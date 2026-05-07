@@ -2,6 +2,7 @@
 import { useAuth } from "@/_app/providers/auth-provider";
 import { EditorialPageShell, PageStubBanner } from "@/widgets/editorial-page-shell";
 import { EditorialLabel, PillButton } from "@/shared/ui";
+import { DeleteAccountButton } from "@/features/account-delete";
 
 export function AccountScreen() {
   const { user, role, logout } = useAuth();
@@ -16,6 +17,7 @@ export function AccountScreen() {
         Вийти
       </PillButton>
       <PageStubBanner cluster="auth" />
+      <DeleteAccountButton />
     </EditorialPageShell>
   );
 }

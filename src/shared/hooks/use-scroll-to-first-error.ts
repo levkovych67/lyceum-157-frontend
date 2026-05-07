@@ -19,5 +19,5 @@ export function useScrollToFirstError<T extends FieldValues>(
     window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
     el.focus({ preventScroll: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSubmitted, JSON.stringify(errors)]);
+  }, [isSubmitted, Object.keys(errors).join(",")]);
 }
