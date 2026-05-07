@@ -1,0 +1,32 @@
+.stamp[data-smudge="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0;
+  transform: translate(4px, 4px);
+  animation: smudge-appear var(--d-3) var(--ease-paper) 60ms both;
+  pointer-events: none;
+}
+@keyframes smudge-appear {
+  to {
+    opacity: 0.15;
+  }
+}
+
+.stamp[data-trail="true"] {
+  box-shadow:
+    0 -8px 12px rgba(110, 39, 61, 0.12),
+    0 -16px 18px rgba(110, 39, 61, 0.06),
+    0 -24px 24px rgba(110, 39, 61, 0.03);
+  animation-name: stamp-drop, trail-fade;
+  animation-duration: var(--d-3), var(--d-3);
+  animation-timing-function: var(--ease-stamp), var(--ease-paper);
+}
+@keyframes trail-fade {
+  60%,
+  100% {
+    box-shadow: none;
+  }
+}

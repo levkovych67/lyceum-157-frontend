@@ -1,0 +1,14 @@
+@media (hover: hover) and (pointer: fine) {
+  html[data-paper-cursor] [data-cursor="zoom"] {
+    cursor: zoom-in;
+  }
+  html[data-paper-cursor] [data-cursor="arrow"] {
+    cursor: pointer;
+  }
+  html[data-paper-cursor] [data-cursor="drag"] {
+    cursor: grab;
+  }
+  html[data-paper-cursor] [data-cursor="drag"]:active {
+    cursor: grabbing;
+  }
+}

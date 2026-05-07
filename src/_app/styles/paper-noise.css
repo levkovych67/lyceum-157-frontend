@@ -1,0 +1,31 @@
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("/textures/paper-noise.svg");
+  background-size: 256px 256px;
+  mix-blend-mode: multiply;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.photo-grainy {
+  position: relative;
+}
+.photo-grainy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/textures/film-grain-1024.png") repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.surface-warm-grainy {
+  background-image: url("/textures/paper-noise.svg");
+  background-size: 256px;
+  mix-blend-mode: multiply;
+  opacity: var(--noise-opacity, 0.1);
+}
