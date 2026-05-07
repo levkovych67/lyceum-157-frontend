@@ -29,7 +29,7 @@ module.exports = {
           { from: "widgets", allow: ["features", "entities", "shared"] },
           { from: "features", allow: ["entities", "shared"] },
           { from: "entities", allow: ["shared"] },
-          { from: "shared", allow: [] },
+          { from: "shared", allow: ["shared"] },
         ],
       },
     ],
