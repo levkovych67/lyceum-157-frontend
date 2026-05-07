@@ -37,19 +37,28 @@ export const PillButton = forwardRef<HTMLButtonElement, PillButtonProps>(functio
   { className, variant, size, asChild, loading, startIcon, endIcon, disabled, children, ...rest },
   ref,
 ) {
-  const Comp = asChild ? Slot : "button";
+  const classes = cn(pill({ variant, size }), className);
+  if (asChild) {
+    // Radix Slot requires a single React element child. Icons + loading state are
+    // not supported in asChild mode (use a regular <PillButton> with onClick instead).
+    return (
+      <Slot ref={ref as never} data-cursor="arrow" className={classes} {...rest}>
+        {children as React.ReactElement}
+      </Slot>
+    );
+  }
   return (
-    <Comp
-      ref={ref as never}
+    <button
+      ref={ref}
       data-cursor="arrow"
       disabled={disabled || loading}
-      className={cn(pill({ variant, size }), className)}
+      className={classes}
       {...rest}
     >
       {loading ? <Spinner /> : startIcon}
       <span>{children}</span>
       {endIcon}
-    </Comp>
+    </button>
   );
 });
 

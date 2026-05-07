@@ -8,7 +8,7 @@ module.exports = {
       { type: "app", pattern: "src/app/*" },
       { type: "_app", pattern: "src/_app/*" },
       { type: "processes", pattern: "src/processes/*" },
-      { type: "pages", pattern: "src/pages/*" },
+      { type: "views", pattern: "src/views/*" },
       { type: "widgets", pattern: "src/widgets/*" },
       { type: "features", pattern: "src/features/*" },
       { type: "entities", pattern: "src/entities/*" },
@@ -22,10 +22,10 @@ module.exports = {
       {
         default: "disallow",
         rules: [
-          { from: "app", allow: ["_app", "processes", "pages", "widgets", "features", "entities", "shared"] },
-          { from: "_app", allow: ["processes", "pages", "widgets", "features", "entities", "shared"] },
-          { from: "processes", allow: ["pages", "widgets", "features", "entities", "shared"] },
-          { from: "pages", allow: ["widgets", "features", "entities", "shared"] },
+          { from: "app", allow: ["_app", "processes", "views", "widgets", "features", "entities", "shared"] },
+          { from: "_app", allow: ["processes", "views", "widgets", "features", "entities", "shared"] },
+          { from: "processes", allow: ["views", "widgets", "features", "entities", "shared"] },
+          { from: "views", allow: ["widgets", "features", "entities", "shared"] },
           { from: "widgets", allow: ["features", "entities", "shared"] },
           { from: "features", allow: ["entities", "shared"] },
           { from: "entities", allow: ["shared"] },
