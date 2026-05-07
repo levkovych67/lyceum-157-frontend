@@ -25,7 +25,7 @@ module.exports = {
           { from: "app", allow: ["_app", "processes", "views", "widgets", "features", "entities", "shared"] },
           { from: "_app", allow: ["processes", "views", "widgets", "features", "entities", "shared"] },
           { from: "processes", allow: ["views", "widgets", "features", "entities", "shared"] },
-          { from: "views", allow: ["widgets", "features", "entities", "shared"] },
+          { from: "views", allow: ["_app", "widgets", "features", "entities", "shared"] },
           { from: "widgets", allow: ["features", "entities", "shared"] },
           { from: "features", allow: ["entities", "shared"] },
           { from: "entities", allow: ["shared"] },
