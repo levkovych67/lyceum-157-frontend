@@ -1,10 +1,13 @@
 import type { ReactNode } from "react";
+import { Header } from "@/widgets/header";
+import { Footer } from "@/widgets/footer";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="relative z-10 min-h-[calc(100vh-124px)]">
-      {/* Header and Footer mounted in Phase 4 — temporarily nothing */}
-      {children}
-    </main>
+    <>
+      <Header />
+      <main className="relative z-10 min-h-[calc(100vh-124px)]">{children}</main>
+      <Footer />
+    </>
   );
 }
