@@ -2,9 +2,13 @@
   "hooks": {
     "Stop": [
       {
-        "matcher": "*",
-        "command": "pnpm verify",
-        "timeout": 600000
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm verify",
+            "timeout": 600000
+          }
+        ]
       }
     ]
   },

@@ -23,6 +23,10 @@
   --c-link: #1e73be;
   --c-stamp: #6e273d;
   --c-error: #b03030;
+  /* Decorative metal (paper-clip and similar fixtures — outside palette) */
+  --c-metal-shade: #9c9c9c;
+  --c-metal-base: #c7c7c7;
+  --c-metal-shine: #f0f0f0;
 
   /* Spacing */
   --s-1: 4px;
@@ -68,8 +72,12 @@
   --d-5: 800ms;
   --d-6: 1200ms;
 
-  /* Font aliases (raw values come from next/font in layout.tsx) */
-  --f-display: var(--f-display-raw, "Iowan Old Style"), Georgia, serif;
+  /* Font aliases (raw values come from next/font in layout.tsx).
+     Display chain: Fraunces (latin only) → Source Serif 4 (cyrillic carrier) → system serif.
+     Browser does per-glyph fallback, so Cyrillic headlines render in a real serif
+     instead of falling all the way to Iowan/Georgia. */
+  --f-display: var(--f-display-raw, "Iowan Old Style"), var(--f-display-cyr-raw, "Iowan Old Style"),
+    Georgia, serif;
   --f-body: var(--f-body-raw, "Helvetica Neue"), system-ui, sans-serif;
   --f-hand: var(--f-hand-raw, "Brush Script MT"), cursive;
 }

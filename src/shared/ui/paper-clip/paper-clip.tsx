@@ -12,9 +12,9 @@ export function PaperClip({ className, rotation = -8 }: PaperClipProps) {
     >
       <defs>
         <linearGradient id="clip-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#c7c7c7" />
-          <stop offset="50%" stopColor="#f0f0f0" />
-          <stop offset="100%" stopColor="#9c9c9c" />
+          <stop offset="0%" stopColor="var(--c-metal-base)" />
+          <stop offset="50%" stopColor="var(--c-metal-shine)" />
+          <stop offset="100%" stopColor="var(--c-metal-shade)" />
         </linearGradient>
       </defs>
       <path

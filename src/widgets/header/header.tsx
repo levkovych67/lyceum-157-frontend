@@ -31,7 +31,7 @@ export function Header() {
             collapsed ? "h-16" : "h-[88px]",
           )}
         >
-          <Link href="/" className="font-display text-2xl font-bold text-burgundy">
+          <Link href="/" className="font-display text-h3 font-bold text-burgundy">
             <span aria-hidden className="mr-3 inline-block h-7 w-7 rounded-full bg-burgundy" />
             Майстерня 157
           </Link>
