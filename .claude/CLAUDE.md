@@ -28,6 +28,7 @@ Paper-noise (body::before SVG turbulence) — must-be-visible. Stamp-drop animat
 - `pnpm typecheck` — TypeScript strict
 - `pnpm lint` — ESLint + FSD boundaries
 - `pnpm test` — Vitest unit + RTL component
+- `pnpm scan-images` — sync між `<ImageSlot slot="…">` у src і анкорами в картинки.md
 - `pnpm build` — Next production build (виявляє RSC/CSR помилки)
 - `pnpm e2e --grep @smoke` — Playwright smoke (app boots, paper-noise, role-redirects, form-ux)
 
