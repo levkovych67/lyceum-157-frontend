@@ -386,18 +386,237 @@ OpenAPI JSON URL: `GET /v3/api-docs` (стандартний springdoc), Swagger
 
 ### 8.1 Code changes
 
-- [ ] **Status enums (TS):** замінити `SHIPPED→FULFILLED`, `COMPLETED→DELIVERED`, додати `DISPUTED`; `SUCCESS→PAID_OUT` (student); `PENDING_APPROVAL→PENDING_REVIEW`.
-- [ ] **AdminPayoutDto.status:** окремий enum з `PAID` (не `PAID_OUT`); `CANCELLED` додано до allowed.
-- [~] **i18n labels:** додати ключі для нових станів (FULFILLED, DELIVERED, DISPUTED, PENDING_REVIEW, AWAITING_DETAILS, PENDING_SIGNATURE). _Track A створив `src/shared/i18n/uk.ts` з namespaced секціями (cookies, legal, loading, errors). Status-labels — додавати в нову `statuses.*` секцію коли робитимете цей пункт._
-- [~] **Error handler:** перейти з `status + title` на `type` URN switch (див. 4.2). _Track A: `app/admin/error.tsx` вже використовує `error instanceof ApiError && error.isUnauthorized` для conditional 2FA-link. Цей паттерн (instanceof + getter) — рекомендований; URN-type switch для більш специфічних помилок робиться у каталог-fetch / mutation handlers, не в Next-error.tsx._
-- [ ] **`useAuth()` → `useMe()`:** замінити on-memory role на `useQuery({ queryKey: ['me'], queryFn: fetchMe, staleTime: 60_000 })`.
-- [ ] **Register flow:** використати `parentEmailMasked` з response замість реконструкції з form.
-- [ ] **Order create:** додати `recaptchaToken` у body коли `process.env.NEXT_PUBLIC_RECAPTCHA_ENABLED='true'`.
-- [ ] **Finance dashboard:** новi поля `paidOut, refunded, taxBreakdown, feeBreakdown, recentMonths` — замінити плейсхолдери.
-- [ ] **Image gallery:** реалізувати DELETE + reorder, видалити placeholder для `student-products` edit.
-- [ ] **Admin payout actions:** додати approve/reject UI (з TOTP-input modal); use `X-TOTP-Code` header. _Track A: `views/admin-payouts` вже обгорнуто `<WidgetErrorBoundary label="Виплати">` у `app/admin/payouts/page.tsx`. Реалізація approve/reject UI робиться всередині view._
-- [ ] **Admin orders/payouts list:** замінити placeholder-екрани реальними даними з нових endpoint-ів.
-- [ ] **Admin products list (Slice 8):** додати search-input (`q`, debounced 300ms, max 80 chars) і student-picker (`studentId`) до moderation-екрану. Зберегти існуючий `status` filter. Combined фільтри — AND-композиція.
+> **Status легенда:** `[ ]` — ще треба робити. `[~]` — частково (Track A торкнувся, але не закрив). `[x]` — закрито. Поряд із пунктом — конкретні файли проекту, які треба створити/змінити, з опорою на поточний стан коду.
+
+#### 8.1.1 Типи + enum-и
+
+- [ ] **Status enums (TS):** додати рідні TS-типи. Зараз їх **ще немає в коді** — не треба нічого замінювати, просто створити з правильними значеннями.
+  - Створити: `src/shared/api/types.ts` — додати поряд з `Role`/`ProblemDetail`/`Page<T>`:
+    ```ts
+    export type OrderStatus = "PENDING_PAYMENT" | "PAID" | "FULFILLED" | "DELIVERED"
+                            | "REFUNDED" | "DISPUTED" | "CANCELLED" | "EXPIRED";
+    export type PayoutStatusStudent = "HOLD" | "APPROVED" | "PAID_OUT" | "REFUNDED";
+    export type PayoutStatusAdmin = "HOLD" | "APPROVED" | "PROCESSING" | "PAID" | "FAILED" | "CANCELLED";
+    export type ParentKycStatus = "AWAITING_DETAILS" | "PENDING_SIGNATURE" | "APPROVED";
+    ```
+  - Модифікувати: `src/shared/api/modules/admin.ts:5-11` — `ProductStatus` уже містить `PENDING_REVIEW` ✅, але є зайвий `DELETED` (не в DTO специфікації, перевірити чи використовується — якщо ні, прибрати).
+  - Експортувати все з `src/shared/api/index.ts:13-46` (типи).
+
+- [ ] **AdminPayoutDto:** немає в коді взагалі. Створити в `src/shared/api/modules/admin.ts` (поруч з `AdminProductDto:13-28`):
+  ```ts
+  export type AdminPayoutDto = {
+    id: string;
+    studentId: string;
+    studentFullName: string;
+    grossAmount: string;
+    netAmount: string;
+    status: PayoutStatusAdmin;       // "PAID" not "PAID_OUT"
+    parentName: string;              // legal_consents.parent_name
+    cardMasked: string;              // "**** 1234"
+    retriesLeft: number;             // 3 - retry_count
+    createdAt: string;
+    paidAt: string | null;
+  };
+  ```
+- [ ] **AdminOrderListDto + AdminOrderDetailDto:** немає в коді. Створити з полями що використовує `views/admin-order/ui/admin-order-screen.tsx` зараз через placeholders. `refundableUntil: string | null` — критичне поле для UI кнопки "Reverse".
+
+#### 8.1.2 i18n labels
+
+- [~] **Status labels** — Track A створив `src/shared/i18n/uk.ts` з namespaced структурою (`cookies`, `legal`, `loading`, `errors`). Додати нову секцію:
+  ```ts
+  // src/shared/i18n/uk.ts — додати в кінець об'єкта uk:
+  statuses: {
+    order: { PENDING_PAYMENT: "Очікує оплату", PAID: "Оплачено",
+      FULFILLED: "Виконано", DELIVERED: "Доставлено", REFUNDED: "Повернено",
+      DISPUTED: "Спір", CANCELLED: "Скасовано", EXPIRED: "Прострочено" },
+    payout: { HOLD: "Утримання", APPROVED: "Схвалено", PROCESSING: "Обробляється",
+      PAID: "Виплачено", PAID_OUT: "Виплачено", FAILED: "Помилка", CANCELLED: "Скасовано", REFUNDED: "Повернено" },
+    product: { DRAFT: "Чернетка", PENDING_REVIEW: "На модерації", ACTIVE: "Активний",
+      HIDDEN: "Прихований", REJECTED: "Відхилений" },
+    kyc: { AWAITING_DETAILS: "Очікуємо реквізити", PENDING_SIGNATURE: "Очікуємо підпис", APPROVED: "Підтверджено" },
+  },
+  ```
+
+#### 8.1.3 Error handler — RFC 7807 URN dispatching
+
+- [~] **`src/shared/api/error-messages.ts:4-15`** — зараз мапить лише за HTTP status. Розширити: спочатку match на `problem.type` (URN), fallback на status. Шаблон:
+  ```ts
+  const byType: Record<string, (p: ProblemDetail) => string> = {
+    "urn:l157:auth/invalid-credentials": () => "Невірний email або пароль",
+    "urn:l157:auth/account-locked": () => "Акаунт заблоковано після 5 невдалих спроб. Зачекайте 1 годину.",
+    "urn:l157:admin/totp-invalid": () => "Невірний 2FA код",
+    "urn:l157:order/out-of-stock": (p) => {
+      const stock = p.invalidParams?.[0];
+      return `Товар закінчився (доступно: ${stock?.["available"] ?? 0})`;
+    },
+    "urn:l157:captcha/rejected": () => "Не вдалося пройти captcha. Оновіть сторінку.",
+    "urn:l157:product/kyc-required": () => "Потрібен підпис батьків (KYC).",
+    "urn:l157:product/images-required": () => "Додайте хоча б одне зображення.",
+    "urn:l157:product/digital-asset-required": () => "Завантажте цифровий файл.",
+    "urn:l157:order/refund-conflict": () => "Виплату вже здійснено — повернення неможливе.",
+    "urn:l157:image/mime-mismatch": () => "Формат файлу не відповідає типу.",
+    "urn:l157:kyc/token-invalid": () => "Магічне посилання прострочене або битe.",
+    "urn:l157:kyc/token-consumed": () => "Магічне посилання вже використане.",
+    "urn:l157:auth/email-taken": () => "Такий email уже зареєстрований.",
+  };
+  export const messageFor = (e: ApiError): string =>
+    byType[e.problem.type]?.(e.problem) ?? messages[e.problem.status]?.(e.problem) ?? e.problem.title;
+  ```
+- [~] **Track A pattern:** `src/app/admin/error.tsx:13` уже використовує `error instanceof ApiError && error.isUnauthorized` для conditional 2FA-link. Цей паттерн (instanceof + ApiError getters) рекомендований для **Next error.tsx**. URN-`type` switch — у API/mutation handlers (TanStack `onError`).
+- [ ] **`ProblemDetail` тип розширити** в `src/shared/api/types.ts:10-18` — додати поле `code?: string` (для business-rule помилок 422):
+  ```ts
+  invalidParams?: Array<{ field: string; reason: string; [k: string]: string }>;  // расширити index signature
+  code?: string;
+  ```
+
+#### 8.1.4 Auth — `useAuth()` → `useMe()`
+
+- [ ] **`src/_app/providers/auth-provider.tsx`** — зараз `useAuth()` тримає тільки `TokenSnapshot { accessToken, userId, role, expiresAt }`. Треба:
+  1. Створити `src/shared/api/modules/users.ts:1-6` (зараз має тільки `deleteMe`) — додати `me: () => api<MeDto>("/users/me")`.
+  2. Створити `MeDto` тип у `src/shared/api/types.ts` (повний shape з §5).
+  3. Створити hook `src/shared/api/hooks/use-me.ts`:
+     ```ts
+     export const useMe = () => useQuery({
+       queryKey: ['me'],
+       queryFn: () => userApi.me(),
+       staleTime: 60_000,
+       enabled: !!getSnapshot(), // tied to login state
+     });
+     ```
+  4. Refactor споживачів з `useAuth().role` → `useMe().data?.role`. Поточні споживачі (`grep "useAuth"`):
+     - `src/app/account/page.tsx`
+     - `src/app/student/layout.tsx`
+     - `src/app/admin/layout.tsx`
+     - `src/views/account/ui/account-screen.tsx`
+     - `src/_app/providers/index.tsx`
+  5. **Видалити client-side обчислення `canSubmitProducts`** — стало серверне поле в `MeDto`.
+
+#### 8.1.5 Register flow
+
+- [ ] **`src/shared/api/modules/auth.ts:12`** — `RegisterResponse = { userId; message }`. Додати `parentEmailMasked: string`:
+  ```ts
+  export type RegisterResponse = { userId: string; parentEmailMasked: string; message: string };
+  ```
+- [ ] **`src/views/register/ui/`** — у success-screen рендерити `parentEmailMasked` напряму, прибрати reconstruction з form (якщо є).
+
+#### 8.1.6 Order create — reCAPTCHA
+
+- [ ] **`src/shared/api/modules/orders.ts:4-9`** — додати поле в `CreateOrderRequest`:
+  ```ts
+  recaptchaToken?: string;
+  ```
+- [ ] **`src/views/checkout/ui/`** — додати reCAPTCHA v3 logic:
+  1. Layout або провайдер: завантажити `https://www.google.com/recaptcha/api.js?render=${siteKey}` через next/script.
+  2. На submit: `await grecaptcha.execute(siteKey, { action: 'order' })` → передати token.
+  3. Gate за `process.env.NEXT_PUBLIC_RECAPTCHA_ENABLED === 'true'` (default false для dev).
+  4. Додати `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` у `.env.example`.
+- [ ] **Error handling:** `urn:l157:captcha/rejected` уже додасться через 8.1.3 — toast з відповідним меседжем.
+
+#### 8.1.7 Finance dashboard — нові поля
+
+- [ ] **`src/shared/api/modules/student.ts:18-24`** — `FinanceSummaryDto` має тільки 5 старих полів. Розширити:
+  ```ts
+  export type FinanceSummaryDto = {
+    totalGross: string;
+    totalTaxes: string;
+    totalNetEarned: string;
+    pendingHold: string;
+    pendingApproved: string;
+    paidOut: string;                                       // НОВЕ
+    refunded: string;                                      // НОВЕ
+    taxBreakdown: { pdfo: string; vz: string };            // НОВЕ
+    feeBreakdown: { liqpay: string; platform: string };    // НОВЕ
+    recentMonths: Array<{ month: string; gross: string; net: string }>;  // НОВЕ
+  };
+  ```
+- [ ] **`src/views/student-finance/ui/`** — додати рендер нових полів. **Семантика:** `paidOut` для "вже на картці", `totalNetEarned` тепер ширше (HOLD+APPROVED+PROCESSING+PAID_OUT) — оновити підпис.
+- [ ] **TanStack Query key** для inval-кешу — лишається `['student','finance','summary']`.
+
+#### 8.1.8 Image gallery — DELETE + reorder
+
+- [ ] **`src/shared/api/modules/student.ts:26-46`** — додати в `studentApi.products`:
+  ```ts
+  deleteImg: (id: string, imageId: string) =>
+    api<void>(`/student/products/${id}/images/${imageId}`, { method: "DELETE" }),
+  reorderImg: (id: string, images: Array<{ imageId: string; sortOrder: number; primary: boolean }>) =>
+    api<void>(`/student/products/${id}/images/reorder`, {
+      method: "PUT",
+      body: JSON.stringify({ images }),
+    }),
+  ```
+- [ ] **`src/views/student-product-edit/ui/`** — реалізувати UI:
+  1. Image grid з drag-handle (можна `@dnd-kit/core` або CSS-only HTML5 drag/drop)
+  2. Trash icon на кожному thumbnail → `deleteImg` мутація
+  3. Star/primary toggle (рівно один primary)
+  4. На зміну порядку — `reorderImg({ images: [...allWithNewOrder] })` атомарно
+  5. **Critical:** `reorder` валідує що **всі** existing images і **рівно один** primary. Не дозволяти drag-drop якщо primary не вибраний.
+- [ ] Видалити placeholder з view.
+
+#### 8.1.9 Resubmit (Slice 7)
+
+- [ ] **`src/shared/api/modules/student.ts:32`** — додати поряд з `submit`:
+  ```ts
+  resubmit: (id: string) => api<void>(`/student/products/${id}/resubmit`, { method: "POST" }),
+  ```
+- [ ] **`src/views/student-products/ui/`** — на rejected-product card додати кнопку "Подати знову" → `resubmit` мутація → invalidate `['student','products']`.
+
+#### 8.1.10 Admin payouts — approve/reject + list
+
+- [ ] **`src/shared/api/modules/admin.ts:74-81`** — `payouts` має тільки `execute`. Додати:
+  ```ts
+  payouts: {
+    list: (params: { status?: PayoutStatusAdmin; studentId?: string;
+                     from?: string; to?: string; page?: number; size?: number }) =>
+      api<Page<AdminPayoutDto>>(`/admin/payouts?${qs(params)}`),
+    approve: (id: string, totp: string) =>
+      api<void>(`/admin/payouts/${id}/approve`, { method: "POST", totp }),
+    reject: (id: string, reason: string, totp: string) =>
+      api<void>(`/admin/payouts/${id}/reject`, {
+        method: "POST",
+        body: JSON.stringify({ reason }),
+        totp,
+      }),
+    execute: /* existing */,
+  },
+  ```
+- [~] **`src/views/admin-payouts/ui/`** + `src/app/admin/payouts/page.tsx:1-9`:
+  - Track A вже обгорнув view в `<WidgetErrorBoundary label="Виплати">` ✅
+  - Реалізувати: list-table з нових даних (зараз placeholder), TOTP-input modal (`@radix-ui/react-dialog` уже є в deps), approve/reject mutations з invalidate.
+  - **TOTP modal patern:** одне modal-вікно перед approve/reject — приймає 6-digit code, передає в API call як `totp` параметр. `client.ts` уже додає `X-TOTP-Code` header якщо `totp` передано.
+- [ ] **Tests:** додати vitest для TOTP-modal (відображення error на `urn:l157:admin/totp-invalid`).
+
+#### 8.1.11 Admin orders list/detail
+
+- [ ] **`src/shared/api/modules/admin.ts:67-72`** — `orders` має тільки `refund`. Додати:
+  ```ts
+  orders: {
+    list: (params: { status?: OrderStatus; from?: string; to?: string;
+                     q?: string; page?: number; size?: number }) =>
+      api<Page<AdminOrderListDto>>(`/admin/orders?${qs(params)}`),
+    get: (id: string) => api<AdminOrderDetailDto>(`/admin/orders/${id}`),
+    refund: /* existing */,
+  },
+  ```
+- [ ] **`src/views/admin-order/ui/admin-order-screen.tsx`** — переключити з placeholder на реальні дані. Wire `AdminOrderDetailDto.items + payment + refund` поля.
+- [ ] **Список admin orders:** немає окремого `app/admin/orders/page.tsx` listing-роут поки що — створити коли будемо реалізовувати list-екран. Існуючий `app/admin/orders/[id]/page.tsx` — тільки detail.
+
+#### 8.1.12 Admin products — `q` + `studentId` фільтри (Slice 8)
+
+- [ ] **`src/shared/api/modules/admin.ts:57-58`** — `list(status, page, size)` приймає 3 аргументи. Розширити сигнатуру:
+  ```ts
+  list: (params: { status?: ProductStatus; studentId?: string; q?: string;
+                   page?: number; size?: number } = {}) =>
+    api<Page<AdminProductDto>>(`/admin/products?${qs(params)}`),
+  ```
+  (Breaking change для існуючих споживачів — `adminApi.products.list("PENDING_REVIEW", 0, 50)` стає `adminApi.products.list({ status: "PENDING_REVIEW", page: 0, size: 50 })`.)
+- [ ] **`src/views/admin-products/ui/`** — додати `<input>` з `q` (debounced 300ms через `use-debounce` або власний hook), `<Select>` з students (потрібен endpoint listing students — або lazy-load по введенню в q).
+- [ ] **Validation:** `q.length <= 80` на front (`maxLength={80}`), back повертає 400 якщо більше — обробити через 8.1.3 error handler.
+
+#### 8.1.13 Inval-кеш + тестування
+
+- [ ] **`src/shared/api/revalidate.ts`** — додати tag-and-key invalidation helpers для нових ресурсів: `me`, `student.orders`, `student.products`, `admin.orders`, `admin.payouts`. Mutate handlers повинні звати ці після successful op.
+- [ ] **Vitest unit тести** для нових типів/handlers (особливо `error-messages.ts` з URN switch — table-driven тест).
+- [ ] **MSW handlers** для нових endpoint-ів у `src/shared/api/__mocks__/` (поки немає такої папки — створити коли наперед знадобиться).
 
 ### 8.2 Config changes
 
