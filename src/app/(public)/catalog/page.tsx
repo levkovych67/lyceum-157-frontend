@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CatalogScreen } from "@/views/catalog";
 import { serverApi } from "@/shared/api/server-client";
 import type { Page as P, ProductCardDto } from "@/shared/api";
+import { WidgetErrorBoundary } from "@/shared/ui/error-boundary";
 
 export const metadata: Metadata = { title: "Каталог" };
 export const revalidate = 300;
@@ -21,5 +22,9 @@ export default async function Page({
     revalidate: 300,
     tags: ["catalog"],
   }).catch(() => null);
-  return <CatalogScreen data={data} />;
+  return (
+    <WidgetErrorBoundary label="Каталог">
+      <CatalogScreen data={data} />
+    </WidgetErrorBoundary>
+  );
 }
