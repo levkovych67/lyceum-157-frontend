@@ -17,3 +17,4 @@ export * from "./toast";
 export * from "./form";
 export * from "./image-slot";
 export * from "./error-boundary";
+export * from "./paper-skeleton";

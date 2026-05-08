@@ -1,0 +1,17 @@
+@keyframes ps-stamp-pulse {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+.ps-stamp-pulse {
+  animation: ps-stamp-pulse 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ps-stamp-pulse {
+    animation: none;
+  }
+}
