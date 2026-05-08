@@ -24,6 +24,7 @@ const nextConfig = {
     ];
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "**.s3.eu-central-1.amazonaws.com" },
       { protocol: "https", hostname: "cdn.157.kyiv.ua" },
