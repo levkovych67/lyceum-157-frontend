@@ -1,7 +1,7 @@
 "use client";
 import { useCartStore } from "@/entities/cart";
-import { EditorialPageShell, PageStubBanner } from "@/widgets/editorial-page-shell";
-import { EditorialLabel, PillButton } from "@/shared/ui";
+import { EditorialPageShell } from "@/widgets/editorial-page-shell";
+import { EditorialLabel, ImageSlot, PillButton } from "@/shared/ui";
 import Link from "next/link";
 
 export function CartScreen() {
@@ -11,7 +11,16 @@ export function CartScreen() {
       <EditorialLabel>СПИСОК ЗАБРАТИ ДОДОМУ</EditorialLabel>
       <h1 className="font-display text-h1 italic text-burgundy">Кошик</h1>
       {items.length === 0 ? (
-        <p className="text-lead text-ink-soft">Кошик порожній.</p>
+        <div className="flex flex-col items-center gap-4 py-16">
+          <ImageSlot
+            slot="cart/empty-state"
+            ratio="4/5"
+            variant="stamp"
+            caption="Кошик порожній"
+            className="w-48"
+          />
+          <p className="font-display text-h3 italic text-ink-soft">Поки що нічого не вибрано</p>
+        </div>
       ) : (
         <>
           <ul className="divide-y divide-line">
@@ -29,7 +38,6 @@ export function CartScreen() {
           </PillButton>
         </>
       )}
-      <PageStubBanner cluster="checkout" />
     </EditorialPageShell>
   );
 }
