@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { fraunces, sourceSerif, manrope, caveat } from "@/_app/fonts";
 import { AppProviders } from "@/_app/providers";
+import { CookieBanner } from "@/widgets/cookie-banner";
 import "@/_app/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="bg-bg font-body text-ink antialiased">
         <AppProviders>{children}</AppProviders>
+        <CookieBanner />
       </body>
     </html>
   );
