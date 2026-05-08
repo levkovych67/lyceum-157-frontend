@@ -144,6 +144,9 @@ const config: Config = {
         "page-turn": "page-turn var(--d-3) var(--ease-paper) both",
         "tilt-into-place": "tilt-into-place var(--d-4) var(--ease-spring) both",
       },
+      backgroundImage: {
+        "paper-noise": "url('/textures/paper-noise.svg')",
+      },
     },
   },
   plugins: [],

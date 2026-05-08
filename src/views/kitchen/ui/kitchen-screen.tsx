@@ -21,6 +21,7 @@ import {
   Stack,
   Row,
   Grid,
+  ImageSlot,
 } from "@/shared/ui";
 
 export function KitchenScreen() {
@@ -81,6 +82,37 @@ export function KitchenScreen() {
               priceUah="1200.00"
             />
           </Row>
+
+          <EditorialDivider variant="marks" />
+          <EditorialLabel>ImageSlot variants</EditorialLabel>
+          <Grid cols={3} gap={6}>
+            <ImageSlot
+              slot="kitchen/polaroid/3-4"
+              ratio="3/4"
+              variant="polaroid"
+              caption="Polaroid 3:4"
+            />
+            <ImageSlot
+              slot="kitchen/photo-print/4-5"
+              ratio="4/5"
+              variant="photo-print"
+              caption="Photo print 4:5"
+            />
+            <ImageSlot
+              slot="kitchen/interlude/16-9"
+              ratio="16/9"
+              variant="interlude"
+              caption="Interlude 16:9"
+            />
+            <ImageSlot
+              slot="kitchen/portrait/16-9"
+              ratio="16/9"
+              variant="portrait"
+              caption="Portrait 16:9"
+            />
+            <ImageSlot slot="kitchen/stamp/1-1" ratio="1/1" variant="stamp" caption="Stamp 1:1" />
+            <ImageSlot slot="kitchen/plain/1-1" ratio="1/1" variant="plain" caption="Plain 1:1" />
+          </Grid>
 
           <EditorialDivider variant="marks" />
           <PillButton onClick={() => setBoom((b) => !b)}>Confetti!</PillButton>

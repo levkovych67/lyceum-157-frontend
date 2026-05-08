@@ -15,3 +15,4 @@ export * from "./layout";
 export * from "./dialog";
 export * from "./toast";
 export * from "./form";
+export * from "./image-slot";
