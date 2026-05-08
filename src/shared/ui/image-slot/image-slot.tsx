@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import { cn } from "@/shared/lib";
 
@@ -26,11 +25,11 @@ export type ImageSlotProps = {
 
 const variantStyles: Record<ImageSlotVariant, string> = {
   polaroid: "bg-white p-3 pb-9 shadow-photo rounded-[2px]",
-  "photo-print": "rounded-[4px] shadow-photo overflow-hidden",
-  interlude: "rounded-none overflow-hidden",
-  portrait: "rounded-[4px] shadow-photo overflow-hidden",
+  "photo-print": "rounded-[4px] shadow-photo",
+  interlude: "rounded-none",
+  portrait: "rounded-[4px] shadow-photo",
   stamp: "rounded-md border-2 border-dashed border-burgundy/60",
-  plain: "rounded-[2px] overflow-hidden",
+  plain: "rounded-[2px]",
 };
 
 const placeholderRingByVariant: Record<ImageSlotVariant, string> = {
@@ -56,6 +55,40 @@ export function ImageSlot({
   const aspectStyle = { aspectRatio: ratio.replace("/", " / ") };
 
   if (src) {
+    if (variant === "polaroid") {
+      return (
+        <div className={cn("inline-block rounded-[2px] bg-white p-3 pb-9 shadow-photo", className)}>
+          <div className="relative overflow-hidden rounded-[1px]" style={aspectStyle}>
+            <Image
+              src={src}
+              alt={alt ?? caption}
+              fill
+              sizes={sizes ?? "100vw"}
+              priority={priority}
+              className="object-cover"
+            />
+          </div>
+        </div>
+      );
+    }
+
+    if (variant === "stamp") {
+      return (
+        <div className={cn("border-burgundy/60 rounded-md border-2 border-dashed p-1", className)}>
+          <div className="relative overflow-hidden rounded-md" style={aspectStyle}>
+            <Image
+              src={src}
+              alt={alt ?? caption}
+              fill
+              sizes={sizes ?? "100vw"}
+              priority={priority}
+              className="object-cover"
+            />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
         className={cn("relative overflow-hidden", variantStyles[variant], className)}
@@ -85,6 +118,7 @@ export function ImageSlot({
         "relative flex w-full flex-col items-center justify-center bg-bg-warm bg-paper-noise",
         placeholderRingByVariant[variant],
         variantStyles[variant],
+        variant !== "polaroid" && variant !== "stamp" && "overflow-hidden",
         className,
       )}
       title={`Покласти файл: public/images/${slot}.jpg`}
