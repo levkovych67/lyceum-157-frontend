@@ -40,7 +40,9 @@ describe("consent cookie helpers", () => {
       Object.defineProperty(document, "cookie", { set: setter, get: () => "" });
       setConsentDismissed();
       expect(setter).toHaveBeenCalledTimes(1);
-      const written = setter.mock.calls[0][0] as string;
+      const firstCall = setter.mock.calls[0];
+      expect(firstCall).toBeDefined();
+      const written = firstCall![0] as string;
       expect(written).toContain(`${CONSENT_COOKIE}=1`);
       expect(written).toContain("max-age=31536000");
       expect(written.toLowerCase()).toContain("samesite=lax");
