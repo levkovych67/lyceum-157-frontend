@@ -263,3 +263,7 @@ UI-задачі завжди з headed Playwright перед "готово".
 - `scripts/scan-image-slots.ts` — TypeScript з ts-node, чи bash з grep + node?
 
 — end of spec —
+
+
+
+
