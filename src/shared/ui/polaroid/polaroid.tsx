@@ -12,6 +12,7 @@ export type PolaroidProps = {
   paperClip?: boolean;
   hoverInteractive?: boolean;
   className?: string;
+  blurDataURL?: string;
 };
 export function Polaroid({
   src,
@@ -22,6 +23,7 @@ export function Polaroid({
   paperClip,
   hoverInteractive = true,
   className,
+  blurDataURL,
 }: PolaroidProps) {
   return (
     <div
@@ -39,7 +41,15 @@ export function Polaroid({
           ratio === "4/5" ? "aspect-[4/5] w-60" : "aspect-square w-60",
         )}
       >
-        <Image src={src} alt={alt} fill sizes="240px" className="object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="240px"
+          placeholder={blurDataURL ? "blur" : "empty"}
+          blurDataURL={blurDataURL}
+          className="object-cover"
+        />
       </div>
       {caption && <p className="mt-3 text-center font-hand text-hand-s text-ink">{caption}</p>}
     </div>

@@ -58,4 +58,29 @@ describe("ImageSlot", () => {
     const root = container.firstElementChild as HTMLElement;
     expect(root.style.aspectRatio).toBe("4 / 5");
   });
+
+  it("forwards blurDataURL to next/image with placeholder=blur", () => {
+    const blur =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkAAIAAAoAAv/lxKUAAAAASUVORK5CYII=";
+    const { container } = render(
+      <ImageSlot
+        slot="hero"
+        ratio="4/5"
+        variant="polaroid"
+        caption="x"
+        src="https://cdn.157.kyiv.ua/sample.jpg"
+        blurDataURL={blur}
+      />,
+    );
+    const img = container.querySelector("img");
+    expect(img).not.toBeNull();
+    // jsdom strips `background-image: url(data:...)` from inline style during CSS
+    // parsing, so we can't assert the data URL directly. Instead, verify next/image
+    // emitted the blur-placeholder CSS scaffolding (background-size/position/repeat),
+    // which it only does when `placeholder="blur"` + `blurDataURL` are passed through.
+    const style = img?.getAttribute("style") ?? "";
+    expect(style).toMatch(/background-size:\s*cover/);
+    expect(style).toMatch(/background-position:\s*50% 50%/);
+    expect(style).toMatch(/background-repeat:\s*no-repeat/);
+  });
 });

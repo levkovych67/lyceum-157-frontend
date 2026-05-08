@@ -21,6 +21,7 @@ export type ImageSlotProps = {
   priority?: boolean;
   sizes?: string;
   className?: string;
+  blurDataURL?: string;
 };
 
 const variantStyles: Record<ImageSlotVariant, string> = {
@@ -51,6 +52,7 @@ export function ImageSlot({
   priority,
   sizes,
   className,
+  blurDataURL,
 }: ImageSlotProps) {
   const aspectStyle = { aspectRatio: ratio.replace("/", " / ") };
 
@@ -65,6 +67,8 @@ export function ImageSlot({
               fill
               sizes={sizes ?? "100vw"}
               priority={priority}
+              placeholder={blurDataURL ? "blur" : "empty"}
+              blurDataURL={blurDataURL}
               className="object-cover"
             />
           </div>
@@ -82,6 +86,8 @@ export function ImageSlot({
               fill
               sizes={sizes ?? "100vw"}
               priority={priority}
+              placeholder={blurDataURL ? "blur" : "empty"}
+              blurDataURL={blurDataURL}
               className="object-cover"
             />
           </div>
@@ -100,6 +106,8 @@ export function ImageSlot({
           fill
           sizes={sizes ?? "100vw"}
           priority={priority}
+          placeholder={blurDataURL ? "blur" : "empty"}
+          blurDataURL={blurDataURL}
           className="object-cover"
         />
       </div>
