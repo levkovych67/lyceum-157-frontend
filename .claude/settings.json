@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pnpm verify",
+            "command": "pnpm typecheck && pnpm lint && pnpm test && pnpm scan-images && pnpm build",
             "timeout": 600000
           }
         ]
