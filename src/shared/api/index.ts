@@ -7,6 +7,7 @@ export * from "./auth-token";
 export * from "./refresh";
 export * from "./idempotency";
 export * from "./client";
+export * from "./dispatch-problem";
 export * from "./upload-s3";
 export * from "./revalidate";
 export { authApi } from "./modules/auth";

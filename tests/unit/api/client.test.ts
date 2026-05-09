@@ -32,7 +32,7 @@ describe("api client", () => {
     expect(headers.get("Authorization")).toBe("Bearer tok");
   });
 
-  it("auto-generates Idempotency-Key on POST", async () => {
+  it("does NOT attach Idempotency-Key by default for mutations", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       status: 204,
@@ -41,7 +41,19 @@ describe("api client", () => {
     });
     await api("/x", { method: "POST", body: JSON.stringify({}) });
     const headers = fetchMock.mock.calls[0]![1].headers as Headers;
-    expect(headers.get("Idempotency-Key")).toMatch(/^[0-9a-f-]{36}$/);
+    expect(headers.get("Idempotency-Key")).toBeNull();
+  });
+
+  it("forwards explicit idemKey as Idempotency-Key header", async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      status: 204,
+      headers: new Headers(),
+      json: async () => undefined,
+    });
+    await api("/orders", { method: "POST", body: "{}", idemKey: "abc-uuid" });
+    const headers = fetchMock.mock.calls[0]![1].headers as Headers;
+    expect(headers.get("Idempotency-Key")).toBe("abc-uuid");
   });
 
   it("returns undefined on 204", async () => {
@@ -88,15 +100,69 @@ describe("api client", () => {
         status: 200,
         headers: new Headers({ "Content-Type": "application/json" }),
         json: async () => ({ accessToken: "new", expiresIn: 900, userId: "u", role: "STUDENT" }),
-      }) // refresh
+      })
       .mockResolvedValueOnce({
         ok: true,
         status: 200,
         headers: new Headers({ "Content-Type": "application/json" }),
         json: async () => ({ data: 1 }),
-      }); // retry
+      });
     const result = await api<{ data: number }>("/protected");
     expect(result.data).toBe(1);
     expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it("dispatches auth:security-incident on 401 + refresh-replay", async () => {
+    const events: Event[] = [];
+    const handler = (e: Event) => events.push(e);
+    window.addEventListener("auth:security-incident", handler);
+    window.addEventListener("auth:logout-required", handler);
+    fetchMock
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        statusText: "Unauthorized",
+        headers: new Headers(),
+        json: async () => ({
+          status: 401,
+          title: "U",
+          type: "",
+          detail: "",
+          instance: "",
+          timestamp: "",
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        json: async () => ({
+          type: "urn:l157:auth/refresh-replay",
+          title: "Reuse",
+          status: 401,
+          detail: "",
+          instance: "",
+          timestamp: "",
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        statusText: "U",
+        headers: new Headers(),
+        json: async () => ({
+          status: 401,
+          title: "U",
+          type: "",
+          detail: "",
+          instance: "",
+          timestamp: "",
+        }),
+      });
+    await expect(api("/protected")).rejects.toBeInstanceOf(ApiError);
+    const types = events.map((e) => e.type);
+    expect(types).toContain("auth:security-incident");
+    expect(types).toContain("auth:logout-required");
+    window.removeEventListener("auth:security-incident", handler);
+    window.removeEventListener("auth:logout-required", handler);
   });
 });

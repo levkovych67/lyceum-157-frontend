@@ -5,13 +5,9 @@ import { tryRefresh } from "./refresh";
 
 export type ApiOptions = RequestInit & {
   auth?: boolean;
-  idempotent?: boolean;
   idemKey?: string;
   totp?: string;
 };
-
-const isMutating = (m?: string) =>
-  ["POST", "PUT", "PATCH", "DELETE"].includes((m ?? "GET").toUpperCase());
 
 export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
   const headers = new Headers(opts.headers);
@@ -24,9 +20,6 @@ export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
     if (tok) headers.set("Authorization", `Bearer ${tok}`);
   }
   if (opts.idemKey) headers.set("Idempotency-Key", opts.idemKey);
-  else if (opts.idempotent ?? isMutating(opts.method)) {
-    headers.set("Idempotency-Key", crypto.randomUUID());
-  }
   if (opts.totp) headers.set("X-TOTP-Code", opts.totp);
 
   const res = await fetch(`${API_BASE}${path}`, {
@@ -38,8 +31,16 @@ export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
   if (res.status === 204) return undefined as T;
 
   if (res.status === 401 && opts.auth !== false && !path.startsWith("/auth/")) {
-    if (await tryRefresh()) return api<T>(path, opts);
-    if (typeof window !== "undefined") window.dispatchEvent(new Event("auth:logout-required"));
+    const refresh = await tryRefresh();
+    if (refresh.ok) return api<T>(path, opts);
+    if (typeof window !== "undefined") {
+      if (refresh.reason === "replay") {
+        window.dispatchEvent(
+          new CustomEvent("auth:security-incident", { detail: { kind: "refresh-replay" } }),
+        );
+      }
+      window.dispatchEvent(new Event("auth:logout-required"));
+    }
   }
 
   if (!res.ok) {

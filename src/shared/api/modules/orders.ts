@@ -1,5 +1,4 @@
 import { api } from "@/shared/api/client";
-import { getOrCreateIdemKey } from "@/shared/api/idempotency";
 
 export type CreateOrderRequest = {
   buyerEmail: string;
@@ -17,13 +16,11 @@ export type OrderCreationResponse = {
 };
 
 export const ordersApi = {
-  create: (body: CreateOrderRequest) => {
-    const idemKey = getOrCreateIdemKey("orders.create", body);
-    return api<OrderCreationResponse>("/orders", {
+  create: (body: CreateOrderRequest, idemKey: string) =>
+    api<OrderCreationResponse>("/orders", {
       method: "POST",
       body: JSON.stringify(body),
       idemKey,
       auth: false,
-    });
-  },
+    }),
 };

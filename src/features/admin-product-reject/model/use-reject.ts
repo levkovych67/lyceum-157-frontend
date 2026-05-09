@@ -1,6 +1,7 @@
 "use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { adminApi, revalidateOnClient } from "@/shared/api";
+import { adminApi, ApiError, revalidateOnClient } from "@/shared/api";
+
 export function useRejectProduct() {
   const qc = useQueryClient();
   return useMutation({
@@ -9,6 +10,12 @@ export function useRejectProduct() {
     onSuccess: async (_d, vars) => {
       await revalidateOnClient(["catalog", `product:${vars.id}`]);
       qc.invalidateQueries({ queryKey: ["admin", "products"] });
+    },
+    onError: async (err, vars) => {
+      if (err instanceof ApiError && err.problem.type === "urn:l157:product/wrong-state") {
+        await revalidateOnClient(["catalog", `product:${vars.id}`]);
+        qc.invalidateQueries({ queryKey: ["admin", "products"] });
+      }
     },
   });
 }
