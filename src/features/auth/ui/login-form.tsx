@@ -20,27 +20,43 @@ export function LoginForm() {
     },
   });
   return (
-    <Form onSubmit={form.handleSubmit} className="max-w-md">
-      <FormField name="email" label="Email" required error={form.formState.errors.email?.message}>
-        <Input type="email" autoComplete="email" {...form.register("email")} />
-      </FormField>
-      <FormField
-        name="password"
-        label="Пароль"
-        required
-        hint="8+ символів"
-        error={form.formState.errors.password?.message}
-      >
-        <Input type="password" autoComplete="current-password" {...form.register("password")} />
-      </FormField>
-      <FormFooter>
-        <Link href="/register" className="font-hand text-hand-s text-burgundy">
-          Немає картки? Зареєструйся
-        </Link>
-        <PillButton type="submit" loading={m.isPending}>
-          Увійти
-        </PillButton>
-      </FormFooter>
-    </Form>
+    <div className="relative mx-auto mt-8 max-w-md rotate-[1deg] border-[1.5px] border-burgundy bg-bg-warm p-8 shadow-[0_12px_24px_rgba(0,0,0,0.18)] md:mx-0">
+      <Form onSubmit={form.handleSubmit} className="space-y-6">
+        <FormField name="email" label="Email" required error={form.formState.errors.email?.message}>
+          <Input
+            type="email"
+            autoComplete="email"
+            {...form.register("email")}
+            className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
+          />
+        </FormField>
+        <FormField
+          name="password"
+          label="Пароль"
+          required
+          hint="8+ символів"
+          error={form.formState.errors.password?.message}
+        >
+          <Input
+            type="password"
+            autoComplete="current-password"
+            {...form.register("password")}
+            className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
+          />
+        </FormField>
+        <FormFooter className="border-ink/30 mt-6 border-t-[1.5px] border-dashed pt-6">
+          <Link href="/register" className="font-hand text-hand-m text-burgundy hover:underline">
+            Немає картки?
+          </Link>
+          <PillButton
+            type="submit"
+            loading={m.isPending}
+            className="hover:bg-burgundy/90 bg-burgundy text-bg-warm"
+          >
+            Увійти
+          </PillButton>
+        </FormFooter>
+      </Form>
+    </div>
   );
 }

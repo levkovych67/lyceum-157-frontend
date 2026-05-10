@@ -11,6 +11,7 @@ export function AdminPayoutsScreen() {
       >
         <ImageSlot
           slot="admin/payouts/shield"
+          src="/images/admin/payouts/shield.png"
           ratio="1/1"
           variant="stamp"
           caption="2FA-замок"

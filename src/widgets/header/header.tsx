@@ -7,6 +7,7 @@ import { Nav } from "./nav";
 import { CartBadge } from "./cart-badge";
 import { Container } from "@/shared/ui";
 import { cn } from "@/shared/lib";
+import Image from "next/image";
 
 export function Header() {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,8 +33,7 @@ export function Header() {
           )}
         >
           <Link href="/" className="font-display text-h3 font-bold text-burgundy">
-            <span aria-hidden className="mr-3 inline-block h-7 w-7 rounded-full bg-burgundy" />
-            Майстерня 157
+            <Image src="/logo.webp" alt="Майстерня 157" width={100} height={100} />
           </Link>
           <Nav />
           <div className="flex items-center gap-5">

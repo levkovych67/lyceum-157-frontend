@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = process.cwd();
@@ -29,27 +29,32 @@ function getSlotsInSrc(): { literal: Set<string>; templated: Set<string> } {
   const literal = new Set<string>();
   const templated = new Set<string>();
 
-  // Two regexes: simple slot="..." and templated slot={`...${expr}...`}
-  const literalRe = /slot="([^"]+)"/g;
-  const templateRe = /slot=\{`([^`]+)`\}/g;
+  // Find <ImageSlot ... /> blocks (multiline). If the block also contains
+  // `src=`, the slot points to a real asset under public/images/ and is
+  // exempt from the src↔md sync check.
+  const blockRe = /<ImageSlot\b[\s\S]*?\/>/g;
+  const literalSlotRe = /\bslot="([^"]+)"/;
+  const templateSlotRe = /\bslot=\{`([^`]+)`\}/;
+  const srcRe = /\bsrc=(?:"[^"]+"|\{[^}]+\})/;
 
   for (const file of walkSrc(SRC_DIR)) {
     if (SRC_DEVONLY_PATH_PARTS.some((p) => file.includes(p))) continue;
     const content = readFileSync(file, "utf8");
     let m: RegExpExecArray | null;
-    literalRe.lastIndex = 0;
-    while ((m = literalRe.exec(content))) {
-      const v = m[1];
-      if (v) literal.add(v);
-    }
-    templateRe.lastIndex = 0;
-    while ((m = templateRe.exec(content))) {
-      // Convert ${expr} into a placeholder marker so we can compare against
-      // md template entries (which use {slug}, {id}, {1..N}).
-      const v = m[1];
-      if (!v) continue;
-      const normalized = v.replace(/\$\{[^}]+\}/g, "{$}");
-      templated.add(normalized);
+    blockRe.lastIndex = 0;
+    while ((m = blockRe.exec(content))) {
+      const block = m[0];
+      if (srcRe.test(block)) continue; // real image — skip md sync
+      const lit = literalSlotRe.exec(block);
+      if (lit && lit[1]) {
+        literal.add(lit[1]);
+        continue;
+      }
+      const tpl = templateSlotRe.exec(block);
+      if (tpl && tpl[1]) {
+        const normalized = tpl[1].replace(/\$\{[^}]+\}/g, "{$}");
+        templated.add(normalized);
+      }
     }
   }
   return { literal, templated };
@@ -61,6 +66,7 @@ function stripFencedCodeBlocks(md: string): string {
 }
 
 function getSlotsInImagesMd(): Set<string> {
+  if (!existsSync(IMAGES_MD)) return new Set();
   const raw = readFileSync(IMAGES_MD, "utf8");
   const md = stripFencedCodeBlocks(raw);
   const slots = new Set<string>();
@@ -97,7 +103,15 @@ function mdEntryToRegex(entry: string): RegExp {
 
 function main() {
   const { literal, templated } = getSlotsInSrc();
+  const mdExists = existsSync(IMAGES_MD);
   const inMd = getSlotsInImagesMd();
+  if (!mdExists) {
+    const total = literal.size + templated.size;
+    console.warn(
+      `картинки.md відсутня — пропускаю sync. Знайдено ${total} placeholder slot(s) у src без src=.`,
+    );
+    process.exit(0);
+  }
 
   const mdLiteral = new Set<string>();
   const mdPatterns: { raw: string; re: RegExp }[] = [];

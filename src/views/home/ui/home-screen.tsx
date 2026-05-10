@@ -21,25 +21,45 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
       <EditorialDivider />
 
       {/* BLOCK 2 — hero collage with 3 polaroids */}
-      <section aria-label="Hero колаж" className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <ImageSlot
-          slot="home/hero/poster-1"
-          ratio="3/4"
-          variant="polaroid"
-          caption="Учнівська робота — кераміка"
-        />
-        <ImageSlot
-          slot="home/hero/poster-2"
-          ratio="3/4"
-          variant="polaroid"
-          caption="Учнівська робота — графіка"
-        />
-        <ImageSlot
-          slot="home/hero/poster-3"
-          ratio="3/4"
-          variant="polaroid"
-          caption="Учнівська робота — текстиль"
-        />
+      <section
+        aria-label="Hero колаж"
+        className="relative grid grid-cols-1 gap-8 py-12 md:grid-cols-3 md:gap-4 lg:gap-8"
+      >
+        <div className="z-10 flex rotate-[-3deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:mt-12 md:justify-end">
+          <ImageSlot
+            slot="home/hero/poster-1"
+            src="/images/home/hero/poster-1.png"
+            ratio="3/4"
+            variant="polaroid"
+            caption="Учнівська робота — кераміка"
+            className="w-64 lg:w-72"
+          />
+        </div>
+        <div className="z-20 flex rotate-[2deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:-mt-4">
+          <ImageSlot
+            slot="home/hero/poster-2"
+            src="/images/home/hero/poster-2.png"
+            ratio="3/4"
+            variant="polaroid"
+            caption="Учнівська робота — графіка"
+            className="w-64 lg:w-80"
+          />
+        </div>
+        <div className="z-0 flex rotate-[-5deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:mt-20 md:justify-start">
+          <div className="relative">
+            <ImageSlot
+              slot="home/hero/poster-3"
+              src="/images/home/hero/poster-3.png"
+              ratio="3/4"
+              variant="polaroid"
+              caption="Учнівська робота — текстиль"
+              className="w-64 lg:w-72"
+            />
+            <p className="absolute -bottom-8 -right-4 hidden rotate-[-8deg] font-hand text-hand-m text-green md:block lg:-right-12 lg:bottom-12">
+              ← хіт виставки!
+            </p>
+          </div>
+        </div>
       </section>
 
       <EditorialDivider />
@@ -61,6 +81,7 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
         </Stack>
         <ImageSlot
           slot="home/manifesto/bw"
+          src="/images/home/manifesto/bw.png"
           ratio="4/5"
           variant="photo-print"
           caption="Ч/Б — клас на занятті"
@@ -74,6 +95,7 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
       <section aria-label="Photographic interlude" className="-mx-6 md:-mx-12">
         <ImageSlot
           slot="home/interlude/main"
+          src="/images/home/interlude/main.png"
           ratio="16/9"
           variant="interlude"
           caption="Cinematic full-bleed момент"
@@ -87,6 +109,7 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
         <EditorialLabel>КОЛЕКЦІЯ МІСЯЦЯ</EditorialLabel>
         <ImageSlot
           slot="home/featured/cover"
+          src="/images/home/featured/cover.png"
           ratio="21/9"
           variant="interlude"
           caption="Банер колекції"
@@ -97,27 +120,72 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
       <EditorialDivider />
 
       {/* BLOCK 7 — Moodboard */}
-      <section aria-label="Дошка натхнення" className="space-y-4">
-        <EditorialLabel>ДОШКА НАТХНЕННЯ</EditorialLabel>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <ImageSlot
-            slot="home/moodboard/scattered-1"
-            ratio="1/1"
-            variant="photo-print"
-            caption="Деталь — пастель"
+      <section aria-label="Дошка натхнення" className="space-y-12 py-8">
+        <div className="flex items-start justify-between">
+          <EditorialLabel>ДОШКА НАТХНЕННЯ</EditorialLabel>
+          <Stamp
+            text="РЕТРО"
+            rotation={-12}
+            animateOn="hover"
+            className="hidden text-burgundy md:block"
           />
-          <ImageSlot
-            slot="home/moodboard/scattered-2"
-            ratio="1/1"
-            variant="photo-print"
-            caption="Деталь — глина"
-          />
-          <ImageSlot
-            slot="home/moodboard/scattered-3"
-            ratio="1/1"
-            variant="photo-print"
-            caption="Деталь — нитка"
-          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-4 lg:gap-8">
+          {/* Item 1 */}
+          <div className="flex justify-center md:col-span-4 md:col-start-1 md:mt-8 md:justify-end">
+            <div className="rotate-[-3deg]">
+              <ImageSlot
+                slot="home/moodboard/scattered-1"
+                src="/images/home/moodboard/scattered-1.png"
+                ratio="1/1"
+                variant="photo-print"
+                caption="Деталь — пастель"
+                className="w-56 shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
+              />
+            </div>
+          </div>
+
+          {/* Item 2 */}
+          <div className="z-10 flex justify-center md:col-span-5 md:col-start-4 md:-mt-12">
+            <div className="rotate-[2deg]">
+              <ImageSlot
+                slot="home/moodboard/scattered-2"
+                src="/images/home/moodboard/scattered-2.png"
+                ratio="1/1"
+                variant="photo-print"
+                caption="Деталь — глина"
+                className="w-64 border-[4px] border-bg-warm shadow-[0_12px_24px_rgba(0,0,0,0.18)] lg:w-80"
+              />
+            </div>
+          </div>
+
+          {/* Item 3 */}
+          <div className="flex justify-center md:col-span-4 md:col-start-9 md:mt-16 md:justify-start">
+            <div className="relative rotate-[-5deg]">
+              <p className="absolute -left-12 -top-6 rotate-[-15deg] font-hand text-hand-m text-ink">
+                фактура ↗
+              </p>
+              <ImageSlot
+                slot="home/moodboard/scattered-3"
+                src="/images/home/moodboard/scattered-3.png"
+                ratio="1/1"
+                variant="photo-print"
+                caption="Деталь — нитка"
+                className="w-48 shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
+              />
+            </div>
+          </div>
+
+          {/* Sticker */}
+          <div className="z-20 flex justify-center md:col-span-6 md:col-start-6 md:-mt-8 md:justify-end lg:-mt-16">
+            <div className="max-w-sm rotate-[3deg] bg-bg-yellow p-6 shadow-[0_8px_32px_rgba(110,39,61,0.12)]">
+              <p className="font-hand text-hand-m text-ink">
+                «Я малюю те, чого не вистачає Києву — снігу влітку.»
+              </p>
+              <p className="mt-4 font-hand text-hand-s text-green">— Марта, 11-А</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -126,20 +194,29 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
       {/* BLOCK 8 — Author feature */}
       <section
         aria-label="Автор місяця"
-        className="grid grid-cols-1 gap-6 md:grid-cols-[auto_1fr] md:items-center"
+        className="grid grid-cols-1 gap-8 md:grid-cols-[auto_1fr] md:items-center"
       >
-        <ImageSlot
-          slot="home/authors/thumb"
-          ratio="1/1"
-          variant="portrait"
-          caption="Портрет автора місяця"
-          className="md:w-48"
-        />
-        <Stack gap={3}>
+        <div className="relative">
+          <ImageSlot
+            slot="home/authors/thumb"
+            src="/images/home/authors/thumb.png"
+            ratio="1/1"
+            variant="portrait"
+            caption="Портрет автора місяця"
+            className="md:w-56"
+          />
+          <div className="absolute -bottom-4 -right-4 z-10 md:-bottom-6 md:-right-6">
+            <Stamp text="АВТОР МІСЯЦЯ" rotation={-8} animateOn="hover" className="text-burgundy" />
+          </div>
+        </div>
+        <Stack gap={3} className="md:pl-8">
           <EditorialLabel>АВТОР МІСЯЦЯ</EditorialLabel>
-          <p className="font-display text-h2 italic">Олена Сидоренко · 11-А</p>
-          <p className="max-w-prose text-small text-ink-soft">
+          <p className="font-display text-h2 italic text-ink">Олена Сидоренко · 11-А</p>
+          <p className="max-w-prose text-lead text-ink-soft">
             Працює переважно з керамікою і текстилем. У цьому місяці — серія «Птахи».
+          </p>
+          <p className="mt-2 font-hand text-hand-m text-green">
+            — Найкраще працюється ввечері, коли школа порожня
           </p>
         </Stack>
       </section>

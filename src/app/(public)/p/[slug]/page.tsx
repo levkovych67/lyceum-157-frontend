@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductDetailScreen } from "@/views/product-detail";
 import { serverApi } from "@/shared/api/server-client";
 import type { ProductDetailDto, Page as P, ProductCardDto } from "@/shared/api";
+import { JsonLd, productSchema, breadcrumbSchema } from "@/shared/seo";
 
 export const revalidate = 600;
 export const dynamicParams = true;
@@ -14,6 +15,13 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return top?.content.map(({ slug }) => ({ slug })) ?? [];
 }
 
+function plainText(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -23,11 +31,27 @@ export async function generateMetadata({
     revalidate: 600,
     tags: [`product:${params.slug}`],
   }).catch(() => null);
-  if (!p) return { title: "Робота" };
+  if (!p) return { title: "Робота не знайдена" };
+  const author = `${p.author.firstName}, ${p.author.grade}`;
+  const desc =
+    `${plainText(p.description).slice(0, 140)} · Автор: ${author} · ${p.priceUah} ₴`.slice(0, 170);
   return {
-    title: p.title,
-    description: p.description.replace(/<[^>]+>/g, "").slice(0, 160),
-    openGraph: { title: p.title, images: p.imageUrls[0] ? [p.imageUrls[0]] : [] },
+    title: `${p.title} — робота учня ${author}`,
+    description: desc,
+    alternates: { canonical: `/p/${params.slug}` },
+    openGraph: {
+      type: "article",
+      title: `${p.title} · ${author}`,
+      description: desc,
+      url: `/p/${params.slug}`,
+      images: p.imageUrls.slice(0, 4).map((url) => ({ url })),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${p.title} · ${author}`,
+      description: desc,
+      images: p.imageUrls.slice(0, 1),
+    },
   };
 }
 
@@ -37,5 +61,27 @@ export default async function Page({ params }: { params: { slug: string } }) {
     tags: [`product:${params.slug}`],
   }).catch(() => null);
   if (!p) notFound();
-  return <ProductDetailScreen product={p} />;
+  return (
+    <>
+      <JsonLd
+        data={[
+          productSchema({
+            slug: p.slug,
+            title: p.title,
+            description: plainText(p.description),
+            priceUah: p.priceUah,
+            imageUrls: p.imageUrls,
+            authorName: p.author.firstName,
+            authorGrade: p.author.grade,
+          }),
+          breadcrumbSchema([
+            { name: "Головна", url: "/" },
+            { name: "Каталог", url: "/catalog" },
+            { name: p.title, url: `/p/${p.slug}` },
+          ]),
+        ]}
+      />
+      <ProductDetailScreen product={p} />
+    </>
+  );
 }

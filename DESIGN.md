@@ -1,41 +1,41 @@
 ---
-version: alpha
-name: Lyceum 157 — Archive Edition №47
+version: 3.0
+name: Майстерня 157 — Випуск Архіву №47
 description: >-
-  Visual identity of the Lyceum 157 student-works storefront. The site presents
-  itself as the 47th annual edition of a hand-printed school archive
-  (1957–2026): warm milky paper, burgundy stamps, deep green editorial accents,
-  Fraunces display + Manrope body + Caveat handwriting. Tactile, archival,
-  publication-grade — never SaaS-flat.
+  Візуальна ідентичність магазину-галереї учнівських робіт Ліцею №157. Сайт позиціонує
+  себе як 47-й щорічний випуск надрукованого вручну шкільного архіву
+  (1957–2026): теплий молочний папір, бордові печатки, темно-зелені редакторські акценти,
+  Fraunces для заголовків + Manrope для тексту + Caveat для рукописів. Тактильний, архівний,
+  видавничий рівень — жодного SaaS-flat.
 
 colors:
-  # Brand
-  primary: "#6e273d"           # burgundy — headlines, prices, stamps
-  primary-deep: "#4d1a2a"      # hover/active for primary
-  primary-soft: "#f5e6ea"      # tinted backgrounds, badges
-  secondary: "#0c6633"         # editorial green — nav, success
-  secondary-deep: "#00662a"    # deep accent, lines
-  secondary-soft: "#d8e6dc"    # soft tinted bg
+  # Brand Core
+  burgundy: "#6e273d"           # primary, заголовки, ціни, печатки
+  burgundy-deep: "#4d1a2a"      # hover, active states
+  burgundy-soft: "#f5e6ea"      # tinted backgrounds, badges
+  green: "#0c6633"              # secondary, навігація, success
+  green-deep: "#00662a"         # deep accent, lines
+  green-soft: "#d8e6dc"         # soft tinted bg
 
   # Surfaces
-  surface: "#fafaf7"           # main milky paper
-  surface-warm: "#f3ead6"      # postcard back, warm callouts
-  surface-card: "#ffffff"      # cards, inputs
-  surface-yellow: "#fef3c7"    # sticker notes, game accents
-  surface-blue: "#dbeafe"      # alt sticker
-  surface-noir: "#1a1612"      # top bar, deep contrast strips
+  bg: "#fafaf7"                 # MAIN — теплий молочний
+  bg-warm: "#f3ead6"            # postcard back, warm callout
+  bg-card: "#ffffff"            # картки, інтерфейсні поверхні
+  bg-yellow: "#fef3c7"          # стікери, гра, акцент-секції
+  bg-blue: "#dbeafe"            # стікери варіант
+  bg-noir: "#1a1612"            # top bar, very bottom, contrast
 
   # Ink
-  on-surface: "#1e1e1e"        # primary text
-  on-surface-soft: "#6b6b6b"   # secondary text
-  on-surface-fade: "#a8a8a8"   # tertiary, hints
-  line: "#ececec"              # dividers
-  line-strong: "#c9c0b3"       # accent lines on warm bg
+  ink: "#1e1e1e"                # основний текст
+  ink-soft: "#6b6b6b"           # secondary text
+  ink-fade: "#a8a8a8"           # tertiary, hints
+  line: "#ececec"               # розділювачі
+  line-strong: "#c9c0b3"        # акцент-лінії на warm bg
 
   # Functional
-  link: "#1e73be"
-  stamp: "#6e273d"
-  error: "#b03030"
+  link: "#1e73be"               # посилання у плотному тексті
+  stamp: "#6e273d"              # печатки
+  error: "#b03030"              # помилки форми
 
 typography:
   mega:
@@ -152,192 +152,192 @@ spacing:
 
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.burgundy}"
+    textColor: "{colors.bg}"
     typography: "{typography.label}"
     rounded: "{rounded.full}"
     padding: 16px 32px
   button-primary-hover:
-    backgroundColor: "{colors.secondary}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.green}"
+    textColor: "{colors.bg}"
   button-primary-active:
-    backgroundColor: "{colors.primary-deep}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.burgundy-deep}"
+    textColor: "{colors.bg}"
 
   button-secondary:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary}"
+    backgroundColor: "{colors.bg}"
+    textColor: "{colors.burgundy}"
     typography: "{typography.label}"
     rounded: "{rounded.full}"
     padding: 16px 32px
   button-secondary-hover:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.burgundy}"
+    textColor: "{colors.bg}"
 
   card-paper:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.on-surface}"
+    backgroundColor: "{colors.bg-card}"
+    textColor: "{colors.ink}"
     rounded: "{rounded.md}"
     padding: 24px
   card-warm:
-    backgroundColor: "{colors.surface-warm}"
-    textColor: "{colors.on-surface}"
+    backgroundColor: "{colors.bg-warm}"
+    textColor: "{colors.ink}"
     rounded: "{rounded.md}"
     padding: 24px
 
   sticker-note:
-    backgroundColor: "{colors.surface-yellow}"
-    textColor: "{colors.on-surface}"
+    backgroundColor: "{colors.bg-yellow}"
+    textColor: "{colors.ink}"
     typography: "{typography.hand-m}"
     rounded: "{rounded.sm}"
     padding: 16px
 
   museum-label:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.on-surface-soft}"
+    backgroundColor: "{colors.bg-card}"
+    textColor: "{colors.ink-soft}"
     typography: "{typography.small}"
     rounded: "{rounded.none}"
     padding: 12px 16px
 
   editorial-label:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary}"
+    backgroundColor: "{colors.bg}"
+    textColor: "{colors.burgundy}"
     typography: "{typography.label}"
     rounded: "{rounded.none}"
     padding: 0px
 
   stamp:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.bg}"
     textColor: "{colors.stamp}"
     typography: "{typography.label}"
     rounded: "{rounded.full}"
     padding: 12px
 
   form-field:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.on-surface}"
+    backgroundColor: "{colors.bg-card}"
+    textColor: "{colors.ink}"
     typography: "{typography.body}"
     rounded: "{rounded.sm}"
     padding: 12px 16px
   form-field-error:
-    backgroundColor: "{colors.surface-card}"
+    backgroundColor: "{colors.bg-card}"
     textColor: "{colors.error}"
 
   input-link:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.bg}"
     textColor: "{colors.link}"
     typography: "{typography.body}"
 
   topbar:
-    backgroundColor: "{colors.surface-noir}"
-    textColor: "{colors.surface}"
+    backgroundColor: "{colors.bg-noir}"
+    textColor: "{colors.bg}"
     typography: "{typography.label}"
     padding: 8px 24px
 ---
 
-## Overview
+## Огляд
 
-The site is **the 47th annual edition of the Lyceum 157 Workshop archive**. The archive has been hand-printed on warm milky paper since 1957, illustrated with black-and-white documentary photography, and dedicated each year to current student work. Every page of the site is a page of that edition: the home is the cover plus opening spread; the catalog is a contact sheet; a product page is a feature article; checkout is a postal order form.
+Сайт є **47-м щорічним випуском архіву Майстерні 157**. Архів друкується вручну на теплому молочному папері з 1957 року, ілюструється чорно-білою документальною фотографією та присвячується щороку актуальним учнівським роботам. Кожна сторінка сайту — це сторінка цього видання: головна — це обкладинка та перший розворот; каталог — це контактний аркуш; сторінка товару — це велика стаття; чекаут — поштовий бланк замовлення.
 
-Three pillars hold the identity together:
+Три стовпи тримають айдентику разом:
 
-1. **Paper.** Tactile surfaces. Photo-print shadows. Milky background. Yellow stickers. Carbon black accents. Hand-stamped marks. Visible traces of physical process — uneven edges, slight tilts, paper noise.
-2. **Typography.** This is a publication, not a SaaS dashboard. Headlines are big, italic, with optical-size axis tuned. Body text is calm. Caveat handwriting lives in the margins. Editorial labels (▌) at 12% tracking. Numerals are oversized.
-3. **School.** It is not "a shop *about* a school" — it is **the school showing its archive**. Stamps marked 157, school crest in hallmarks, photos of corridors, student handwriting, alumni quotes, addresses of physical buildings on postcards.
+1. **Папір.** Тактильні поверхні. Тіні від фотографій. Молочний фон. Жовті стікери. Вугільно-чорні акценти. Печатки ручної роботи. Видимі сліди фізичного процесу — нерівні краї, легкі нахили, шум паперу.
+2. **Типографіка.** Це видання, а не SaaS-дашборд. Заголовки великі, італійські, з налаштованою віссю оптичного розміру. Основний текст спокійний. Рукописний шрифт Caveat живе на полях. Редакторські мітки (▌) з трекінгом 12%. Цифри збільшені.
+3. **Школа.** Це не «магазин *про* школу» — це **школа показує свій архів**. Печатки з позначкою 157, шкільний герб, фотографії коридорів, учнівський почерк, цитати випускників, адреси фізичних будівель на листівках.
 
-Tone shifts subtly across the site (editorial-formal on home/catalog/about, editorial-warm on author/work/thank-you, functional-paper on cart/checkout/login/account) but the visual language never changes — only the density of decoration.
+Тон делікатно змінюється на сайті (редакторський-офіційний на головній/каталозі/про нас, редакторський-теплий на авторі/роботі/дякуємо, функціональний-паперовий на кошику/оформленні/вході/кабінеті), але візуальна мова ніколи не змінюється — лише щільність декору.
 
-## Colors
+## Кольори
 
-The 60-30-10 rule governs surface allocation:
+Правило 60-30-10 керує розподілом поверхонь:
 
-- **60%** of any view is `surface` (#fafaf7 milky paper).
-- **30%** is split across `primary` (burgundy) blocks and warm callouts (`surface-warm`, `surface-yellow`).
-- **10%** is reserved for point accents — `secondary` (deep green) and `surface-noir`.
+- **60%** будь-якого вигляду — це `bg` (#fafaf7 молочний папір).
+- **30%** розподілено між `burgundy` (бордовий) блоками та теплими вставками (`bg-warm`, `bg-yellow`).
+- **10%** зарезервовано для точкових акцентів — `green` (глибокий зелений) та `bg-noir`.
 
-- **`primary` (#6e273d "Burgundy"):** the single brand voice. Headlines, prices, stamps, the most important call to action on each screen. Never used for body text.
-- **`primary-deep` (#4d1a2a):** active/pressed state of primary surfaces; never a static fill.
-- **`primary-soft` (#f5e6ea):** tinted backgrounds for badges and notification chips that need to read as "of the brand" without screaming.
-- **`secondary` (#0c6633 "Editorial Green"):** navigation rest state, success states, and the inverted hover of `button-primary`. The green-burgundy alternation is intentional — it echoes printed-edition spot inks.
-- **`surface` (#fafaf7):** the milky paper that anchors everything. Pure white (`surface-card`) is reserved for raised surfaces (cards, inputs) so that the page itself reads warmer.
-- **`surface-warm` (#f3ead6):** the back of a postcard. Used for the footer composition and warm callouts.
-- **`surface-yellow` / `surface-blue`:** sticker notes — handwritten margin commentary, never primary content.
-- **`surface-noir` (#1a1612):** a near-black with a hint of warmth. Used only for the very top utility strip and the very bottom of the page; never as a generic dark background.
-- **`on-surface` family (#1e1e1e → #a8a8a8):** type hierarchy. Body always `on-surface`; metadata uses `on-surface-soft`; hints, placeholders, disabled state use `on-surface-fade`.
-- **`link` (#1e73be):** the only blue allowed, and only for prose-embedded hyperlinks. Buttons never use it.
-- **`error` (#b03030):** a warmer, more burgundy-leaning red — sits within the palette rather than fighting it.
+- **`burgundy` (#6e273d "Бордовий"):** єдиний голос бренду. Заголовки, ціни, печатки, найважливіший заклик до дії на кожному екрані. Ніколи не використовується для основного тексту.
+- **`burgundy-deep` (#4d1a2a):** стан active/pressed основних поверхонь; ніколи не як статична заливка.
+- **`burgundy-soft` (#f5e6ea):** тоновані фони для бейджів та підказок, які повинні виглядати як частина бренду, але не кричати.
+- **`green` (#0c6633 "Редакторський зелений"):** стан спокою навігації, стани успіху та інвертований hover для `button-primary`. Чергування зеленого та бордового є навмисним — воно нагадує друкарські акцентні чорнила.
+- **`bg` (#fafaf7):** молочний папір, який тримає все разом. Чисто білий (`bg-card`) зарезервовано для піднятих поверхонь (картки, поля вводу), щоб сама сторінка виглядала теплішою.
+- **`bg-warm` (#f3ead6):** зворотна сторона поштової листівки. Використовується для композиції футера та теплих вставок.
+- **`bg-yellow` / `bg-blue`:** стікери — рукописні коментарі на полях, ніколи не основний контент.
+- **`bg-noir` (#1a1612):** майже чорний з відтінком тепла. Використовується лише для верхньої технічної смуги та самого низу сторінки; ніколи як звичайний темний фон.
+- **`ink` родина (#1e1e1e → #a8a8a8):** ієрархія тексту. Основний текст завжди `ink`; метадані використовують `ink-soft`; підказки, плейсхолдери, неактивний стан використовують `ink-fade`.
+- **`link` (#1e73be):** єдиний дозволений синій, і тільки для гіперпосилань, вбудованих у текст. Кнопки ніколи його не використовують.
+- **`error` (#b03030):** тепліший, більш бордовий червоний — сидить усередині палітри, а не сперечається з нею.
 
-## Typography
+## Типографіка
 
-Three typefaces, all variable, all from Google Fonts:
+Три гарнітури, усі варіативні, усі з Google Fonts:
 
-- **Fraunces** (display) — serif with `opsz` (optical size) and `WONK` axes. Carries the publication tone.
-- **Manrope** (body) — neutral grotesque, weights 200–800.
-- **Caveat** (handwriting) — margin notes, signatures, never running text.
+- **Fraunces** (display) — із засічками, з віссю `opsz` (оптичний розмір) та `WONK`. Задає тон видання.
+- **Manrope** (body) — нейтральний гротеск, товщина 200–800.
+- **Caveat** (handwriting) — нотатки на полях, підписи, ніколи не основний текст.
 
-Italic Fraunces is reserved for `display`, `h2`, and `quote` — never used as a generic emphasis style. The optical-size axis mirrors traditional print: `opsz 144` on the largest headlines (softer, higher-contrast curves) and `opsz 9–24` on smaller working type. Fake italic and synthetic obliques are forbidden.
+Курсив Fraunces зарезервований для `display`, `h2` та `quote` — ніколи не використовується як загальний стиль виділення. Вісь оптичного розміру відображає традиційний друк: `opsz 144` на найбільших заголовках (м'якші, більш контрастні криві) та `opsz 9–24` на меншому робочому тексті. Штучний курсив та синтетичні нахили заборонені.
 
-The `label` token is uppercase Manrope at 12% tracking — this is the editorial-label voice that replaces the "▌ SECTION TITLE" device throughout the site. The handwriting tokens (`hand-s/m/l`) are used sparingly: marginalia, the editor's signature, occasional pull-quote attributions. Body text never uses Caveat.
+Токен `label` — це великі літери Manrope з трекінгом 12% — це голос редакторської мітки, який замінює прийом "▌ НАЗВА РОЗДІЛУ" по всьому сайту. Рукописні токени (`hand-s/m/l`) використовуються помірно: маргіналії, підпис редактора, поодинокі атрибуції цитат. Основний текст ніколи не використовує Caveat.
 
-## Layout
+## Макет
 
-- **Container:** max-width 1280px, horizontal padding 24px (desktop) / 20px (mobile).
-- **Vertical rhythm:** sections breathe at 120px on desktop, 64px on mobile. Anything tighter feels web-flat; anything wider breaks the page-turn rhythm.
-- **Grid:** 12-column with 24px gap (16px mobile). The grid is *present* but **never symmetric** — content is intentionally weighted left or right, image-heavy on one side, type-heavy on the other.
-- **Spacing scale:** dense in increments of 4–32px for component-internal spacing; jumps to 48–200px for editorial breathing room. Never use a value that isn't on the scale.
+- **Контейнер:** максимальна ширина 1280px, горизонтальні відступи 24px (десктоп) / 20px (мобільний).
+- **Вертикальний ритм:** секції дихають на 120px на десктопі, 64px на мобільному. Все, що щільніше, здається плоским; все, що ширше, ламає ритм перегортання сторінок.
+- **Сітка:** 12-колонкова з відступом 24px (16px мобільний). Сітка *присутня*, але **ніколи не симетрична** — контент навмисно зважений ліворуч або праворуч, багато фотографій з одного боку, багато тексту з іншого.
+- **Шкала відступів:** щільна з кроком 4–32px для внутрішнього простору компонентів; стрибає до 48–200px для вільного простору. Ніколи не використовуйте значення, якого немає на шкалі.
 
-## Elevation & Depth
+## Висота та Глибина
 
-Shadows are warm, never neutral grey. Burgundy alpha layers stand in for ambient ink shadows you'd see on stacked paper.
+Тіні теплі, ніколи не нейтрально-сірі. Бордові альфа-шари замінюють тіні від чорнила, які ви б побачили на складеному папері.
 
-- **Paper-rest** (`0 1px 0 rgba(0,0,0,0.04), 0 4px 16px rgba(110,39,61,0.06)`) — default for cards. Imitates a sheet resting on the page beneath it.
-- **Lift** (`0 8px 32px rgba(110,39,61,0.12)`) — hover state for product cards, modal entry.
-- **Photo-print** (`0 12px 24px rgba(0,0,0,0.18), 0 2px 4px rgba(0,0,0,0.10)`) — black-and-white photographs sitting on the page; intentionally cooler and harder than the paper shadow.
-- **Deep** (`0 32px 64px rgba(0,0,0,0.24)`) — overlays and lightboxes only.
+- **Paper-rest** (`0 1px 0 rgba(0,0,0,0.04), 0 4px 16px rgba(110,39,61,0.06)`) — за замовчуванням для карток. Імітує аркуш, що лежить на сторінці під ним.
+- **Lift** (`0 8px 32px rgba(110,39,61,0.12)`) — стан наведення для карток товарів, входу в модальне вікно.
+- **Photo-print** (`0 12px 24px rgba(0,0,0,0.18), 0 2px 4px rgba(0,0,0,0.10)`) — чорно-білі фотографії, що лежать на сторінці; навмисно холодніші та жорсткіші за тінь паперу.
+- **Deep** (`0 32px 64px rgba(0,0,0,0.24)`) — лише для накладень і лайтбоксів.
 
-A faint burgundy vignette (`radial-gradient at center, transparent 60%, rgba(110,39,61,0.04) 100%`) is layered over photo sections. Glassmorphism is forbidden except on the sticky header.
+Слабке бордове віньєтування (`radial-gradient at center, transparent 60%, rgba(110,39,61,0.04) 100%`) накладається на фото-секції. Гласморфізм заборонений, окрім прилипаючого хедера.
 
-## Shapes
+## Форми
 
-- `rounded.sm` (6px) — tags, small badges, inputs.
-- `rounded.md` (12px) — photographs, content cards.
-- `rounded.lg` (20px) — large feature cards.
-- `rounded.full` (9999px) — pill buttons, stamps.
-- `rounded.none` — editorial labels, museum labels, divider rules. Sharp corners signal "printed".
+- `rounded.sm` (6px) — теги, малі бейджі, поля вводу.
+- `rounded.md` (12px) — фотографії, картки контенту.
+- `rounded.lg` (20px) — великі картки функцій.
+- `rounded.full` (9999px) — кнопки-пігулки, печатки.
+- `rounded.none` — редакторські мітки, музейні мітки, розділювальні лінії. Гострі кути сигналізують про «надируковане».
 
-Borders come in four flavors: thin (`1px solid line`) for default dividers, strong (`1.5px solid on-surface`) for emphasis, burgundy (`1.5px solid primary`) for brand surfaces, and dashed (`1.5px dashed on-surface`) for postal/form dividers.
+Межі бувають чотирьох видів: тонкі (`1px solid line`) для звичайних розділювачів, сильні (`1.5px solid ink`) для наголосу, бордові (`1.5px solid burgundy`) для фірмових поверхонь і пунктирні (`1.5px dashed ink`) для поштових/формних розділювачів.
 
-## Components
+## Компоненти
 
-The components in the front matter cover the foundational vocabulary. Each named state (`-hover`, `-active`, `-error`) is a sibling token, not a nested object — this keeps them addressable from Tailwind themes and DTCG exports.
+Компоненти у frontmatter охоплюють базовий словник. Кожен іменований стан (`-hover`, `-active`, `-error`) є сестринським токеном, а не вкладеним об'єктом — це дозволяє звертатися до них з тем Tailwind та експортів DTCG.
 
-Conventions:
+Умовності:
 
-- **Buttons** are pill-shaped, label-typed, full-width on mobile. The hover swaps `primary` ↔ `secondary` rather than darkening — this is the brand's signature interaction.
-- **Cards** sit on `surface-card` (white) at `rounded.md` with `paper-rest` elevation. Warm callouts use `surface-warm` instead.
-- **Stamps** are circular `rounded.full` blocks of `stamp` color, applied with the `stamp-drop` motion (scale 1.4 → 1, rotate ±10° from final, `cubic-bezier(0.5, -0.6, 0.5, 1.6)` over 280ms). Fade-in is forbidden on stamps.
-- **Sticker notes** use `surface-yellow` and Caveat handwriting — they are decorative annotations, never the main content.
-- **Form fields** use `surface-card`, `rounded.sm`, body type. Errors render text in `error` while keeping the surface unchanged — color drives the alert, not a red box.
-- **Editorial labels** are uppercase Manrope `label` (11px, 12% tracking) preceded by the ▌ glyph; rounded.none, no padding, sit flush above headings.
+- **Кнопки** мають форму пігулки, використовують шрифт `label`, на всю ширину на мобільному. При наведенні `burgundy` змінюється на `green`, а не затемнюється — це фірмова взаємодія бренду.
+- **Картки** знаходяться на `bg-card` (білий) з `rounded.md` і висотою `paper-rest`. Теплі вставки замість цього використовують `bg-warm`.
+- **Печатки** — це круглі блоки `rounded.full` кольору `stamp`, які застосовуються з рухом `stamp-drop` (масштаб 1.4 → 1, обертання ±10° від фінального, `cubic-bezier(0.5, -0.6, 0.5, 1.6)` протягом 280мс). Плавне зникнення (fade-in) заборонено для печаток.
+- **Стікери** використовують `bg-yellow` і рукописний Caveat — це декоративні анотації, ніколи не основний контент.
+- **Поля форм** використовують `bg-card`, `rounded.sm`, основний шрифт. Помилки відображають текст у `error`, залишаючи поверхню незмінною — колір керує попередженням, а не червона коробка.
+- **Редакторські мітки** — це великі літери Manrope `label` (11px, трекінг 12%), яким передує символ ▌; rounded.none, без відступів, розташовані прямо над заголовками.
 
-## Do's and Don'ts
+## Що робити і чого не робити
 
-**Do**
+**Робіть**
 
-- Do reserve `primary` (burgundy) for the single most important action on each screen.
-- Do use the sibling-naming convention for states (`button-primary-hover`, not nested objects).
-- Do keep the paper-noise overlay visible on every page (`body::before`, opacity 0.04, multiply blend).
-- Do animate stamps with the bouncy `ease-stamp` curve — the slight overshoot is the brand.
-- Do mix italic and roman Fraunces deliberately; italic equals "section title" and "pull quote", roman equals everything else.
-- Do respect the 60-30-10 surface rule on every composition.
+- Зарезервуйте `burgundy` (бордовий) для єдиної найважливішої дії на кожному екрані.
+- Використовуйте угоду про іменування сестринських станів (`button-primary-hover`, а не вкладені об'єкти).
+- Зберігайте накладення шуму паперу видимим на кожній сторінці (`body::before`, непрозорість 0.04, змішування multiply).
+- Анімуйте печатки пружною кривою `ease-stamp` — невелике перестрибування є фірмовим.
+- Свідомо поєднуйте курсивний і прямий Fraunces; курсив означає "назва розділу" і "цитата", прямий — усе інше.
+- Дотримуйтесь правила 60-30-10 щодо поверхонь у кожній композиції.
 
-**Don't**
+**Не робіть**
 
-- Don't introduce hardcoded colors, sizes, or fonts in components — only token-derived classes.
-- Don't replace `stamp-drop` with a fade-in. Fade-in is a non-negotiable regression.
-- Don't use symmetric 4×N product grids — they read as Shopify default. Lean asymmetric.
-- Don't use gradient backgrounds, glassmorphism (except sticky header), purple corner glows, or generic Lottie loops — these are the AI-slop tells the spec explicitly bans.
-- Don't pair Inter / Space Grotesk / Roboto with this palette. Fraunces + Manrope + Caveat or nothing.
-- Don't mix `rounded.sm` and `rounded.lg` in the same composition — choose a register and hold it.
-- Don't use emojis as UI affordances; use printer's marks (★ ▌ → ⊙) instead.
-- Don't force WCAG-failing pairings. Body text on `surface` must clear 4.5:1 — verify with the lint contrast check.
+- Не вводьте жорстко закодовані кольори, розміри або шрифти в компонентах — лише класи, похідні від токенів.
+- Не замінюйте `stamp-drop` на плавне зникнення. Плавне зникнення є неприйнятним кроком назад.
+- Не використовуйте симетричні сітки товарів 4×N — вони виглядають як стандартний Shopify. Схиляйтеся до асиметрії.
+- Не використовуйте градієнтні фони, гласморфізм (окрім прилипаючого хедера), фіолетові світіння по кутах або стандартні цикли Lottie — це ознаки AI-генерації, які специфікація прямо забороняє.
+- Не поєднуйте Inter / Space Grotesk / Roboto з цією палітрою. Або Fraunces + Manrope + Caveat, або нічого.
+- Не змішуйте `rounded.sm` і `rounded.lg` в одній композиції — оберіть один регістр і тримайте його.
+- Не використовуйте емодзі як елементи інтерфейсу; натомість використовуйте друкарські знаки (★ ▌ → ⊙).
+- Не допускайте поєднань кольорів, що не відповідають WCAG. Основний текст на `bg` повинен перевищувати 4.5:1 — перевірте за допомогою контрастної перевірки.

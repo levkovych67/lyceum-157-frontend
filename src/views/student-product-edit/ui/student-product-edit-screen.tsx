@@ -9,6 +9,7 @@ export function StudentProductEditScreen({ id }: { id: string }) {
       <h1 className="font-display text-h1 italic text-burgundy">Робота {id}</h1>
       <ImageSlot
         slot="student/upload/art"
+        src="/images/student/upload/art.png"
         ratio="4/5"
         variant="photo-print"
         caption="Прев'ю фото"

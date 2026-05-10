@@ -6,19 +6,24 @@ import { CheckoutForm } from "@/features/checkout";
 export function CheckoutScreen() {
   return (
     <EditorialPageShell>
-      <EditorialLabel>БЛАНК-ЗАМОВЛЕННЯ</EditorialLabel>
-      <h1 className="font-display text-h1 italic text-burgundy">Оформлення</h1>
+      <section className="relative py-8">
+        <EditorialLabel>БЛАНК-ЗАМОВЛЕННЯ</EditorialLabel>
+        <h1 className="mt-4 font-display text-mega italic text-burgundy">Оформлення</h1>
+      </section>
+
       <CheckoutForm />
-      <div className="flex items-center gap-3 border-t border-line pt-4">
+
+      <div className="border-ink/30 mt-16 flex items-center justify-center gap-4 border-t-[1.5px] border-dashed pt-8 text-center md:justify-start md:text-left">
         <ImageSlot
           slot="checkout/trust-seal"
+          src="/images/checkout/trust-seal.png"
           ratio="1/1"
           variant="stamp"
           caption="Безпечний платіж"
-          className="w-16"
+          className="w-16 opacity-80 grayscale"
         />
-        <p className="text-small text-ink-soft">
-          Платіж проходить через WayForPay. Картку не зберігаємо.
+        <p className="max-w-xs font-hand text-hand-m text-ink-soft">
+          Платіж проходить через WayForPay. Дані карток не зберігаються у нас.
         </p>
       </div>
     </EditorialPageShell>

@@ -11,6 +11,7 @@ export function StudentProductNewScreen() {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[auto_1fr] md:items-start">
         <ImageSlot
           slot="student/upload/art"
+          src="/images/student/upload/art.png"
           ratio="4/5"
           variant="photo-print"
           caption="Прев'ю першого фото"

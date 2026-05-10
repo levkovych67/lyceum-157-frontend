@@ -8,6 +8,7 @@ export function StudentFinanceScreen() {
       <h1 className="font-display text-h1 italic text-burgundy">Фінанси</h1>
       <ImageSlot
         slot="student/finance/banner"
+        src="/images/student/finance/banner.png"
         ratio="16/9"
         variant="interlude"
         caption="Hero банер фінансів"
@@ -16,6 +17,7 @@ export function StudentFinanceScreen() {
       <div className="flex flex-col items-center gap-3 py-12">
         <ImageSlot
           slot="student/empty/no-payouts"
+          src="/images/student/empty/no-payouts.png"
           ratio="1/1"
           variant="stamp"
           caption="Виплат поки немає"

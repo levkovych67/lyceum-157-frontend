@@ -5,7 +5,7 @@ body::before {
   background-image: url("/textures/paper-noise.svg");
   background-size: 256px 256px;
   mix-blend-mode: multiply;
-  opacity: 0.04;
+  opacity: 0.06;
   pointer-events: none;
   z-index: 1;
 }

@@ -12,7 +12,7 @@ export function CookieBanner() {
     <div
       role="region"
       aria-label={uk.cookies.ariaLabel}
-      className="border-burgundy/30 bg-bg-warm/95 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur-sm"
+      className="border-ink/30 fixed inset-x-0 bottom-0 z-40 border-t-[1.5px] border-dashed bg-bg-warm shadow-[0_-8px_32px_rgba(110,39,61,0.12)]"
     >
       <Container>
         <div className="flex items-center justify-between gap-4 py-2">

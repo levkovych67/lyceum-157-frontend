@@ -129,7 +129,7 @@ export function ImageSlot({
         variant !== "polaroid" && variant !== "stamp" && "overflow-hidden",
         className,
       )}
-      title={`Покласти файл: public/images/${slot}.jpg`}
+      title={`Покласти файл: public/images/${slot}`}
     >
       <span className="bg-ink/80 absolute left-2 top-2 rounded-sm px-2 py-1 font-mono text-[10px] uppercase tracking-wide text-bg-warm">
         {slot}

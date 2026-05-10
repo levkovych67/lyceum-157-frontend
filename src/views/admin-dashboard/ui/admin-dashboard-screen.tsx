@@ -9,6 +9,7 @@ export function AdminDashboardScreen() {
       <h1 className="font-display text-h1 italic text-burgundy">Кабінет адміністратора</h1>
       <ImageSlot
         slot="admin/dashboard/hero"
+        src="/images/admin/dashboard/hero.png"
         ratio="16/9"
         variant="interlude"
         caption="Hero банер адмінки"
@@ -32,6 +33,7 @@ export function AdminDashboardScreen() {
       <div className="flex flex-col items-center gap-3 py-8">
         <ImageSlot
           slot="admin/empty/queue"
+          src="/images/admin/empty/queue.png"
           ratio="1/1"
           variant="stamp"
           caption="Черга порожня"

@@ -18,8 +18,15 @@ export type StampText =
   | "ЗОШИТ ЗАГУБЛЕНО"
   | "ШТАМП-ВІДДІЛ ЗАЧИНЕНО"
   | "КОРЕСПОНДЕНЦІЯ ЗАГУБЛЕНА"
-  | "ДОКУМЕНТ ГОТУЄТЬСЯ";
+  | "ДОКУМЕНТ ГОТУЄТЬСЯ"
+  | "РЕТРО"
+  | "АВТОР МІСЯЦЯ"
+  | "ПОШТА"
+  | "РАХУНОК"
+  | "ІСТОРІЯ"
+  | "1957"
+  | "MAYSTERNYA · KYIV";
 export type StampShape = "circle" | "octagon" | "rect" | "soft";
-export type StampRotation = -12 | -8 | -5 | -3 | 3 | 5 | 8 | 10;
+export type StampRotation = -15 | -12 | -10 | -8 | -5 | -3 | 3 | 5 | 8 | 10 | 12 | 15;
 export type StampColor = "burgundy" | "ink";
-export type StampAnimateOn = "load" | "scroll" | "none";
+export type StampAnimateOn = "load" | "scroll" | "hover" | "none";

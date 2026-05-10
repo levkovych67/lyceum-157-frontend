@@ -11,6 +11,7 @@ export function AdminProductsScreen() {
       <div className="flex flex-col items-center gap-3 py-12">
         <ImageSlot
           slot="admin/empty/queue"
+          src="/images/admin/empty/queue.png"
           ratio="1/1"
           variant="stamp"
           caption="Черга порожня"
