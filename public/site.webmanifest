@@ -1,0 +1,26 @@
+{
+  "name": "Майстерня 157 — Архів учнівських робіт Ліцею №157",
+  "short_name": "Майстерня 157",
+  "description": "Архів робіт учнів художнього класу Ліцею №157 у Києві. З 1957 року.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5ecd9",
+  "theme_color": "#6e273d",
+  "lang": "uk-UA",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
