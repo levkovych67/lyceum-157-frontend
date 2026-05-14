@@ -1,7 +1,8 @@
 import { api } from "@/shared/api/client";
 import type { Page } from "@/shared/api/types";
+import type { ProductTypeValue } from "@/shared/api/enums";
 
-export type ProductType = "PHYSICAL" | "DIGITAL";
+export type ProductType = ProductTypeValue;
 export type Sort = "newest" | "price_asc" | "price_desc" | "popular";
 
 export type AuthorDto = { studentId: string; firstName: string; grade: string };

@@ -38,4 +38,14 @@ module.exports = {
       { patterns: [{ group: ["../*"], message: "Use @/ alias instead of relative parent imports" }] },
     ],
   },
+  overrides: [
+    {
+      files: ["src/shared/api/generated/**/*.ts"],
+      rules: {
+        "no-restricted-imports": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "react-hooks/rules-of-hooks": "off",
+      },
+    },
+  ],
 };

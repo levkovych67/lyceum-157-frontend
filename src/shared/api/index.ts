@@ -1,5 +1,15 @@
 export * from "./constants";
 export * from "./types";
+export {
+  ProductStatus,
+  type ProductStatusValue,
+  ProductType,
+  type ProductTypeValue,
+  KycStatus,
+  type KycStatusValue,
+  type OrderStatus,
+  type PayoutStatus,
+} from "./enums";
 export * from "./errors";
 export * from "./error-messages";
 export * from "./api-error-to-form";
@@ -18,13 +28,7 @@ export type {
   TokenResponse,
 } from "./modules/auth";
 export { catalogApi } from "./modules/catalog";
-export type {
-  ProductType,
-  Sort,
-  ProductCardDto,
-  ProductDetailDto,
-  AuthorDto,
-} from "./modules/catalog";
+export type { Sort, ProductCardDto, ProductDetailDto, AuthorDto } from "./modules/catalog";
 export { ordersApi } from "./modules/orders";
 export type { CreateOrderRequest, OrderCreationResponse } from "./modules/orders";
 export { kycApi } from "./modules/kyc";
@@ -39,7 +43,6 @@ export type {
 export { userApi } from "./modules/users";
 export { adminApi, downloadTaxReport } from "./modules/admin";
 export type {
-  ProductStatus,
   AdminProductDto,
   TotpEnrollResponse,
   PayoutBatchRequest,

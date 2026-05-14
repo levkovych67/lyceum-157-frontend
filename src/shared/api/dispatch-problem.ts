@@ -59,8 +59,21 @@ export function dispatchProblem(problem: ProblemDetail, ctx: DispatchContext): v
       toast.error("Цей email уже зареєстрований");
       return;
 
+    case "urn:l157:auth/email-not-verified":
+      router.push("/verify-email");
+      return;
+
+    case "urn:l157:auth/totp-required":
+      toast.error("Введіть TOTP код 2FA");
+      return;
+
     case "urn:l157:admin/totp-invalid":
       toast.error("Невірний код 2FA");
+      return;
+
+    // === Legal / acceptance ===
+    case "urn:l157:legal/acceptance-required":
+      router.push("/legal/accept-updates");
       return;
 
     // === Catalog / Product ===
@@ -80,20 +93,44 @@ export function dispatchProblem(problem: ProblemDetail, ctx: DispatchContext): v
     }
 
     // === Order / Idempotency ===
-    case "urn:l157:order/out-of-stock": {
-      const stock = problem.invalidParams?.[0] as
-        | (Record<string, string> & { available?: string })
+    case "urn:l157:order/out-of-stock":
+    case "urn:l157:checkout/insufficient-stock": {
+      const failedItems = problem.extensions?.failedItems as
+        | Array<{ title?: string; available?: number }>
         | undefined;
-      const available = stock?.available ?? "0";
-      toast.error(`Товар закінчився (доступно: ${available})`);
+      if (failedItems && failedItems.length > 0) {
+        const names = failedItems
+          .map((i) => i.title)
+          .filter(Boolean)
+          .join(", ");
+        toast.error(names ? `Товар скінчився: ${names}` : "Деякі товари скінчились");
+      } else {
+        const stock = problem.invalidParams?.[0] as
+          | (Record<string, string> & { available?: string })
+          | undefined;
+        const available = stock?.available ?? "0";
+        toast.error(`Товар закінчився (доступно: ${available})`);
+      }
+      queryClient.invalidateQueries({ queryKey: ["catalog"] });
       return;
     }
 
     case "urn:l157:order/idem-conflict":
+    case "urn:l157:idem/conflict":
       throw new IdempotencyConflictError(problem);
 
     case "urn:l157:order/refund-conflict":
       toast.error("Виплата вже виконана — refund неможливий");
+      return;
+
+    // === Concurrency / transient ===
+    case "urn:l157:resource/concurrent-modification":
+      toast.error("Хтось щойно це змінив, оновіть сторінку");
+      queryClient.invalidateQueries();
+      return;
+
+    case "urn:l157:transient/retry":
+      toast.error("Тимчасова помилка, спробуйте ще раз");
       return;
 
     // === Payout ===

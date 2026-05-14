@@ -15,6 +15,7 @@ export type ProblemDetail = {
   instance: string;
   timestamp: string;
   invalidParams?: Array<{ field: string; reason: string }>;
+  extensions?: Record<string, unknown>;
 };
 
 export type Page<T> = {

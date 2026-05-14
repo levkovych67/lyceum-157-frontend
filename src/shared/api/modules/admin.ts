@@ -1,14 +1,9 @@
 import { api } from "@/shared/api/client";
 import type { Page } from "@/shared/api/types";
-import type { ProductType } from "./catalog";
+import type { ProductStatusValue, ProductTypeValue } from "@/shared/api/enums";
 
-export type ProductStatus =
-  | "DRAFT"
-  | "PENDING_REVIEW"
-  | "ACTIVE"
-  | "REJECTED"
-  | "HIDDEN"
-  | "DELETED";
+export type ProductStatus = ProductStatusValue;
+export type ProductType = ProductTypeValue;
 
 export type AdminProductDto = {
   id: string;
