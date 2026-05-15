@@ -23,7 +23,7 @@ export function CheckoutScreen() {
           className="w-16 opacity-80 grayscale"
         />
         <p className="max-w-xs font-hand text-hand-m text-ink-soft">
-          Платіж проходить через WayForPay. Дані карток не зберігаються у нас.
+          Платіж проходить через LiqPay. Дані карток не зберігаються у нас.
         </p>
       </div>
     </EditorialPageShell>

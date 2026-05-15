@@ -108,7 +108,7 @@ export function CheckoutForm() {
               loading={m.isPending}
               className="hover:bg-burgundy/90 bg-burgundy text-bg-warm"
             >
-              {m.isPending ? "Зʼєднання з WayForPay…" : `Сплатити ${totalUah} ₴`}
+              {m.isPending ? "Перенаправляємо на LiqPay…" : `Сплатити ${totalUah} ₴`}
             </PillButton>
           </FormFooter>
         </div>
