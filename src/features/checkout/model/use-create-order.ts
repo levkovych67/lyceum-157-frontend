@@ -1,11 +1,10 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
+import { create1 as createOrder } from "@/shared/api/generated/orders/orders";
 import {
-  ordersApi,
   type CreateOrderRequest,
   type OrderCreationResponse,
   ApiError,
-  IdempotencyConflictError,
   clearCheckoutIdempotencyKey,
   rotateCheckoutIdempotencyKey,
   useCheckoutIdempotencyKey,
@@ -16,17 +15,12 @@ async function createOrderSafe(
   initialKey: string,
 ): Promise<OrderCreationResponse> {
   try {
-    return await ordersApi.create(body, initialKey);
+    return await createOrder(body, { headers: { "Idempotency-Key": initialKey } });
   } catch (e) {
-    if (e instanceof IdempotencyConflictError) {
-      const fresh = rotateCheckoutIdempotencyKey();
-      return ordersApi.create(body, fresh);
-    }
     if (e instanceof ApiError && e.problem.type === "urn:l157:order/idem-conflict") {
-      // Дисптчер може ще не встигнути конвертувати ApiError → IdempotencyConflictError
-      // (наприклад mutationFn кидає до того, як query-provider mutations.onError виконається).
+      // Idempotency-Key collision (BE rejected reuse) — rotate and retry once.
       const fresh = rotateCheckoutIdempotencyKey();
-      return ordersApi.create(body, fresh);
+      return createOrder(body, { headers: { "Idempotency-Key": fresh } });
     }
     throw e;
   }
