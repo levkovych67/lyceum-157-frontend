@@ -49,6 +49,8 @@ export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
   }
 
   const ct = res.headers.get("Content-Type") ?? "";
-  if (ct.includes("text/csv")) return res.body as unknown as T;
+  if (ct.includes("text/csv") || ct.includes("application/octet-stream")) {
+    return (await res.blob()) as unknown as T;
+  }
   return res.json() as Promise<T>;
 }

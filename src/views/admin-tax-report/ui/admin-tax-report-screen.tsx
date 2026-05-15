@@ -1,7 +1,17 @@
 "use client";
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
 import { EditorialLabel, EditorialDivider, ImageSlot, PillButton } from "@/shared/ui";
-import { downloadTaxReport, getAccessToken } from "@/shared/api";
+import { download as downloadTaxReport } from "@/shared/api/generated/admin-tax-report/admin-tax-report";
+
+async function downloadCsv(from: string, to: string) {
+  const blob = await downloadTaxReport({ from, to });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `4DF_${from}_${to}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export function AdminTaxReportScreen() {
   return (
@@ -25,8 +35,7 @@ export function AdminTaxReportScreen() {
       <EditorialDivider />
       <PillButton
         onClick={() => {
-          const token = getAccessToken();
-          if (token) void downloadTaxReport("2026-01-01", "2026-12-31", token);
+          void downloadCsv("2026-01-01", "2026-12-31");
         }}
       >
         Завантажити CSV (2026)
