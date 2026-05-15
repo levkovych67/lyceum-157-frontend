@@ -14,6 +14,9 @@ export default defineConfig({
           path: "./src/shared/api/orval-mutator.ts",
           name: "customFetch",
         },
+        fetch: {
+          includeHttpResponseReturnType: false,
+        },
         query: {
           useQuery: true,
           useMutation: true,

@@ -34,69 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type refundResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type refundResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type refundResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type refundResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type refundResponse404 = {
-  data: void;
-  status: 404;
-};
-
-export type refundResponse409 = {
-  data: void;
-  status: 409;
-};
-
-export type refundResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type refundResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type refundResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type refundResponseSuccess = refundResponse204 & {
-  headers: Headers;
-};
-export type refundResponseError = (
-  | refundResponse400
-  | refundResponse401
-  | refundResponse403
-  | refundResponse404
-  | refundResponse409
-  | refundResponse422
-  | refundResponse429
-  | refundResponse500
-) & {
-  headers: Headers;
-};
-
-export type refundResponse = refundResponseSuccess | refundResponseError;
-
 export const getRefundUrl = (orderId: string) => {
   return `/api/v1/admin/orders/${orderId}/refund`;
 };
@@ -109,8 +46,8 @@ export const refund = async (
   orderId: string,
   refundOrderRequest: RefundOrderRequest,
   options?: RequestInit,
-): Promise<refundResponse> => {
-  return customFetch<refundResponse>(getRefundUrl(orderId), {
+): Promise<void> => {
+  return customFetch<void>(getRefundUrl(orderId), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },

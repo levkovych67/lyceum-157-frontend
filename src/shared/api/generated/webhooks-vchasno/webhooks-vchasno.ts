@@ -32,30 +32,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type handleResponse200 = {
-  data: void;
-  status: 200;
-};
-
-export type handleResponse400 = {
-  data: void;
-  status: 400;
-};
-
-export type handleResponse401 = {
-  data: void;
-  status: 401;
-};
-
-export type handleResponseSuccess = handleResponse200 & {
-  headers: Headers;
-};
-export type handleResponseError = (handleResponse400 | handleResponse401) & {
-  headers: Headers;
-};
-
-export type handleResponse = handleResponseSuccess | handleResponseError;
-
 export const getHandleUrl = () => {
   return `/api/v1/webhooks/vchasno`;
 };
@@ -64,11 +40,8 @@ export const getHandleUrl = () => {
  * Fires when a parent has completed (or rejected) the e-signature flow. Approved consents activate the LegalConsent record and unblock product publication for the student.
  * @summary Vchasno e-signature status callback
  */
-export const handle = async (
-  handleBody: string,
-  options?: RequestInit,
-): Promise<handleResponse> => {
-  return customFetch<handleResponse>(getHandleUrl(), {
+export const handle = async (handleBody: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getHandleUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },

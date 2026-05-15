@@ -42,51 +42,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type updateCardResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type updateCardResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type updateCardResponse404 = {
-  data: void;
-  status: 404;
-};
-
-export type updateCardResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type updateCardResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type updateCardResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type updateCardResponseSuccess = updateCardResponse204 & {
-  headers: Headers;
-};
-export type updateCardResponseError = (
-  | updateCardResponse400
-  | updateCardResponse404
-  | updateCardResponse422
-  | updateCardResponse429
-  | updateCardResponse500
-) & {
-  headers: Headers;
-};
-
-export type updateCardResponse = updateCardResponseSuccess | updateCardResponseError;
-
 export const getUpdateCardUrl = (params: UpdateCardParams) => {
   const normalizedParams = new URLSearchParams();
 
@@ -111,8 +66,8 @@ export const updateCard = async (
   cardUpdateRequest: CardUpdateRequest,
   params: UpdateCardParams,
   options?: RequestInit,
-): Promise<updateCardResponse> => {
-  return customFetch<updateCardResponse>(getUpdateCardUrl(params), {
+): Promise<void> => {
+  return customFetch<void>(getUpdateCardUrl(params), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -237,51 +192,6 @@ export function useUpdateCard<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type submit1Response200 = {
-  data: KycSubmitResponse;
-  status: 200;
-};
-
-export type submit1Response400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type submit1Response404 = {
-  data: KycSubmitResponse;
-  status: 404;
-};
-
-export type submit1Response422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type submit1Response429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type submit1Response500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type submit1ResponseSuccess = submit1Response200 & {
-  headers: Headers;
-};
-export type submit1ResponseError = (
-  | submit1Response400
-  | submit1Response404
-  | submit1Response422
-  | submit1Response429
-  | submit1Response500
-) & {
-  headers: Headers;
-};
-
-export type submit1Response = submit1ResponseSuccess | submit1ResponseError;
-
 export const getSubmit1Url = (params: Submit1Params) => {
   const normalizedParams = new URLSearchParams();
 
@@ -306,8 +216,8 @@ export const submit1 = async (
   kycSubmitRequest: KycSubmitRequest,
   params: Submit1Params,
   options?: RequestInit,
-): Promise<submit1Response> => {
-  return customFetch<submit1Response>(getSubmit1Url(params), {
+): Promise<KycSubmitResponse> => {
+  return customFetch<KycSubmitResponse>(getSubmit1Url(params), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -429,51 +339,6 @@ export function useSubmit1<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type getSessionResponse200 = {
-  data: KycSessionResponse;
-  status: 200;
-};
-
-export type getSessionResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type getSessionResponse404 = {
-  data: KycSessionResponse;
-  status: 404;
-};
-
-export type getSessionResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type getSessionResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type getSessionResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type getSessionResponseSuccess = getSessionResponse200 & {
-  headers: Headers;
-};
-export type getSessionResponseError = (
-  | getSessionResponse400
-  | getSessionResponse404
-  | getSessionResponse422
-  | getSessionResponse429
-  | getSessionResponse500
-) & {
-  headers: Headers;
-};
-
-export type getSessionResponse = getSessionResponseSuccess | getSessionResponseError;
-
 export const getGetSessionUrl = (token: string) => {
   return `/api/v1/kyc/session/${token}`;
 };
@@ -485,8 +350,8 @@ export const getGetSessionUrl = (token: string) => {
 export const getSession = async (
   token: string,
   options?: RequestInit,
-): Promise<getSessionResponse> => {
-  return customFetch<getSessionResponse>(getGetSessionUrl(token), {
+): Promise<KycSessionResponse> => {
+  return customFetch<KycSessionResponse>(getGetSessionUrl(token), {
     ...options,
     method: "GET",
   });

@@ -34,63 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type executeResponse202 = {
-  data: PayoutBatchResponse;
-  status: 202;
-};
-
-export type executeResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type executeResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type executeResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type executeResponse409 = {
-  data: PayoutBatchResponse;
-  status: 409;
-};
-
-export type executeResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type executeResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type executeResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type executeResponseSuccess = executeResponse202 & {
-  headers: Headers;
-};
-export type executeResponseError = (
-  | executeResponse400
-  | executeResponse401
-  | executeResponse403
-  | executeResponse409
-  | executeResponse422
-  | executeResponse429
-  | executeResponse500
-) & {
-  headers: Headers;
-};
-
-export type executeResponse = executeResponseSuccess | executeResponseError;
-
 export const getExecuteUrl = () => {
   return `/api/v1/admin/payouts/execute`;
 };
@@ -102,8 +45,8 @@ export const getExecuteUrl = () => {
 export const execute = async (
   payoutBatchRequest: PayoutBatchRequest,
   options?: RequestInit,
-): Promise<executeResponse> => {
-  return customFetch<executeResponse>(getExecuteUrl(), {
+): Promise<PayoutBatchResponse> => {
+  return customFetch<PayoutBatchResponse>(getExecuteUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },

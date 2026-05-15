@@ -34,39 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type handle1Response200 = {
-  data: void;
-  status: 200;
-};
-
-export type handle1Response400 = {
-  data: void;
-  status: 400;
-};
-
-export type handle1Response401 = {
-  data: void;
-  status: 401;
-};
-
-export type handle1Response503 = {
-  data: void;
-  status: 503;
-};
-
-export type handle1ResponseSuccess = handle1Response200 & {
-  headers: Headers;
-};
-export type handle1ResponseError = (
-  | handle1Response400
-  | handle1Response401
-  | handle1Response503
-) & {
-  headers: Headers;
-};
-
-export type handle1Response = handle1ResponseSuccess | handle1ResponseError;
-
 export const getHandle1Url = (params: Handle1Params) => {
   const normalizedParams = new URLSearchParams();
 
@@ -87,11 +54,8 @@ export const getHandle1Url = (params: Handle1Params) => {
  * Body is `application/x-www-form-urlencoded` with two fields: `data` and `signature`. Signature is `Base64(SHA1(private_key + data + private_key))`. Returns 200 on success or unrecoverable error to avoid LiqPay retry storms; 503 only for transient failures.
  * @summary LiqPay payment-status callback
  */
-export const handle1 = async (
-  params: Handle1Params,
-  options?: RequestInit,
-): Promise<handle1Response> => {
-  return customFetch<handle1Response>(getHandle1Url(params), {
+export const handle1 = async (params: Handle1Params, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getHandle1Url(params), {
     ...options,
     method: "POST",
   });

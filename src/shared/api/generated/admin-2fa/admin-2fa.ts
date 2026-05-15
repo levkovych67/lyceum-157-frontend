@@ -39,57 +39,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type verifyResponse200 = {
-  data: TotpVerifyResponse;
-  status: 200;
-};
-
-export type verifyResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type verifyResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type verifyResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type verifyResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type verifyResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type verifyResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type verifyResponseSuccess = verifyResponse200 & {
-  headers: Headers;
-};
-export type verifyResponseError = (
-  | verifyResponse400
-  | verifyResponse401
-  | verifyResponse403
-  | verifyResponse422
-  | verifyResponse429
-  | verifyResponse500
-) & {
-  headers: Headers;
-};
-
-export type verifyResponse = verifyResponseSuccess | verifyResponseError;
-
 export const getVerifyUrl = () => {
   return `/api/v1/admin/2fa/verify`;
 };
@@ -101,8 +50,8 @@ export const getVerifyUrl = () => {
 export const verify = async (
   totpCodeRequest: TotpCodeRequest,
   options?: RequestInit,
-): Promise<verifyResponse> => {
-  return customFetch<verifyResponse>(getVerifyUrl(), {
+): Promise<TotpVerifyResponse> => {
+  return customFetch<TotpVerifyResponse>(getVerifyUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -202,57 +151,6 @@ export function useVerify<TData = Awaited<ReturnType<typeof verify>>, TError = P
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type enrollResponse200 = {
-  data: TotpEnrollResponse;
-  status: 200;
-};
-
-export type enrollResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type enrollResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type enrollResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type enrollResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type enrollResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type enrollResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type enrollResponseSuccess = enrollResponse200 & {
-  headers: Headers;
-};
-export type enrollResponseError = (
-  | enrollResponse400
-  | enrollResponse401
-  | enrollResponse403
-  | enrollResponse422
-  | enrollResponse429
-  | enrollResponse500
-) & {
-  headers: Headers;
-};
-
-export type enrollResponse = enrollResponseSuccess | enrollResponseError;
-
 export const getEnrollUrl = () => {
   return `/api/v1/admin/2fa/enroll`;
 };
@@ -261,8 +159,8 @@ export const getEnrollUrl = () => {
  * Generates a fresh TOTP secret bound to the admin account. Account is NOT yet 2FA-enabled — admin must scan the QR and call /confirm with the first valid code.
  * @summary Begin 2FA enrollment — returns QR code + recovery codes
  */
-export const enroll = async (options?: RequestInit): Promise<enrollResponse> => {
-  return customFetch<enrollResponse>(getEnrollUrl(), {
+export const enroll = async (options?: RequestInit): Promise<TotpEnrollResponse> => {
+  return customFetch<TotpEnrollResponse>(getEnrollUrl(), {
     ...options,
     method: "POST",
   });
@@ -353,57 +251,6 @@ export function useEnroll<TData = Awaited<ReturnType<typeof enroll>>, TError = P
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type confirmResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type confirmResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type confirmResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type confirmResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type confirmResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type confirmResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type confirmResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type confirmResponseSuccess = confirmResponse204 & {
-  headers: Headers;
-};
-export type confirmResponseError = (
-  | confirmResponse400
-  | confirmResponse401
-  | confirmResponse403
-  | confirmResponse422
-  | confirmResponse429
-  | confirmResponse500
-) & {
-  headers: Headers;
-};
-
-export type confirmResponse = confirmResponseSuccess | confirmResponseError;
-
 export const getConfirmUrl = () => {
   return `/api/v1/admin/2fa/confirm`;
 };
@@ -415,8 +262,8 @@ export const getConfirmUrl = () => {
 export const confirm = async (
   totpCodeRequest: TotpCodeRequest,
   options?: RequestInit,
-): Promise<confirmResponse> => {
-  return customFetch<confirmResponse>(getConfirmUrl(), {
+): Promise<void> => {
+  return customFetch<void>(getConfirmUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },

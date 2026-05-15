@@ -34,57 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type deleteMyAccountResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type deleteMyAccountResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type deleteMyAccountResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type deleteMyAccountResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type deleteMyAccountResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type deleteMyAccountResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type deleteMyAccountResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type deleteMyAccountResponseSuccess = deleteMyAccountResponse204 & {
-  headers: Headers;
-};
-export type deleteMyAccountResponseError = (
-  | deleteMyAccountResponse400
-  | deleteMyAccountResponse401
-  | deleteMyAccountResponse403
-  | deleteMyAccountResponse422
-  | deleteMyAccountResponse429
-  | deleteMyAccountResponse500
-) & {
-  headers: Headers;
-};
-
-export type deleteMyAccountResponse = deleteMyAccountResponseSuccess | deleteMyAccountResponseError;
-
 export const getDeleteMyAccountUrl = () => {
   return `/api/v1/users/me`;
 };
@@ -93,8 +42,8 @@ export const getDeleteMyAccountUrl = () => {
  * Soft-deletes the user, crypto-shreds encrypted PII (RNOKPP, payout card), anonymizes buyer fields on Orders, revokes all refresh tokens. Tax-law-required records (payouts, fiscal_receipts) are kept for 7 years but with PII rendered un-decryptable.
  * @summary Delete my account (GDPR right-to-be-forgotten)
  */
-export const deleteMyAccount = async (options?: RequestInit): Promise<deleteMyAccountResponse> => {
-  return customFetch<deleteMyAccountResponse>(getDeleteMyAccountUrl(), {
+export const deleteMyAccount = async (options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getDeleteMyAccountUrl(), {
     ...options,
     method: "DELETE",
   });

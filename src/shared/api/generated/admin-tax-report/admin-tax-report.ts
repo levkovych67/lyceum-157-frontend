@@ -34,57 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type downloadResponse200 = {
-  data: Blob;
-  status: 200;
-};
-
-export type downloadResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type downloadResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type downloadResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type downloadResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type downloadResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type downloadResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type downloadResponseSuccess = downloadResponse200 & {
-  headers: Headers;
-};
-export type downloadResponseError = (
-  | downloadResponse400
-  | downloadResponse401
-  | downloadResponse403
-  | downloadResponse422
-  | downloadResponse429
-  | downloadResponse500
-) & {
-  headers: Headers;
-};
-
-export type downloadResponse = downloadResponseSuccess | downloadResponseError;
-
 export const getDownloadUrl = (params: DownloadParams) => {
   const normalizedParams = new URLSearchParams();
 
@@ -105,11 +54,8 @@ export const getDownloadUrl = (params: DownloadParams) => {
  * Streams CSV (one row per payout) including parent RNOKPP, gross/PDFO/VZ/net. Filename: `4DF_<from>_<to>.csv`. No-cache headers prevent browser caching of decrypted PII.
  * @summary Download 4DF CSV report for a date range
  */
-export const download = async (
-  params: DownloadParams,
-  options?: RequestInit,
-): Promise<downloadResponse> => {
-  return customFetch<downloadResponse>(getDownloadUrl(params), {
+export const download = async (params: DownloadParams, options?: RequestInit): Promise<Blob> => {
+  return customFetch<Blob>(getDownloadUrl(params), {
     ...options,
     method: "GET",
   });

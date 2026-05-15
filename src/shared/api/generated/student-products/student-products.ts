@@ -42,69 +42,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type editResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type editResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type editResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type editResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type editResponse404 = {
-  data: void;
-  status: 404;
-};
-
-export type editResponse409 = {
-  data: void;
-  status: 409;
-};
-
-export type editResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type editResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type editResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type editResponseSuccess = editResponse204 & {
-  headers: Headers;
-};
-export type editResponseError = (
-  | editResponse400
-  | editResponse401
-  | editResponse403
-  | editResponse404
-  | editResponse409
-  | editResponse422
-  | editResponse429
-  | editResponse500
-) & {
-  headers: Headers;
-};
-
-export type editResponse = editResponseSuccess | editResponseError;
-
 export const getEditUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}`;
 };
@@ -117,8 +54,8 @@ export const edit = async (
   productId: string,
   editProductRequest: EditProductRequest,
   options?: RequestInit,
-): Promise<editResponse> => {
-  return customFetch<editResponse>(getEditUrl(productId), {
+): Promise<void> => {
+  return customFetch<void>(getEditUrl(productId), {
     ...options,
     method: "PUT",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -227,57 +164,6 @@ export function useEdit<TData = Awaited<ReturnType<typeof edit>>, TError = Probl
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type _deleteResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type _deleteResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type _deleteResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type _deleteResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type _deleteResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type _deleteResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type _deleteResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type _deleteResponseSuccess = _deleteResponse204 & {
-  headers: Headers;
-};
-export type _deleteResponseError = (
-  | _deleteResponse400
-  | _deleteResponse401
-  | _deleteResponse403
-  | _deleteResponse422
-  | _deleteResponse429
-  | _deleteResponse500
-) & {
-  headers: Headers;
-};
-
-export type _deleteResponse = _deleteResponseSuccess | _deleteResponseError;
-
 export const getDeleteUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}`;
 };
@@ -286,11 +172,8 @@ export const getDeleteUrl = (productId: string) => {
  * Sets deleted_at timestamp; product becomes invisible. Pending orders stay linked. Hard-delete is admin-only.
  * @summary Soft-delete a product
  */
-export const _delete = async (
-  productId: string,
-  options?: RequestInit,
-): Promise<_deleteResponse> => {
-  return customFetch<_deleteResponse>(getDeleteUrl(productId), {
+export const _delete = async (productId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getDeleteUrl(productId), {
     ...options,
     method: "DELETE",
   });
@@ -392,57 +275,6 @@ export function useDelete<TData = Awaited<ReturnType<typeof _delete>>, TError = 
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type createResponse201 = {
-  data: CreatedProductResponse;
-  status: 201;
-};
-
-export type createResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type createResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type createResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type createResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type createResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type createResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type createResponseSuccess = createResponse201 & {
-  headers: Headers;
-};
-export type createResponseError = (
-  | createResponse400
-  | createResponse401
-  | createResponse403
-  | createResponse422
-  | createResponse429
-  | createResponse500
-) & {
-  headers: Headers;
-};
-
-export type createResponse = createResponseSuccess | createResponseError;
-
 export const getCreateUrl = () => {
   return `/api/v1/student/products`;
 };
@@ -454,8 +286,8 @@ export const getCreateUrl = () => {
 export const create = async (
   createProductRequest: CreateProductRequest,
   options?: RequestInit,
-): Promise<createResponse> => {
-  return customFetch<createResponse>(getCreateUrl(), {
+): Promise<CreatedProductResponse> => {
+  return customFetch<CreatedProductResponse>(getCreateUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -555,57 +387,6 @@ export function useCreate<TData = Awaited<ReturnType<typeof create>>, TError = P
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type unhideResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type unhideResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type unhideResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type unhideResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type unhideResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type unhideResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type unhideResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type unhideResponseSuccess = unhideResponse204 & {
-  headers: Headers;
-};
-export type unhideResponseError = (
-  | unhideResponse400
-  | unhideResponse401
-  | unhideResponse403
-  | unhideResponse422
-  | unhideResponse429
-  | unhideResponse500
-) & {
-  headers: Headers;
-};
-
-export type unhideResponse = unhideResponseSuccess | unhideResponseError;
-
 export const getUnhideUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}/unhide`;
 };
@@ -613,8 +394,8 @@ export const getUnhideUrl = (productId: string) => {
 /**
  * @summary Restore a HIDDEN product to ACTIVE
  */
-export const unhide = async (productId: string, options?: RequestInit): Promise<unhideResponse> => {
-  return customFetch<unhideResponse>(getUnhideUrl(productId), {
+export const unhide = async (productId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getUnhideUrl(productId), {
     ...options,
     method: "POST",
   });
@@ -716,63 +497,6 @@ export function useUnhide<TData = Awaited<ReturnType<typeof unhide>>, TError = P
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type submitResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type submitResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type submitResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type submitResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type submitResponse409 = {
-  data: void;
-  status: 409;
-};
-
-export type submitResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type submitResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type submitResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type submitResponseSuccess = submitResponse204 & {
-  headers: Headers;
-};
-export type submitResponseError = (
-  | submitResponse400
-  | submitResponse401
-  | submitResponse403
-  | submitResponse409
-  | submitResponse422
-  | submitResponse429
-  | submitResponse500
-) & {
-  headers: Headers;
-};
-
-export type submitResponse = submitResponseSuccess | submitResponseError;
-
 export const getSubmitUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}/submit`;
 };
@@ -781,8 +505,8 @@ export const getSubmitUrl = (productId: string) => {
  * Transitions DRAFT → PENDING_REVIEW. Requires the parent's KYC to be APPROVED and at least one product image confirmed.
  * @summary Submit a draft for admin review
  */
-export const submit = async (productId: string, options?: RequestInit): Promise<submitResponse> => {
-  return customFetch<submitResponse>(getSubmitUrl(productId), {
+export const submit = async (productId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getSubmitUrl(productId), {
     ...options,
     method: "POST",
   });
@@ -896,59 +620,6 @@ export function useSubmit<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type requestImageUploadUrlResponse200 = {
-  data: PresignedUploadDto;
-  status: 200;
-};
-
-export type requestImageUploadUrlResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type requestImageUploadUrlResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type requestImageUploadUrlResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type requestImageUploadUrlResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type requestImageUploadUrlResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type requestImageUploadUrlResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type requestImageUploadUrlResponseSuccess = requestImageUploadUrlResponse200 & {
-  headers: Headers;
-};
-export type requestImageUploadUrlResponseError = (
-  | requestImageUploadUrlResponse400
-  | requestImageUploadUrlResponse401
-  | requestImageUploadUrlResponse403
-  | requestImageUploadUrlResponse422
-  | requestImageUploadUrlResponse429
-  | requestImageUploadUrlResponse500
-) & {
-  headers: Headers;
-};
-
-export type requestImageUploadUrlResponse =
-  | requestImageUploadUrlResponseSuccess
-  | requestImageUploadUrlResponseError;
-
 export const getRequestImageUploadUrlUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}/images/upload-url`;
 };
@@ -961,8 +632,8 @@ export const requestImageUploadUrl = async (
   productId: string,
   uploadImageRequest: UploadImageRequest,
   options?: RequestInit,
-): Promise<requestImageUploadUrlResponse> => {
-  return customFetch<requestImageUploadUrlResponse>(getRequestImageUploadUrlUrl(productId), {
+): Promise<PresignedUploadDto> => {
+  return customFetch<PresignedUploadDto>(getRequestImageUploadUrlUrl(productId), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -1103,63 +774,6 @@ export function useRequestImageUploadUrl<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type confirmImageResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type confirmImageResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type confirmImageResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type confirmImageResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type confirmImageResponse415 = {
-  data: void;
-  status: 415;
-};
-
-export type confirmImageResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type confirmImageResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type confirmImageResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type confirmImageResponseSuccess = confirmImageResponse204 & {
-  headers: Headers;
-};
-export type confirmImageResponseError = (
-  | confirmImageResponse400
-  | confirmImageResponse401
-  | confirmImageResponse403
-  | confirmImageResponse415
-  | confirmImageResponse422
-  | confirmImageResponse429
-  | confirmImageResponse500
-) & {
-  headers: Headers;
-};
-
-export type confirmImageResponse = confirmImageResponseSuccess | confirmImageResponseError;
-
 export const getConfirmImageUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}/images/confirm`;
 };
@@ -1172,8 +786,8 @@ export const confirmImage = async (
   productId: string,
   confirmImageRequest: ConfirmImageRequest,
   options?: RequestInit,
-): Promise<confirmImageResponse> => {
-  return customFetch<confirmImageResponse>(getConfirmImageUrl(productId), {
+): Promise<void> => {
+  return customFetch<void>(getConfirmImageUrl(productId), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -1302,57 +916,6 @@ export function useConfirmImage<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type hideResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type hideResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type hideResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type hideResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type hideResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type hideResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type hideResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type hideResponseSuccess = hideResponse204 & {
-  headers: Headers;
-};
-export type hideResponseError = (
-  | hideResponse400
-  | hideResponse401
-  | hideResponse403
-  | hideResponse422
-  | hideResponse429
-  | hideResponse500
-) & {
-  headers: Headers;
-};
-
-export type hideResponse = hideResponseSuccess | hideResponseError;
-
 export const getHideUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}/hide`;
 };
@@ -1361,8 +924,8 @@ export const getHideUrl = (productId: string) => {
  * Removes from public catalog without deleting. Reversible via /unhide.
  * @summary Hide an ACTIVE product
  */
-export const hide = async (productId: string, options?: RequestInit): Promise<hideResponse> => {
-  return customFetch<hideResponse>(getHideUrl(productId), {
+export const hide = async (productId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getHideUrl(productId), {
     ...options,
     method: "POST",
   });

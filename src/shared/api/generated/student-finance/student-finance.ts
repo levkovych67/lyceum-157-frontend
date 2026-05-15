@@ -34,57 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type summaryResponse200 = {
-  data: FinanceSummaryDto;
-  status: 200;
-};
-
-export type summaryResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type summaryResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type summaryResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type summaryResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type summaryResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type summaryResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type summaryResponseSuccess = summaryResponse200 & {
-  headers: Headers;
-};
-export type summaryResponseError = (
-  | summaryResponse400
-  | summaryResponse401
-  | summaryResponse403
-  | summaryResponse422
-  | summaryResponse429
-  | summaryResponse500
-) & {
-  headers: Headers;
-};
-
-export type summaryResponse = summaryResponseSuccess | summaryResponseError;
-
 export const getSummaryUrl = () => {
   return `/api/v1/student/finance/summary`;
 };
@@ -93,8 +42,8 @@ export const getSummaryUrl = () => {
  * Returns total gross/taxes/net across all approved payouts plus pending hold (within 14-day chargeback window) and pending approved (waiting admin payout execution).
  * @summary Aggregate earnings summary
  */
-export const summary = async (options?: RequestInit): Promise<summaryResponse> => {
-  return customFetch<summaryResponse>(getSummaryUrl(), {
+export const summary = async (options?: RequestInit): Promise<FinanceSummaryDto> => {
+  return customFetch<FinanceSummaryDto>(getSummaryUrl(), {
     ...options,
     method: "GET",
   });

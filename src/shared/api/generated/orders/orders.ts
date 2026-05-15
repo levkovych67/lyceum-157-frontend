@@ -34,51 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type create1Response201 = {
-  data: OrderCreationResponse;
-  status: 201;
-};
-
-export type create1Response400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type create1Response409 = {
-  data: OrderCreationResponse;
-  status: 409;
-};
-
-export type create1Response422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type create1Response429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type create1Response500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type create1ResponseSuccess = create1Response201 & {
-  headers: Headers;
-};
-export type create1ResponseError = (
-  | create1Response400
-  | create1Response409
-  | create1Response422
-  | create1Response429
-  | create1Response500
-) & {
-  headers: Headers;
-};
-
-export type create1Response = create1ResponseSuccess | create1ResponseError;
-
 export const getCreate1Url = () => {
   return `/api/v1/orders`;
 };
@@ -90,8 +45,8 @@ export const getCreate1Url = () => {
 export const create1 = async (
   createOrderRequest: CreateOrderRequest,
   options?: RequestInit,
-): Promise<create1Response> => {
-  return customFetch<create1Response>(getCreate1Url(), {
+): Promise<OrderCreationResponse> => {
+  return customFetch<OrderCreationResponse>(getCreate1Url(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },

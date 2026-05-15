@@ -34,45 +34,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type listResponse200 = {
-  data: PageProductCardDto;
-  status: 200;
-};
-
-export type listResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type listResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type listResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type listResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type listResponseSuccess = listResponse200 & {
-  headers: Headers;
-};
-export type listResponseError = (
-  | listResponse400
-  | listResponse422
-  | listResponse429
-  | listResponse500
-) & {
-  headers: Headers;
-};
-
-export type listResponse = listResponseSuccess | listResponseError;
-
 export const getListUrl = (params?: ListParams) => {
   const normalizedParams = new URLSearchParams();
 
@@ -93,8 +54,11 @@ export const getListUrl = (params?: ListParams) => {
  * Returns ACTIVE products only; HIDDEN/DRAFT/PENDING_REVIEW are not exposed.
  * @summary List active products (paged)
  */
-export const list = async (params?: ListParams, options?: RequestInit): Promise<listResponse> => {
-  return customFetch<listResponse>(getListUrl(params), {
+export const list = async (
+  params?: ListParams,
+  options?: RequestInit,
+): Promise<PageProductCardDto> => {
+  return customFetch<PageProductCardDto>(getListUrl(params), {
     ...options,
     method: "GET",
   });
@@ -192,51 +156,6 @@ export function useList<TData = Awaited<ReturnType<typeof list>>, TError = Probl
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type getBySlugResponse200 = {
-  data: ProductDetailDto;
-  status: 200;
-};
-
-export type getBySlugResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type getBySlugResponse404 = {
-  data: ProductDetailDto;
-  status: 404;
-};
-
-export type getBySlugResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type getBySlugResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type getBySlugResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type getBySlugResponseSuccess = getBySlugResponse200 & {
-  headers: Headers;
-};
-export type getBySlugResponseError = (
-  | getBySlugResponse400
-  | getBySlugResponse404
-  | getBySlugResponse422
-  | getBySlugResponse429
-  | getBySlugResponse500
-) & {
-  headers: Headers;
-};
-
-export type getBySlugResponse = getBySlugResponseSuccess | getBySlugResponseError;
-
 export const getGetBySlugUrl = (slug: string) => {
   return `/api/v1/products/${slug}`;
 };
@@ -245,11 +164,8 @@ export const getGetBySlugUrl = (slug: string) => {
  * Increments view count asynchronously. Returns 404 if not ACTIVE.
  * @summary Get a single active product by SEO slug
  */
-export const getBySlug = async (
-  slug: string,
-  options?: RequestInit,
-): Promise<getBySlugResponse> => {
-  return customFetch<getBySlugResponse>(getGetBySlugUrl(slug), {
+export const getBySlug = async (slug: string, options?: RequestInit): Promise<ProductDetailDto> => {
+  return customFetch<ProductDetailDto>(getGetBySlugUrl(slug), {
     ...options,
     method: "GET",
   });

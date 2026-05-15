@@ -40,51 +40,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type registerResponse201 = {
-  data: RegisterResponse;
-  status: 201;
-};
-
-export type registerResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type registerResponse409 = {
-  data: RegisterResponse;
-  status: 409;
-};
-
-export type registerResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type registerResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type registerResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type registerResponseSuccess = registerResponse201 & {
-  headers: Headers;
-};
-export type registerResponseError = (
-  | registerResponse400
-  | registerResponse409
-  | registerResponse422
-  | registerResponse429
-  | registerResponse500
-) & {
-  headers: Headers;
-};
-
-export type registerResponse = registerResponseSuccess | registerResponseError;
-
 export const getRegisterUrl = () => {
   return `/api/v1/auth/register`;
 };
@@ -96,8 +51,8 @@ export const getRegisterUrl = () => {
 export const register = async (
   registerRequest: RegisterRequest,
   options?: RequestInit,
-): Promise<registerResponse> => {
-  return customFetch<registerResponse>(getRegisterUrl(), {
+): Promise<RegisterResponse> => {
+  return customFetch<RegisterResponse>(getRegisterUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -209,51 +164,6 @@ export function useRegister<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type refreshResponse200 = {
-  data: TokenResponse;
-  status: 200;
-};
-
-export type refreshResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type refreshResponse401 = {
-  data: TokenResponse;
-  status: 401;
-};
-
-export type refreshResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type refreshResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type refreshResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type refreshResponseSuccess = refreshResponse200 & {
-  headers: Headers;
-};
-export type refreshResponseError = (
-  | refreshResponse400
-  | refreshResponse401
-  | refreshResponse422
-  | refreshResponse429
-  | refreshResponse500
-) & {
-  headers: Headers;
-};
-
-export type refreshResponse = refreshResponseSuccess | refreshResponseError;
-
 export const getRefreshUrl = () => {
   return `/api/v1/auth/refresh`;
 };
@@ -262,8 +172,8 @@ export const getRefreshUrl = () => {
  * Reads the `refresh_token` cookie, invalidates it, and issues a new pair. If the same refresh token is presented twice (replay), all sessions for the user are revoked.
  * @summary Rotate the refresh token and issue a fresh access token
  */
-export const refresh = async (options?: RequestInit): Promise<refreshResponse> => {
-  return customFetch<refreshResponse>(getRefreshUrl(), {
+export const refresh = async (options?: RequestInit): Promise<TokenResponse> => {
+  return customFetch<TokenResponse>(getRefreshUrl(), {
     ...options,
     method: "POST",
   });
@@ -366,45 +276,6 @@ export function useRefresh<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type logoutResponse204 = {
-  data: void;
-  status: 204;
-};
-
-export type logoutResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type logoutResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type logoutResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type logoutResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type logoutResponseSuccess = logoutResponse204 & {
-  headers: Headers;
-};
-export type logoutResponseError = (
-  | logoutResponse400
-  | logoutResponse422
-  | logoutResponse429
-  | logoutResponse500
-) & {
-  headers: Headers;
-};
-
-export type logoutResponse = logoutResponseSuccess | logoutResponseError;
-
 export const getLogoutUrl = () => {
   return `/api/v1/auth/logout`;
 };
@@ -413,8 +284,8 @@ export const getLogoutUrl = () => {
  * Idempotent — safe to call when the cookie is already gone.
  * @summary Invalidate the current refresh token
  */
-export const logout = async (options?: RequestInit): Promise<logoutResponse> => {
-  return customFetch<logoutResponse>(getLogoutUrl(), {
+export const logout = async (options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getLogoutUrl(), {
     ...options,
     method: "POST",
   });
@@ -505,51 +376,6 @@ export function useLogout<TData = Awaited<ReturnType<typeof logout>>, TError = P
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type loginResponse200 = {
-  data: TokenResponse;
-  status: 200;
-};
-
-export type loginResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type loginResponse401 = {
-  data: TokenResponse;
-  status: 401;
-};
-
-export type loginResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type loginResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type loginResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type loginResponseSuccess = loginResponse200 & {
-  headers: Headers;
-};
-export type loginResponseError = (
-  | loginResponse400
-  | loginResponse401
-  | loginResponse422
-  | loginResponse429
-  | loginResponse500
-) & {
-  headers: Headers;
-};
-
-export type loginResponse = loginResponseSuccess | loginResponseError;
-
 export const getLoginUrl = () => {
   return `/api/v1/auth/login`;
 };
@@ -561,8 +387,8 @@ export const getLoginUrl = () => {
 export const login = async (
   loginRequest: LoginRequest,
   options?: RequestInit,
-): Promise<loginResponse> => {
-  return customFetch<loginResponse>(getLoginUrl(), {
+): Promise<TokenResponse> => {
+  return customFetch<TokenResponse>(getLoginUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },

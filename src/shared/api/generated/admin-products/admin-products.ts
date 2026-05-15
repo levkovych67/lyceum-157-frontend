@@ -40,63 +40,6 @@ import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type rejectResponse200 = {
-  data: AdminProductDto;
-  status: 200;
-};
-
-export type rejectResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type rejectResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type rejectResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type rejectResponse409 = {
-  data: AdminProductDto;
-  status: 409;
-};
-
-export type rejectResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type rejectResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type rejectResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type rejectResponseSuccess = rejectResponse200 & {
-  headers: Headers;
-};
-export type rejectResponseError = (
-  | rejectResponse400
-  | rejectResponse401
-  | rejectResponse403
-  | rejectResponse409
-  | rejectResponse422
-  | rejectResponse429
-  | rejectResponse500
-) & {
-  headers: Headers;
-};
-
-export type rejectResponse = rejectResponseSuccess | rejectResponseError;
-
 export const getRejectUrl = (id: string) => {
   return `/api/v1/admin/products/${id}/reject`;
 };
@@ -109,8 +52,8 @@ export const reject = async (
   id: string,
   rejectProductRequest: RejectProductRequest,
   options?: RequestInit,
-): Promise<rejectResponse> => {
-  return customFetch<rejectResponse>(getRejectUrl(id), {
+): Promise<AdminProductDto> => {
+  return customFetch<AdminProductDto>(getRejectUrl(id), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -231,63 +174,6 @@ export function useReject<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type approveResponse200 = {
-  data: AdminProductDto;
-  status: 200;
-};
-
-export type approveResponse400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type approveResponse401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type approveResponse403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type approveResponse409 = {
-  data: AdminProductDto;
-  status: 409;
-};
-
-export type approveResponse422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type approveResponse429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type approveResponse500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type approveResponseSuccess = approveResponse200 & {
-  headers: Headers;
-};
-export type approveResponseError = (
-  | approveResponse400
-  | approveResponse401
-  | approveResponse403
-  | approveResponse409
-  | approveResponse422
-  | approveResponse429
-  | approveResponse500
-) & {
-  headers: Headers;
-};
-
-export type approveResponse = approveResponseSuccess | approveResponseError;
-
 export const getApproveUrl = (id: string) => {
   return `/api/v1/admin/products/${id}/approve`;
 };
@@ -296,8 +182,8 @@ export const getApproveUrl = (id: string) => {
  * Generates the public slug, makes product visible in catalog.
  * @summary Approve a product (PENDING_REVIEW → ACTIVE)
  */
-export const approve = async (id: string, options?: RequestInit): Promise<approveResponse> => {
-  return customFetch<approveResponse>(getApproveUrl(id), {
+export const approve = async (id: string, options?: RequestInit): Promise<AdminProductDto> => {
+  return customFetch<AdminProductDto>(getApproveUrl(id), {
     ...options,
     method: "POST",
   });
@@ -411,57 +297,6 @@ export function useApprove<
   return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export type list1Response200 = {
-  data: PageAdminProductDto;
-  status: 200;
-};
-
-export type list1Response400 = {
-  data: ProblemDetail;
-  status: 400;
-};
-
-export type list1Response401 = {
-  data: ProblemDetail;
-  status: 401;
-};
-
-export type list1Response403 = {
-  data: ProblemDetail;
-  status: 403;
-};
-
-export type list1Response422 = {
-  data: ProblemDetail;
-  status: 422;
-};
-
-export type list1Response429 = {
-  data: ProblemDetail;
-  status: 429;
-};
-
-export type list1Response500 = {
-  data: ProblemDetail;
-  status: 500;
-};
-
-export type list1ResponseSuccess = list1Response200 & {
-  headers: Headers;
-};
-export type list1ResponseError = (
-  | list1Response400
-  | list1Response401
-  | list1Response403
-  | list1Response422
-  | list1Response429
-  | list1Response500
-) & {
-  headers: Headers;
-};
-
-export type list1Response = list1ResponseSuccess | list1ResponseError;
-
 export const getList1Url = (params: List1Params) => {
   const normalizedParams = new URLSearchParams();
 
@@ -482,8 +317,11 @@ export const getList1Url = (params: List1Params) => {
  * Defaults to PENDING_REVIEW. Filter via `status`. Includes student name, grade, and KYC-signed flag for context.
  * @summary List products awaiting moderation (paged)
  */
-export const list1 = async (params: List1Params, options?: RequestInit): Promise<list1Response> => {
-  return customFetch<list1Response>(getList1Url(params), {
+export const list1 = async (
+  params: List1Params,
+  options?: RequestInit,
+): Promise<PageAdminProductDto> => {
+  return customFetch<PageAdminProductDto>(getList1Url(params), {
     ...options,
     method: "GET",
   });
