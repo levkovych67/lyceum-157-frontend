@@ -20,31 +20,53 @@ export * from "./client";
 export * from "./dispatch-problem";
 export * from "./upload-s3";
 export * from "./revalidate";
-export { authApi } from "./modules/auth";
+
+// Re-export selected orval-generated MODELS only (no functions; consumers import
+// those directly from generated/<tag>/<tag>.ts to avoid name collisions like
+// `create`/`list`/`submit` overlapping across tags).
 export type {
+  // auth
+  LoginRequest,
   RegisterRequest,
   RegisterResponse,
-  LoginRequest,
   TokenResponse,
-} from "./modules/auth";
-export { catalogApi } from "./modules/catalog";
-export type { Sort, ProductCardDto, ProductDetailDto, AuthorDto } from "./modules/catalog";
-export { ordersApi } from "./modules/orders";
-export type { CreateOrderRequest, OrderCreationResponse } from "./modules/orders";
-export { kycApi } from "./modules/kyc";
-export type { KycSessionResponse, KycSubmitRequest, KycSubmitResponse } from "./modules/kyc";
-export { studentApi } from "./modules/student";
-export type {
+  // catalog (public)
+  ProductCardDto,
+  ProductDetailDto,
+  AuthorDto,
+  PageProductCardDto,
+  // orders
+  CreateOrderRequest,
+  OrderCreationResponse,
+  OrderItemRequest,
+  // kyc-parent
+  KycSessionResponse,
+  KycSubmitRequest,
+  KycSubmitResponse,
+  CardUpdateRequest,
+  // student-products
   CreateProductRequest,
   EditProductRequest,
   ConfirmImageRequest,
+  UploadImageRequest,
+  PresignedUploadDto,
+  CreatedProductResponse,
+  RejectProductRequest,
+  // student-finance
   FinanceSummaryDto,
-} from "./modules/student";
-export { userApi } from "./modules/users";
-export { adminApi, downloadTaxReport } from "./modules/admin";
-export type {
+  // admin-products
   AdminProductDto,
-  TotpEnrollResponse,
+  PageAdminProductDto,
+  // admin-payouts
   PayoutBatchRequest,
   PayoutBatchResponse,
-} from "./modules/admin";
+  // admin-2fa
+  TotpEnrollResponse,
+  TotpCodeRequest,
+  TotpVerifyResponse,
+  // admin-orders
+  RefundOrderRequest,
+} from "./generated/models";
+
+// Catalog sort literal not exposed via OpenAPI; keep here until BE annotates.
+export type Sort = "newest" | "price_asc" | "price_desc" | "popular";
