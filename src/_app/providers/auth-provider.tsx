@@ -14,8 +14,8 @@ import {
   REFRESH_PROACTIVE_MS,
   type TokenSnapshot,
   type Role,
-  authApi,
 } from "@/shared/api";
+import { logout as apiLogout } from "@/shared/api/generated/auth/auth";
 import { tryRefresh } from "@/shared/api/refresh";
 
 type Ctx = {
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       role: snap?.role ?? null,
       isAuthenticated: !!snap,
       logout: async () => {
-        await authApi.logout().catch(() => {});
+        await apiLogout().catch(() => {});
         setSnapshot(null);
       },
     }),
