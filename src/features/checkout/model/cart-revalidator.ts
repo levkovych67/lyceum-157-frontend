@@ -1,5 +1,5 @@
 "use client";
-import { catalogApi } from "@/shared/api";
+import { getBySlug } from "@/shared/api/generated/catalog/catalog";
 import type { CartItem } from "@/entities/cart";
 
 export type CartRevalidationIssue =
@@ -11,12 +11,13 @@ export async function revalidateCart(items: CartItem[]): Promise<CartRevalidatio
   await Promise.all(
     items.map(async (it) => {
       try {
-        const p = await catalogApi.bySlug(it.slug);
-        if (it.type === "PHYSICAL" && p.stockQty < it.qty) {
+        const p = await getBySlug(it.slug);
+        const stockQty = p.stockQty ?? 0;
+        if (it.type === "PHYSICAL" && stockQty < it.qty) {
           issues.push({
             productId: it.productId,
             reason: "insufficient-stock",
-            available: p.stockQty,
+            available: stockQty,
           });
         }
       } catch {
