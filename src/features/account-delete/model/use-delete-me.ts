@@ -1,9 +1,10 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
-import { userApi, setSnapshot } from "@/shared/api";
+import { setSnapshot } from "@/shared/api";
+import { deleteMyAccount } from "@/shared/api/generated/user-account/user-account";
 export function useDeleteMe() {
   return useMutation({
-    mutationFn: () => userApi.deleteMe(),
+    mutationFn: () => deleteMyAccount({ headers: { "Idempotency-Key": crypto.randomUUID() } }),
     onSuccess: () => {
       setSnapshot(null);
       try {
