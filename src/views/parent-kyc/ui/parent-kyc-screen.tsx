@@ -1,13 +1,13 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { kycApi } from "@/shared/api";
+import { getSession } from "@/shared/api/generated/kyc-parent/kyc-parent";
 import { Stamp, EditorialLabel, Sticker } from "@/shared/ui";
 import { KycSubmitForm } from "@/features/kyc-submit";
 
 export function ParentKycScreen({ token }: { token: string }) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["kyc", "session", token],
-    queryFn: () => kycApi.peek(token),
+    queryFn: () => getSession(token),
     retry: false,
   });
   if (isLoading) return <p className="py-10 text-lead text-ink-soft">Завантаження…</p>;
