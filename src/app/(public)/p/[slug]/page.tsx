@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProductDetailScreen } from "@/views/product-detail";
+import { ProductDetailScreen, assertProductDetail } from "@/views/product-detail";
 import { serverApi } from "@/shared/api/server-client";
 import type { ProductDetailDto, Page as P, ProductCardDto } from "@/shared/api";
 import { JsonLd, productSchema, breadcrumbSchema } from "@/shared/seo";
@@ -12,7 +12,7 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   const top = await serverApi<P<ProductCardDto>>("/products?page=0&size=100&sort=popular", {
     revalidate: 3600,
   }).catch(() => null);
-  return top?.content.map(({ slug }) => ({ slug })) ?? [];
+  return top?.content.flatMap(({ slug }) => (slug ? [{ slug }] : [])) ?? [];
 }
 
 function plainText(html: string): string {
@@ -32,6 +32,7 @@ export async function generateMetadata({
     tags: [`product:${params.slug}`],
   }).catch(() => null);
   if (!p) return { title: "Робота не знайдена" };
+  assertProductDetail(p);
   const author = `${p.author.firstName}, ${p.author.grade}`;
   const desc =
     `${plainText(p.description).slice(0, 140)} · Автор: ${author} · ${p.priceUah} ₴`.slice(0, 170);
@@ -61,6 +62,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     tags: [`product:${params.slug}`],
   }).catch(() => null);
   if (!p) notFound();
+  assertProductDetail(p);
   return (
     <>
       <JsonLd

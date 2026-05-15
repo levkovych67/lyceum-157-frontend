@@ -31,6 +31,9 @@ export function CheckoutForm() {
         ...data,
         items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
       });
+      if (!resp.paymentUrl) {
+        throw new Error("OrderCreationResponse missing paymentUrl from BE");
+      }
       clear();
       window.location.href = resp.paymentUrl;
     },
