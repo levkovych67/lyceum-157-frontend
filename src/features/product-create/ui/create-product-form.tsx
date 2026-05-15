@@ -37,14 +37,17 @@ export function CreateProductForm() {
       stockQty: 1,
     } as CreateProductInput,
     onSubmit: async (data) => {
-      const { id } = await m.mutateAsync({
+      const { productId } = await m.mutateAsync({
         title: data.title,
         description: data.description,
-        priceUah: data.priceUah,
+        priceUah: Number(data.priceUah),
         type: data.type,
         stockQty: data.stockQty,
       });
-      router.push(`/student/products/${id}/edit`);
+      if (!productId) {
+        throw new Error("CreatedProductResponse missing productId from BE");
+      }
+      router.push(`/student/products/${productId}/edit`);
     },
   });
   const type = form.watch("type");
