@@ -9,7 +9,7 @@ vi.mock("@/shared/api/client", () => ({
 import { customFetch } from "@/shared/api/orval-mutator";
 
 function lastCall(): readonly [string, ApiOptions] {
-  const call = apiMock.mock.calls[0];
+  const call = apiMock.mock.calls.at(-1);
   if (!call) throw new Error("api() was not called");
   const [path, opts] = call;
   return [path, opts ?? {}] as const;
@@ -70,6 +70,8 @@ describe("customFetch", () => {
     });
     const [, opts] = lastCall();
     expect(opts.auth).toBe(false);
+    const h = new Headers(opts.headers as HeadersInit);
+    expect(h.has("x-auth-disable")).toBe(false);
   });
 
   it("works with undefined init (GET with no options)", async () => {
