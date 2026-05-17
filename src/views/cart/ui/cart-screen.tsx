@@ -2,11 +2,12 @@
 import { useCartStore } from "@/entities/cart";
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
 import { EditorialLabel, EditorialDivider, ImageSlot, PillButton, Stamp } from "@/shared/ui";
+import { mulMoney, sumMoney } from "@/shared/lib/money";
 import Link from "next/link";
 
 export function CartScreen() {
   const items = useCartStore((s) => s.items);
-  const total = items.reduce((acc, it) => acc + Number(it.priceUah) * it.qty, 0);
+  const total = sumMoney(items.map((it) => mulMoney(it.priceUah, it.qty)));
 
   return (
     <EditorialPageShell>

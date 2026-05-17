@@ -16,5 +16,4 @@ Backlog знайденого під час Track A що виходить за sc
 - [ ] E2E admin 2FA payouts/execute hardening tests
 
 ## Інше
-- [ ] Sentry/observability — error.tsx логи зараз тільки в console.error
 - [ ] Виокремити catalog-grid / cart / payouts-table як reusable widgets з views (якщо буде потрібно для іншого контексту)
