@@ -1,9 +1,13 @@
+import Link from "next/link";
+import { MOCK_PRODUCTS_CARDS } from "@/shared/api/mock-products";
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
 import { EditorialLabel, EditorialDivider, ImageSlot, Stamp } from "@/shared/ui";
 import type { Page, ProductCardDto } from "@/shared/api";
 
 export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
-  const isEmpty = !data || data.totalElements === 0;
+  const products =
+    !data || !data.content || data.content.length === 0 ? MOCK_PRODUCTS_CARDS : data.content;
+  const isEmpty = products.length === 0;
 
   return (
     <EditorialPageShell>
@@ -69,17 +73,53 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
 
       <EditorialDivider />
 
-      {/* Pagination info / placeholder for product grid */}
-      {data ? (
-        <p className="text-lead text-ink-soft">
-          Сторінка {data.number + 1} з {data.totalPages}, всього {data.totalElements} робіт.
-        </p>
-      ) : (
-        <p className="text-lead text-ink-soft">Каталог тимчасово недоступний.</p>
-      )}
+      {/* Product Grid */}
+      <section aria-label="Перелік учнівських робіт" className="py-12">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product, idx) => {
+            const rotations = [-3, 2, -4, 3, -2, 4];
+            const rotation = rotations[idx % rotations.length];
+            return (
+              <div key={product.id} className="flex justify-center">
+                <Link
+                  href={`/p/${product.slug}`}
+                  style={{ transform: `rotate(${rotation}deg)` }}
+                  className="group relative flex w-full max-w-[280px] flex-col items-center rounded-[2px] bg-white p-4 pb-10 shadow-photo transition-all duration-d3 ease-spring hover:rotate-0 hover:scale-[1.04]"
+                >
+                  {/* Polaroid photo display */}
+                  <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-[1px] bg-bg-warm">
+                    <ImageSlot
+                      slot={`products/${product.slug}`}
+                      src={product.thumbnailUrl}
+                      ratio="3/4"
+                      variant="plain"
+                      caption={product.title ?? "Робота"}
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                  {/* Polaroid bottom border content */}
+                  <div className="w-full space-y-1 text-center">
+                    <h3 className="truncate px-1 font-hand text-hand-m leading-tight text-ink">
+                      {product.title}
+                    </h3>
+                    <p className="text-ink-soft/80 select-none font-hand text-hand-s">
+                      Автор: {product.author?.firstName}, {product.author?.grade}
+                    </p>
+                    <div className="mt-2 border-t border-dashed border-line pt-2">
+                      <span className="font-mono text-body font-bold text-burgundy">
+                        {product.priceUah} ₴
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       {/* Mid-page intermission */}
-      <section aria-label="Цитата-інтермісія" className="-mx-6 my-12 md:-mx-12">
+      <section aria-label="Цитата-інтермісія" className="-mx-5 my-12 md:-mx-6">
         <ImageSlot
           slot="catalog/intermission/quote"
           src="/images/catalog/intermission/quote.png"

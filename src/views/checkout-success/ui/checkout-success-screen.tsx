@@ -4,7 +4,7 @@ import { Stamp, EditorialLabel, ImageSlot } from "@/shared/ui";
 export function CheckoutSuccessScreen({ orderId }: { orderId?: string }) {
   return (
     <EditorialPageShell>
-      <section className="relative -mx-6 md:-mx-12">
+      <section className="relative -mx-5 md:-mx-6">
         <ImageSlot
           slot="checkout-success/confetti-bg"
           src="/images/checkout-success/confetti-bg.png"

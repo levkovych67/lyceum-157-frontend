@@ -5,7 +5,7 @@ import { Stamp, PillButton, EditorialLabel, ImageSlot } from "@/shared/ui";
 export function CheckoutFailureScreen() {
   return (
     <EditorialPageShell>
-      <section className="relative -mx-6 md:-mx-12">
+      <section className="relative -mx-5 md:-mx-6">
         <ImageSlot
           slot="checkout-failure/rain-bg"
           src="/images/checkout-failure/rain-bg.png"

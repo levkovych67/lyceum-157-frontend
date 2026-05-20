@@ -1,6 +1,16 @@
+"use client";
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
-import { EditorialLabel, EditorialDivider, ImageSlot, MuseumLabel, Stamp } from "@/shared/ui";
+import {
+  EditorialLabel,
+  EditorialDivider,
+  ImageSlot,
+  MuseumLabel,
+  Stamp,
+  PillButton,
+  toast,
+} from "@/shared/ui";
 import type { AuthorDto, ProductDetailDto } from "@/shared/api";
+import { useCartStore } from "@/entities/cart";
 
 /**
  * Narrowed ProductDetailDto with all fields the UI relies on asserted present.
@@ -45,6 +55,21 @@ export function ProductDetailScreen({ product }: { product: ProductDetail }) {
   const [main, ...rest] = product.imageUrls;
   const thumbs = [rest[0], rest[1], rest[2]];
 
+  const addToCart = useCartStore((state) => state.add);
+
+  const handleAddToCart = () => {
+    addToCart({
+      productId: product.id,
+      slug: product.slug,
+      title: product.title,
+      priceUah: String(product.priceUah),
+      qty: 1,
+      thumbnailUrl: main ?? null,
+      type: product.type as "PHYSICAL" | "DIGITAL",
+    });
+    toast.success(`Роботу «${product.title}» додано до кошика!`);
+  };
+
   return (
     <EditorialPageShell>
       {/* Lead 60/40 */}
@@ -77,7 +102,7 @@ export function ProductDetailScreen({ product }: { product: ProductDetail }) {
         </div>
 
         {/* Right: Info */}
-        <div className="space-y-8 md:sticky md:top-32 md:self-start">
+        <div className="space-y-8 md:sticky md:top-36 md:self-start">
           <div className="space-y-4">
             <EditorialLabel>▌ УНІКАЛЬНИЙ ЕКЗЕМПЛЯР</EditorialLabel>
             <h1 className="font-display text-h1 italic leading-none text-burgundy">
@@ -106,6 +131,16 @@ export function ProductDetailScreen({ product }: { product: ProductDetail }) {
               author={`${product.author.firstName}, ${product.author.grade}`}
               priceUah={String(product.priceUah)}
             />
+
+            <div className="mt-8">
+              <PillButton
+                onClick={handleAddToCart}
+                variant="primary"
+                className="w-full justify-center text-center"
+              >
+                Забрати роботу в кошик
+              </PillButton>
+            </div>
           </div>
         </div>
       </section>

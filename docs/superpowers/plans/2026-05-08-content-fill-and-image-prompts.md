@@ -496,7 +496,7 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
       <EditorialDivider />
 
       {/* BLOCK 5 — Photographic Interlude (full-bleed) */}
-      <section aria-label="Photographic interlude" className="-mx-6 md:-mx-12">
+      <section aria-label="Photographic interlude" className="-mx-5 md:-mx-6">
         <ImageSlot
           slot="home/interlude/main"
           ratio="16/9"
@@ -1195,7 +1195,7 @@ export function AuthorProfileScreen({ author }: { author: { id: string; name: st
   return (
     <EditorialPageShell>
       <EditorialLabel>АВТОР</EditorialLabel>
-      <section aria-label="Hero portrait" className="-mx-6 md:-mx-12">
+      <section aria-label="Hero portrait" className="-mx-5 md:-mx-6">
         <ImageSlot
           slot={`authors/${author.id}/hero/big`}
           ratio="16/9"
@@ -1408,7 +1408,7 @@ In `checkout-screen.tsx`, near submit button:
 In `checkout-success-screen.tsx`:
 
 ```tsx
-<section className="relative -mx-6 md:-mx-12">
+<section className="relative -mx-5 md:-mx-6">
   <ImageSlot slot="checkout-success/confetti-bg" ratio="16/9" variant="interlude" caption="Свято успіху" />
   <div className="absolute inset-0 flex items-center justify-center">
     <h1 className="font-display text-mega italic text-cream drop-shadow-lg">Дякуємо!</h1>
@@ -1419,7 +1419,7 @@ In `checkout-success-screen.tsx`:
 In `checkout-failure-screen.tsx`:
 
 ```tsx
-<section className="relative -mx-6 md:-mx-12">
+<section className="relative -mx-5 md:-mx-6">
   <ImageSlot slot="checkout-failure/rain-bg" ratio="16/9" variant="interlude" caption="Дощовий фон невдачі" />
   <div className="absolute inset-0 flex items-center justify-center">
     <h1 className="font-display text-mega italic text-cream drop-shadow-lg">Платіж не пройшов</h1>

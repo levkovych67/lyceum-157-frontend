@@ -6,7 +6,7 @@ export function AuthorProfileScreen({ id }: { id: string }) {
     <EditorialPageShell>
       <EditorialLabel>ПРОФАЙЛ-FEATURE</EditorialLabel>
 
-      <section aria-label="Hero portrait" className="-mx-6 md:-mx-12">
+      <section aria-label="Hero portrait" className="-mx-5 md:-mx-6">
         <ImageSlot
           slot={`authors/${id}/hero/big`}
           ratio="16/9"

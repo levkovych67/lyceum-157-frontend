@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductDetailScreen, assertProductDetail } from "@/views/product-detail";
 import { serverApi } from "@/shared/api/server-client";
 import type { ProductDetailDto, Page as P, ProductCardDto } from "@/shared/api";
+import { MOCK_PRODUCTS_DETAILS } from "@/shared/api/mock-products";
 import { JsonLd, productSchema, breadcrumbSchema } from "@/shared/seo";
 
 export const revalidate = 600;
@@ -12,7 +13,10 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   const top = await serverApi<P<ProductCardDto>>("/products?page=0&size=100&sort=popular", {
     revalidate: 3600,
   }).catch(() => null);
-  return top?.content.flatMap(({ slug }) => (slug ? [{ slug }] : [])) ?? [];
+  const slugs = top?.content.flatMap(({ slug }) => (slug ? [{ slug }] : [])) ?? [];
+  // Include mock product slugs in pre-generation
+  const mockSlugs = Object.keys(MOCK_PRODUCTS_DETAILS).map((slug) => ({ slug }));
+  return [...slugs, ...mockSlugs];
 }
 
 function plainText(html: string): string {
@@ -27,10 +31,15 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const p = await serverApi<ProductDetailDto>(`/products/${params.slug}`, {
+  let p = await serverApi<ProductDetailDto>(`/products/${params.slug}`, {
     revalidate: 600,
     tags: [`product:${params.slug}`],
   }).catch(() => null);
+
+  if (!p) {
+    p = MOCK_PRODUCTS_DETAILS[params.slug] || null;
+  }
+
   if (!p) return { title: "Робота не знайдена" };
   assertProductDetail(p);
   const author = `${p.author.firstName}, ${p.author.grade}`;
@@ -57,10 +66,15 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const p = await serverApi<ProductDetailDto>(`/products/${params.slug}`, {
+  let p = await serverApi<ProductDetailDto>(`/products/${params.slug}`, {
     revalidate: 600,
     tags: [`product:${params.slug}`],
   }).catch(() => null);
+
+  if (!p) {
+    p = MOCK_PRODUCTS_DETAILS[params.slug] || null;
+  }
+
   if (!p) notFound();
   assertProductDetail(p);
   return (

@@ -10,7 +10,7 @@ export type MuseumLabelProps = {
 };
 export function MuseumLabel({ title, author, meta, priceUah, className }: MuseumLabelProps) {
   return (
-    <div className={cn("w-[220px] border-y border-ink-fade py-3 text-ink", className)}>
+    <div className={cn("w-full max-w-[240px] border-y border-ink-fade py-3 text-ink", className)}>
       <p className="font-display text-lead italic">{title}</p>
       <p className="text-small font-medium">{author}</p>
       {meta && <p className="text-small italic text-ink-soft">{meta}</p>}

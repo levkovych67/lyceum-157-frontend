@@ -6,7 +6,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Header />
-      <main className="relative z-10 min-h-[calc(100vh-124px)]">{children}</main>
+      <main className="relative z-10 min-h-[calc(100vh-124px)] overflow-x-hidden pt-[100px] md:pt-[124px]">
+        {children}
+      </main>
       <Footer />
     </>
   );

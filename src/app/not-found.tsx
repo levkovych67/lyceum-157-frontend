@@ -11,9 +11,11 @@ export default function NotFound() {
           Сторінку не знайдено в архіві
         </h1>
         <p className="text-lead text-ink-soft">Можливо, ця стаття була в іншому випуску.</p>
-        <PillButton asChild variant="primary">
-          <Link href="/">До обкладинки</Link>
-        </PillButton>
+        <div className="w-fit self-start">
+          <PillButton asChild variant="primary">
+            <Link href="/">До обкладинки</Link>
+          </PillButton>
+        </div>
       </Stack>
     </Container>
   );
