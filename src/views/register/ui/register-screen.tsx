@@ -1,24 +1,19 @@
-"use client";
-import { EditorialPageShell } from "@/widgets/editorial-page-shell";
-import { EditorialLabel, ImageSlot } from "@/shared/ui";
+import { AuthLayout } from "@/widgets/auth-layout";
+import { EditorialLabel } from "@/shared/ui";
 import { RegisterForm } from "@/features/auth";
 
 export function RegisterScreen() {
   return (
-    <EditorialPageShell>
-      <EditorialLabel>НОВА КАРТКА</EditorialLabel>
-      <div className="relative mt-4">
-        <ImageSlot
-          slot="auth/register/decorative-stamp"
-          src="/images/auth/register/decorative-stamp.webp"
-          ratio="1/1"
-          variant="stamp"
-          caption="Печатка реєстрації"
-          className="absolute -right-2 -top-12 z-10 w-20 rotate-[-8deg] md:-right-6 md:-top-16 md:w-24"
-        />
-        <h1 className="font-display text-mega italic text-burgundy">Реєстрація</h1>
+    <AuthLayout
+      photoSide="right"
+      photoSlot="auth/register/cover"
+      photoCaption="Майстерня художнього класу"
+    >
+      <div className="w-full max-w-2xl">
+        <EditorialLabel>НОВА КАРТКА</EditorialLabel>
+        <h1 className="mt-4 font-display text-display italic text-burgundy">Реєстрація</h1>
+        <RegisterForm />
       </div>
-      <RegisterForm />
-    </EditorialPageShell>
+    </AuthLayout>
   );
 }
