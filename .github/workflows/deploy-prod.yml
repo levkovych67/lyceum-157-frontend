@@ -48,7 +48,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
-            NEXT_PUBLIC_API_BASE=https://api.lyceum157-kiev.shop/api/v1
+            # Bare origin — the API client adds the /api/v1 prefix itself.
+            NEXT_PUBLIC_API_BASE=https://api.lyceum157-kiev.shop
             NEXT_PUBLIC_SITE_URL=https://lyceum157-kiev.shop
           cache-from: type=gha
           cache-to: type=gha,mode=max
