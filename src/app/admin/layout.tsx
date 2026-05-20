@@ -7,10 +7,11 @@ import { RoleGateSplash, RoleSectionShell } from "@/widgets/role-section-shell";
 export const dynamic = "force-dynamic";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  const { isAuthenticated, role } = useAuth();
+  const { status, role } = useAuth();
   const router = useRouter();
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
       router.replace("/login");
       return;
     }
@@ -18,7 +19,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       router.replace("/");
       return;
     }
-  }, [isAuthenticated, role, router]);
-  if (!isAuthenticated || role !== "ADMIN") return <RoleGateSplash />;
+  }, [status, role, router]);
+  if (status !== "authenticated" || role !== "ADMIN") return <RoleGateSplash />;
   return <RoleSectionShell role="admin">{children}</RoleSectionShell>;
 }
