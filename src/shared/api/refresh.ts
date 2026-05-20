@@ -17,7 +17,7 @@ export function tryRefresh(): Promise<RefreshResult> {
   if (!inflight) {
     inflight = (async () => {
       try {
-        const r = await fetch(`${API_BASE}/auth/refresh`, {
+        const r = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
           method: "POST",
           credentials: "include",
         });

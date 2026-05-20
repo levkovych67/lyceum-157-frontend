@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ROLE_PROTECTED = ["/student", "/admin", "/account"] as const;
-
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -12,21 +10,14 @@ export function middleware(req: NextRequest) {
     return res;
   }
 
-  for (const prefix of ROLE_PROTECTED) {
-    if (pathname.startsWith(prefix)) {
-      const hasRefresh = req.cookies.has("refresh_token");
-      if (!hasRefresh) {
-        const url = req.nextUrl.clone();
-        url.pathname = "/login";
-        url.searchParams.set("from", pathname);
-        return NextResponse.redirect(url);
-      }
-    }
-  }
-
+  // Route protection for /student, /admin, /account is enforced client-side by the
+  // role layouts (useAuth) and by the backend (@PreAuthorize on every endpoint).
+  // The previous middleware cookie-gate was removed: the refresh_token cookie is
+  // host-scoped to the api. subdomain with path /api/v1/auth, so it is never present
+  // on requests to the apex frontend host — the gate always falsely redirected to /login.
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/student/:path*", "/admin/:path*", "/account", "/parent/:path*"],
+  matcher: ["/parent/:path*"],
 };
