@@ -31,7 +31,7 @@ export function CartScreen() {
             caption="Порожній кошик"
             className="w-48 opacity-50 grayscale"
           />
-          <PillButton asChild className="hover:bg-burgundy/90 mt-8 bg-burgundy text-bg-warm">
+          <PillButton asChild className="mt-8">
             <Link href="/catalog">До каталогу</Link>
           </PillButton>
         </div>
@@ -68,7 +68,7 @@ export function CartScreen() {
 
                     <div className="mt-4 flex items-center gap-4">
                       {/* Pill Quantity Stepper */}
-                      <div className="flex h-8 w-24 items-center overflow-hidden rounded-full border-[1.5px] border-line-strong bg-bg">
+                      <div className="flex h-8 w-24 items-center overflow-hidden rounded-none border-[1.5px] border-line-strong bg-bg">
                         <button
                           onClick={() => setQty(it.productId, it.qty - 1)}
                           className="hover:bg-bg-warm/50 flex h-full w-8 items-center justify-center font-display text-sm font-bold text-ink transition-colors hover:text-burgundy focus:outline-none"
@@ -140,10 +140,7 @@ export function CartScreen() {
               <span>{total} ₴</span>
             </div>
 
-            <PillButton
-              asChild
-              className="hover:bg-burgundy/90 w-full justify-center bg-burgundy text-bg-warm transition-transform duration-200 hover:-translate-y-0.5"
-            >
+            <PillButton asChild className="w-full">
               <Link href="/checkout">Оформити</Link>
             </PillButton>
           </aside>
