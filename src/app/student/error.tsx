@@ -15,7 +15,7 @@ export default function StudentError({ error, reset }: { error: Error; reset: ()
         <h1 className="font-display text-display italic text-burgundy">
           {uk.errors.studentHeadline}
         </h1>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-5">
           <PillButton onClick={reset}>{uk.errors.reset}</PillButton>
           <PillButton variant="outline-d" asChild>
             <Link href="/student">До зошита</Link>

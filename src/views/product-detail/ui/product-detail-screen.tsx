@@ -94,11 +94,7 @@ export function ProductDetailScreen({ product }: { product: ProductDetail }) {
             />
 
             <div className="mt-8">
-              <PillButton
-                onClick={handleAddToCart}
-                variant="primary"
-                className="w-full justify-center text-center"
-              >
+              <PillButton onClick={handleAddToCart} className="w-full">
                 Забрати роботу в кошик
               </PillButton>
             </div>
