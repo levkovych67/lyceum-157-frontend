@@ -63,10 +63,7 @@ export function RegisterForm() {
             required
             error={form.formState.errors.firstName?.message}
           >
-            <Input
-              {...form.register("firstName")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-            />
+            <Input variant="underline" {...form.register("firstName")} />
           </FormField>
           <FormField
             name="lastName"
@@ -74,10 +71,7 @@ export function RegisterForm() {
             required
             error={form.formState.errors.lastName?.message}
           >
-            <Input
-              {...form.register("lastName")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-            />
+            <Input variant="underline" {...form.register("lastName")} />
           </FormField>
         </FormRow>
         <FormRow cols={2}>
@@ -90,8 +84,8 @@ export function RegisterForm() {
             <Input
               type="email"
               autoComplete="email"
+              variant="underline"
               {...form.register("email")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
             />
           </FormField>
           <FormField
@@ -101,11 +95,7 @@ export function RegisterForm() {
             hint="формат 9-А або 11-B"
             error={form.formState.errors.grade?.message}
           >
-            <Input
-              placeholder="9-А"
-              {...form.register("grade")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-            />
+            <Input variant="underline" placeholder="9-А" {...form.register("grade")} />
           </FormField>
         </FormRow>
         <FormField
@@ -118,8 +108,8 @@ export function RegisterForm() {
           <Input
             type="password"
             autoComplete="new-password"
+            variant="underline"
             {...form.register("password")}
-            className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
           />
         </FormField>
         <FormField
@@ -129,19 +119,11 @@ export function RegisterForm() {
           hint="Надішлемо їм запит на згоду"
           error={form.formState.errors.parentEmail?.message}
         >
-          <Input
-            type="email"
-            {...form.register("parentEmail")}
-            className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-          />
+          <Input type="email" variant="underline" {...form.register("parentEmail")} />
         </FormField>
         <FormFooter className="border-ink/30 mt-8 border-t-[1.5px] border-dashed pt-8">
           <span />
-          <PillButton
-            type="submit"
-            loading={m.isPending}
-            className="hover:bg-burgundy/90 bg-burgundy text-bg-warm"
-          >
+          <PillButton type="submit" loading={m.isPending}>
             Зареєструватись
           </PillButton>
         </FormFooter>

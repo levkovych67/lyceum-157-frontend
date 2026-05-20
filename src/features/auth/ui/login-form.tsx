@@ -42,9 +42,9 @@ export function LoginForm() {
           <Input
             type="email"
             autoComplete="email"
+            variant="underline"
             {...form.register("email")}
             placeholder="your.name@example.com"
-            className="border-ink/30 rounded-none border-b bg-transparent px-0 py-1.5 shadow-none transition-colors duration-200 focus:border-burgundy focus:ring-0"
           />
         </FormField>
         <FormField
@@ -57,9 +57,9 @@ export function LoginForm() {
           <Input
             type="password"
             autoComplete="current-password"
+            variant="underline"
             {...form.register("password")}
             placeholder="••••••••"
-            className="border-ink/30 rounded-none border-b bg-transparent px-0 py-1.5 shadow-none transition-colors duration-200 focus:border-burgundy focus:ring-0"
           />
         </FormField>
         <FormFooter className="border-line-strong/40 mt-8 flex items-center justify-between border-t-[1.5px] border-dashed pt-6">
@@ -69,11 +69,7 @@ export function LoginForm() {
           >
             Немає картки?
           </Link>
-          <PillButton
-            type="submit"
-            loading={m.isPending}
-            className="bg-burgundy text-bg-warm transition-all hover:bg-burgundy-soft"
-          >
+          <PillButton type="submit" loading={m.isPending}>
             Увійти
           </PillButton>
         </FormFooter>

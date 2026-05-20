@@ -45,7 +45,7 @@ export function CheckoutForm() {
         <p className="text-lead text-ink-soft">
           Кошик порожній. Щоб оформити замовлення, спочатку оберіть роботу.
         </p>
-        <PillButton asChild className="hover:bg-burgundy/90 mt-4 bg-burgundy text-bg-warm">
+        <PillButton asChild className="mt-4">
           <Link href="/catalog">До каталогу</Link>
         </PillButton>
       </div>
@@ -70,10 +70,7 @@ export function CheckoutForm() {
             required
             error={form.formState.errors.buyerName?.message}
           >
-            <Input
-              {...form.register("buyerName")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-            />
+            <Input variant="underline" {...form.register("buyerName")} />
           </FormField>
           <FormField
             name="buyerEmail"
@@ -81,11 +78,7 @@ export function CheckoutForm() {
             required
             error={form.formState.errors.buyerEmail?.message}
           >
-            <Input
-              type="email"
-              {...form.register("buyerEmail")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-            />
+            <Input type="email" variant="underline" {...form.register("buyerEmail")} />
           </FormField>
           <FormField
             name="buyerPhone"
@@ -94,20 +87,12 @@ export function CheckoutForm() {
             hint="+380XXXXXXXXX"
             error={form.formState.errors.buyerPhone?.message}
           >
-            <Input
-              type="tel"
-              {...form.register("buyerPhone")}
-              className="rounded-none border-b border-ink bg-transparent px-0 shadow-none focus:ring-0"
-            />
+            <Input type="tel" variant="underline" {...form.register("buyerPhone")} />
           </FormField>
 
           <FormFooter className="pt-8">
             <span />
-            <PillButton
-              type="submit"
-              loading={m.isPending}
-              className="hover:bg-burgundy/90 bg-burgundy text-bg-warm"
-            >
+            <PillButton type="submit" loading={m.isPending}>
               {m.isPending ? "Перенаправляємо на LiqPay…" : `Сплатити ${totalUah} ₴`}
             </PillButton>
           </FormFooter>
