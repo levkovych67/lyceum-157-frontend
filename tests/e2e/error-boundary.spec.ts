@@ -1,6 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-test("@smoke catalog widget boundary catches API failure and recovers", async ({ page }) => {
+// TODO: rewrite as a Vitest + RTL + MSW component test.
+// page.route() intercepts only browser requests, but /catalog fetches products
+// server-side (RSC: `await serverApi(...)` in catalog/page.tsx) — the mock never
+// applies. Also catalog/page.tsx does `.catch(() => null)`, so an API failure
+// never throws and WidgetErrorBoundary has nothing to catch. Playwright cannot
+// inject server-side failures into an RSC fetch.
+test.fixme("@smoke catalog widget boundary catches API failure and recovers", async ({ page }) => {
   let failOnce = true;
 
   await page.route("**/api/v1/products**", async (route) => {
