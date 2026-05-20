@@ -1,33 +1,48 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Search, User } from "lucide-react";
+import { Search, User, Menu, X } from "lucide-react";
 import { TopBar } from "./top-bar";
 import { Nav } from "./nav";
 import { CartBadge } from "./cart-badge";
-import { Container } from "@/shared/ui";
+import { useHeaderState } from "./use-header-state";
+import { Container, Stamp } from "@/shared/ui";
 import { cn } from "@/shared/lib";
-import Image from "next/image";
+
+const navItems = [
+  { href: "/catalog", label: "Каталог" },
+  { href: "/authors/all", label: "Автори" },
+  { href: "/collections", label: "Колекції" },
+  { href: "/about", label: "Про проєкт" },
+];
 
 export function Header() {
-  const [collapsed, setCollapsed] = useState(false);
+  const { floating } = useHeaderState();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Prevent background scroll when mobile menu is open
   useEffect(() => {
-    const onScroll = () => setCollapsed(window.scrollY > 120);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <header
-      data-collapsed={collapsed}
+      data-floating={floating}
       className={cn(
-        "bg-bg/90 fixed left-0 right-0 top-0 z-30 border-b border-line backdrop-blur-md transition-all duration-d3 ease-paper",
-        collapsed ? "h-16 shadow-paper" : "h-[88px] md:h-[124px]",
+        "fixed left-0 right-0 top-0 z-30 border-b transition-all duration-d3 ease-paper",
+        floating
+          ? "h-16 border-line bg-glass shadow-paper backdrop-blur-md"
+          : "h-[88px] border-transparent bg-transparent md:h-[124px]",
       )}
     >
       <div
         className={cn(
           "overflow-hidden transition-all duration-d3 ease-paper",
-          collapsed ? "h-0 opacity-0" : "h-9 opacity-100",
+          floating ? "h-0 opacity-0" : "h-9 opacity-100",
         )}
       >
         <TopBar />
@@ -36,34 +51,129 @@ export function Header() {
         <div
           className={cn(
             "flex items-center justify-between transition-all duration-d3 ease-paper",
-            collapsed ? "h-16" : "h-[88px]",
+            floating ? "h-16" : "h-[88px]",
           )}
         >
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="-ml-2 p-2 text-ink transition-colors hover:text-burgundy md:hidden"
+            aria-label="Відкрити меню"
+          >
+            <Menu size={24} strokeWidth={1.5} />
+          </button>
+
+          {/* Logo - Centered on mobile, Left-aligned on desktop */}
           <Link
             href="/"
-            className="relative flex items-center justify-center transition-all duration-d3 ease-paper"
+            className="absolute left-1/2 flex -translate-x-1/2 items-center justify-center transition-all duration-d3 ease-paper md:static md:translate-x-0"
           >
             <Image
               src="/logo.webp"
               alt="Майстерня 157"
               width={80}
               height={80}
+              priority
               className={cn(
                 "object-contain transition-all duration-d3 ease-paper",
-                collapsed ? "h-12 w-12" : "h-20 w-20",
+                floating ? "h-10 w-10 md:h-12 md:w-12" : "h-16 w-16 md:h-20 md:w-20",
               )}
             />
           </Link>
+
+          {/* Desktop Nav */}
           <Nav />
-          <div className="flex items-center gap-5">
-            <Search size={20} strokeWidth={1.5} aria-label="Пошук" />
-            <Link href="/account" aria-label="Кабінет">
+
+          {/* Global Icons */}
+          <div className="flex items-center gap-4 text-ink md:gap-5">
+            <Search
+              size={20}
+              strokeWidth={1.5}
+              className="hidden cursor-pointer transition-colors hover:text-burgundy sm:block"
+              aria-label="Пошук"
+            />
+            <Link
+              href="/account"
+              className="hidden transition-colors hover:text-burgundy sm:block"
+              aria-label="Кабінет"
+            >
               <User size={20} strokeWidth={1.5} />
             </Link>
             <CartBadge />
           </div>
         </div>
       </Container>
+
+      {/* Mobile Menu Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-d3"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Drawer Panel */}
+          <div
+            className={cn(
+              "fixed inset-y-0 left-0 flex w-full max-w-[300px] flex-col justify-between border-r border-line bg-bg p-6 shadow-deep transition-transform duration-d3 ease-paper",
+              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full",
+            )}
+          >
+            <div>
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between border-b border-line pb-4">
+                <div className="flex flex-col">
+                  <span className="-rotate-2 font-hand text-hand-m text-green">зміст випуску</span>
+                  <span className="font-body text-[10px] uppercase tracking-widest text-ink-fade">
+                    Архів 157
+                  </span>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="rounded-full p-2 text-ink transition-colors hover:bg-line"
+                  aria-label="Закрити меню"
+                >
+                  <X size={20} strokeWidth={1.5} />
+                </button>
+              </div>
+
+              {/* Navigation Items */}
+              <nav className="mt-8">
+                <ul className="flex flex-col gap-6">
+                  {navItems.map((it) => (
+                    <li key={it.href}>
+                      <Link
+                        href={it.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="font-display text-h2 italic text-burgundy transition-colors hover:text-green"
+                      >
+                        {it.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+
+            {/* Drawer Footer with Stamp decoration */}
+            <div className="flex flex-col items-center gap-4 border-t border-line pt-6">
+              <Stamp
+                text="1957"
+                shape="octagon"
+                rotation={-5}
+                size={64}
+                animateOn="none"
+                smudge={true}
+                className="text-burgundy/20"
+              />
+              <p className="text-center font-body text-[10px] uppercase tracking-[0.15em] text-ink-fade">
+                ВИПУСК №47 · ТРАВЕНЬ 2026
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

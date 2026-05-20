@@ -13,7 +13,7 @@ export function EditorialDivider({ variant = "dashed", number, className }: Edit
     );
   if (variant === "marks")
     return (
-      <div className={cn("flex items-center justify-center gap-2 py-4", className)}>
+      <div className={cn("flex items-center justify-center gap-2", className)}>
         <span className="h-4 w-1 bg-burgundy" />
         <span className="h-4 w-1 bg-burgundy" />
         <span className="h-4 w-1 bg-burgundy" />
@@ -21,14 +21,14 @@ export function EditorialDivider({ variant = "dashed", number, className }: Edit
     );
   if (variant === "number")
     return (
-      <div className={cn("flex items-center gap-3 py-4 text-small text-ink-soft", className)}>
+      <div className={cn("flex items-center gap-3 text-small text-ink-soft", className)}>
         <span className="h-px flex-1 bg-line-strong" />
         <span className="font-body">{String(number ?? 0).padStart(2, "0")}</span>
         <span className="h-px flex-1 bg-line-strong" />
       </div>
     );
   return (
-    <div className={cn("flex items-center gap-3 py-4", className)}>
+    <div className={cn("flex items-center gap-3", className)}>
       <span className="h-px flex-1 bg-line-strong" />
       <span className="text-burgundy">★</span>
       <span className="h-px flex-1 bg-line-strong" />

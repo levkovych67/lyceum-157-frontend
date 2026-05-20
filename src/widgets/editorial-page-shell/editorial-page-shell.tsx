@@ -3,9 +3,9 @@ import { Container, Section, Stack } from "@/shared/ui";
 
 export function EditorialPageShell({ children }: { children: ReactNode }) {
   return (
-    <Section pad="default" className="overflow-x-hidden">
+    <Section pad="page" className="overflow-x-hidden">
       <Container>
-        <Stack gap={6}>{children}</Stack>
+        <Stack gap="block">{children}</Stack>
       </Container>
     </Section>
   );

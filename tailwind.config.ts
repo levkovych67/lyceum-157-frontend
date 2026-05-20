@@ -37,6 +37,7 @@ const config: Config = {
         link: "var(--c-link)",
         stamp: "var(--c-stamp)",
         error: "var(--c-error)",
+        glass: "var(--header-glass-bg)",
       },
       fontFamily: {
         display: ["var(--f-display)"],

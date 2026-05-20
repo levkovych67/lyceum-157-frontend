@@ -10,6 +10,7 @@ const pad = {
   default: "py-16 md:py-[120px]",
   tight: "py-10 md:py-16",
   wide: "py-20 md:py-[160px]",
+  page: "pt-6 pb-8 md:pt-7 md:pb-9",
 } as const;
 export function Section({
   tone: t = "bg",
