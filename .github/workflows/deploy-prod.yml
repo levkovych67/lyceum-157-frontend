@@ -66,8 +66,8 @@ jobs:
           script: |
             set -euo pipefail
             cd /opt/lyceum157
-            sudo docker compose pull frontend
-            sudo docker compose up -d frontend
+            docker compose pull frontend
+            docker compose up -d frontend
             # Wait for healthcheck (max 90s)
             for i in $(seq 1 45); do
               if curl -fs http://127.0.0.1:3000/ >/dev/null; then
@@ -76,5 +76,5 @@ jobs:
               sleep 2
             done
             echo "Frontend not ready in 90s"
-            sudo docker compose logs --tail 50 frontend
+            docker compose logs --tail 50 frontend
             exit 1
