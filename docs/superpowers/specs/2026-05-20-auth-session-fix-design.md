@@ -128,9 +128,13 @@ logged-out state then updates. It does not redirect, so no change is required.
 
 **Config:**
 
-- `AppProperties` — add a nested `Admin` record with optional `bootstrapEmail` /
-  `bootstrapPassword` (plain `String`, no `@NotBlank` — absent on `local`).
-- `application.yml` — `app.admin.bootstrap-email: ${ADMIN_EMAIL:}` and
+- New `config/AdminBootstrapProperties` — a `@ConfigurationProperties(prefix = "app.admin")`
+  record with optional `bootstrapEmail` / `bootstrapPassword` (plain `String`, no `@NotBlank`
+  — absent on `local`). A separate record, consistent with the codebase's per-feature config
+  (`app.refund`, `app.delivery`) and avoiding a constructor change to the shared `AppProperties`
+  (which is built manually in three test files). Auto-registered by the existing
+  `@ConfigurationPropertiesScan` on the `config` package.
+- `application.yml` — add `app.admin.bootstrap-email: ${ADMIN_EMAIL:}` and
   `bootstrap-password: ${ADMIN_PASSWORD:}` (empty defaults → skip when unset).
 - `deploy/.env.prod.example` — add `ADMIN_EMAIL=` / `ADMIN_PASSWORD=` with a comment.
 
@@ -148,7 +152,7 @@ logged-out state then updates. It does not redirect, so no change is required.
 **Backend:**
 
 - `src/main/java/com/lyceum157/hub/config/AdminBootstrapRunner.java` — new
-- `src/main/java/com/lyceum157/hub/config/AppProperties.java` — `Admin` config record
+- `src/main/java/com/lyceum157/hub/config/AdminBootstrapProperties.java` — new `@ConfigurationProperties` record
 - `src/main/resources/application.yml` — wire `app.admin.*` from env
 - `deploy/.env.prod.example` — `ADMIN_EMAIL` / `ADMIN_PASSWORD`
 
