@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LoginScreen } from "@/views/login";
+import { RedirectIfAuthenticated } from "./redirect-if-authenticated";
 
 export const metadata: Metadata = {
   title: "Вхід · Майстерня 157",
@@ -9,5 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <LoginScreen />;
+  return (
+    <>
+      <RedirectIfAuthenticated />
+      <LoginScreen />
+    </>
+  );
 }
