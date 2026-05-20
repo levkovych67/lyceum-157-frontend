@@ -1,5 +1,2 @@
-export {
-  ProductDetailScreen,
-  assertProductDetail,
-  type ProductDetail,
-} from "./ui/product-detail-screen";
+export { ProductDetailScreen } from "./ui/product-detail-screen";
+export { assertProductDetail, type ProductDetail } from "./lib/product-detail";
