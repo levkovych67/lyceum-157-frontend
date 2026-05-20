@@ -165,4 +165,50 @@ describe("api client", () => {
     window.removeEventListener("auth:security-incident", handler);
     window.removeEventListener("auth:logout-required", handler);
   });
+
+  it("does NOT retry a second time when the retried request also 401s", async () => {
+    const events: string[] = [];
+    const handler = (e: Event) => events.push(e.type);
+    window.addEventListener("auth:logout-required", handler);
+    fetchMock
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        statusText: "Unauthorized",
+        headers: new Headers(),
+        json: async () => ({
+          status: 401,
+          title: "U",
+          type: "",
+          detail: "",
+          instance: "",
+          timestamp: "",
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        headers: new Headers({ "Content-Type": "application/json" }),
+        json: async () => ({ accessToken: "new", expiresIn: 900, userId: "u", role: "STUDENT" }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        statusText: "Unauthorized",
+        headers: new Headers(),
+        json: async () => ({
+          status: 401,
+          title: "U",
+          type: "",
+          detail: "",
+          instance: "",
+          timestamp: "",
+        }),
+      });
+    await expect(api("/protected")).rejects.toBeInstanceOf(ApiError);
+    // 1 = original request, 2 = refresh call, 3 = the single retry. No 4th call = guard works.
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(events).toContain("auth:logout-required");
+    window.removeEventListener("auth:logout-required", handler);
+  });
 });
