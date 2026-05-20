@@ -25,7 +25,7 @@ export type ImageSlotProps = {
 };
 
 const variantStyles: Record<ImageSlotVariant, string> = {
-  polaroid: "bg-white p-3 pb-8 md:pb-10 shadow-photo rounded-[2px]",
+  polaroid: "bg-white p-3  shadow-photo rounded-[2px]",
   "photo-print": "rounded-[4px] shadow-photo",
   interlude: "rounded-none",
   portrait: "rounded-[4px] shadow-photo",
@@ -59,12 +59,7 @@ export function ImageSlot({
   if (src) {
     if (variant === "polaroid") {
       return (
-        <div
-          className={cn(
-            "inline-block rounded-[2px] bg-white p-3 pb-8 shadow-photo md:pb-10",
-            className,
-          )}
-        >
+        <div className={cn("inline-block rounded-[2px] bg-white p-3 shadow-photo", className)}>
           <div className="relative mb-2 overflow-hidden rounded-[1px]" style={aspectStyle}>
             <Image
               src={src}

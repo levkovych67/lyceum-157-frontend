@@ -120,7 +120,7 @@ export function CheckoutForm() {
           <span className="font-mono text-small tracking-widest text-ink-soft">КОПІЯ №2</span>
         </div>
         <p className="mb-6 text-small uppercase tracking-widest text-burgundy">Замовлення №____</p>
-        <ul className="border-ink/30 mb-6 space-y-4 border-b-[1.5px] border-dashed pb-6 text-lead text-ink">
+        <ul className="border-ink/30 mb-6 space-y-4 border-b-[1.5px] border-dashed text-lead text-ink">
           {items.map((it) => (
             <li key={it.productId} className="flex justify-between gap-4">
               <span className="truncate">

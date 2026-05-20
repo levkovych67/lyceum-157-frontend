@@ -42,7 +42,7 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
         <div className="flex rotate-[-2deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:col-span-4 md:col-start-1 md:mt-8 md:justify-end">
           <ImageSlot
             slot="catalog/category/tile-1"
-            src="/images/catalog/category/tile-1.png"
+            src="/images/catalog/category/tile-1.webp"
             ratio="4/5"
             variant="photo-print"
             caption="Кераміка"
@@ -52,7 +52,7 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
         <div className="z-10 flex rotate-[3deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:col-span-5 md:col-start-4 md:-mt-4">
           <ImageSlot
             slot="catalog/category/tile-2"
-            src="/images/catalog/category/tile-2.png"
+            src="/images/catalog/category/tile-2.webp"
             ratio="4/5"
             variant="photo-print"
             caption="Графіка"
@@ -62,7 +62,7 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
         <div className="flex rotate-[-4deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:col-span-4 md:col-start-9 md:mt-12 md:justify-start">
           <ImageSlot
             slot="catalog/category/tile-3"
-            src="/images/catalog/category/tile-3.png"
+            src="/images/catalog/category/tile-3.webp"
             ratio="4/5"
             variant="photo-print"
             caption="Текстиль"
@@ -84,7 +84,7 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
                 <Link
                   href={`/p/${product.slug}`}
                   style={{ transform: `rotate(${rotation}deg)` }}
-                  className="group relative flex w-full max-w-[280px] flex-col items-center rounded-[2px] bg-white p-4 pb-10 shadow-photo transition-all duration-d3 ease-spring hover:rotate-0 hover:scale-[1.04]"
+                  className="group relative flex w-full max-w-[280px] flex-col items-center rounded-[2px] bg-white p-4 shadow-photo transition-all duration-d3 ease-spring hover:rotate-0 hover:scale-[1.04]"
                 >
                   {/* Polaroid photo display */}
                   <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-[1px] bg-bg-warm">
@@ -122,7 +122,7 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
       <section aria-label="Цитата-інтермісія" className="-mx-5 my-12 md:-mx-6">
         <ImageSlot
           slot="catalog/intermission/quote"
-          src="/images/catalog/intermission/quote.png"
+          src="/images/catalog/intermission/quote.webp"
           ratio="21/9"
           variant="interlude"
           caption="Інтермісія — full-bleed цитата"
@@ -135,7 +135,7 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
           <p className="font-hand text-hand-l text-ink">Хм, нічого не знайшлось.</p>
           <ImageSlot
             slot="catalog/empty-state/illustration"
-            src="/images/catalog/empty-state/illustration.png"
+            src="/images/catalog/empty-state/illustration.webp"
             ratio="1/1"
             variant="plain"
             caption="Порожній альбом"

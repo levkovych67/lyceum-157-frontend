@@ -8,7 +8,7 @@ export function Admin2faScreen() {
       <div className="flex items-center gap-4">
         <ImageSlot
           slot="admin/payouts/shield"
-          src="/images/admin/payouts/shield.png"
+          src="/images/admin/payouts/shield.webp"
           ratio="1/1"
           variant="stamp"
           caption="2FA-замок"

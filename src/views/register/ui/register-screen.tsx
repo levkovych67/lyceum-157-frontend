@@ -10,7 +10,7 @@ export function RegisterScreen() {
       <div className="relative mt-4">
         <ImageSlot
           slot="auth/register/decorative-stamp"
-          src="/images/auth/register/decorative-stamp.png"
+          src="/images/auth/register/decorative-stamp.webp"
           ratio="1/1"
           variant="stamp"
           caption="Печатка реєстрації"

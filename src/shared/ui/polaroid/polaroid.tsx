@@ -29,7 +29,7 @@ export function Polaroid({
     <div
       style={{ transform: `rotate(${rotation}deg)` }}
       className={cn(
-        "relative inline-block bg-white p-3 pb-9 shadow-photo transition-transform duration-d3 ease-spring",
+        "relative inline-block bg-white p-3 shadow-photo transition-transform duration-d3 ease-spring",
         hoverInteractive && "hover:rotate-0 hover:scale-[1.04]",
         className,
       )}

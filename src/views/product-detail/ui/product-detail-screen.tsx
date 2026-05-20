@@ -114,7 +114,7 @@ export function ProductDetailScreen({ product }: { product: ProductDetail }) {
           <div className="flex rotate-[-3deg] justify-center md:justify-end">
             <ImageSlot
               slot="product/story/process-1"
-              src="/images/product/story/process-1.png"
+              src="/images/product/story/process-1.webp"
               ratio="1/1"
               variant="polaroid"
               caption="Процес створення"
@@ -132,7 +132,7 @@ export function ProductDetailScreen({ product }: { product: ProductDetail }) {
           <div className="flex rotate-[4deg] justify-center md:justify-start">
             <ImageSlot
               slot="product/story/process-2"
-              src="/images/product/story/process-2.png"
+              src="/images/product/story/process-2.webp"
               ratio="4/5"
               variant="polaroid"
               caption="Деталі фактури"

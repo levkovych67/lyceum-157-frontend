@@ -165,7 +165,7 @@ export type ImageSlotProps = {
 };
 
 const variantStyles: Record<ImageSlotVariant, string> = {
-  polaroid: "bg-white p-3 pb-9 shadow-photo rounded-[2px]",
+  polaroid: "bg-white p-3  shadow-photo rounded-[2px]",
   "photo-print": "rounded-[4px] shadow-photo overflow-hidden",
   interlude: "rounded-none overflow-hidden",
   portrait: "rounded-[4px] shadow-photo overflow-hidden",

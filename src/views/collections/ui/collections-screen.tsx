@@ -4,7 +4,7 @@ import { EditorialLabel, EditorialDivider, ImageSlot, Stamp } from "@/shared/ui"
 const tiles = [
   {
     slot: "collections/tile-1",
-    src: "/images/collections/tile-1.png",
+    src: "/images/collections/tile-1.webp",
     title: "Шевченківські дні",
     edition: "Випуск №31 · Березень 2026",
     blurb: "Графічні портрети до Шевченкових днів — вугілля, олівець, туш.",
@@ -14,7 +14,7 @@ const tiles = [
   },
   {
     slot: "collections/tile-2",
-    src: "/images/collections/tile-2.png",
+    src: "/images/collections/tile-2.webp",
     title: "Випуск 11-А",
     edition: "Спецвипуск · Травень 2026",
     blurb: "Дипломні роботи — кераміка, текстиль, змішана техніка від випускників.",
@@ -24,7 +24,7 @@ const tiles = [
   },
   {
     slot: "collections/tile-3",
-    src: "/images/collections/tile-3.png",
+    src: "/images/collections/tile-3.webp",
     title: "Літня практика",
     edition: "Польовий зошит · Червень–Серпень 2025",
     blurb: "Пленер у Карпатах та Криму — акварель, нариси, етюди.",
@@ -34,7 +34,7 @@ const tiles = [
   },
   {
     slot: "collections/tile-4",
-    src: "/images/collections/tile-4.png",
+    src: "/images/collections/tile-4.webp",
     title: "Архів 2024",
     edition: "Ретроспектива",
     blurb: "Найкращі роботи минулого року з картотеки кураторки.",
@@ -67,7 +67,7 @@ export function CollectionsScreen() {
         <div className="relative">
           <ImageSlot
             slot="collections/hero"
-            src="/images/collections/hero.png"
+            src="/images/collections/hero.webp"
             ratio="21/9"
             variant="plain"
             caption="Колекція місяця"
@@ -126,7 +126,7 @@ export function CollectionsScreen() {
         <div className="rotate-[-4deg] transition-transform hover:rotate-0">
           <ImageSlot
             slot="collections/decorative/stamp"
-            src="/images/collections/decorative/stamp.png"
+            src="/images/collections/decorative/stamp.webp"
             ratio="1/1"
             variant="stamp"
             caption="Архівна печатка"

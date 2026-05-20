@@ -11,7 +11,7 @@ export function LoginScreen() {
       <div className="relative mt-4">
         <ImageSlot
           slot="auth/login/decorative-stamp"
-          src="/images/auth/login/decorative-stamp.png"
+          src="/images/auth/login/decorative-stamp.webp"
           ratio="1/1"
           variant="stamp"
           caption="Печатка входу"

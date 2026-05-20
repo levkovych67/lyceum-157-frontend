@@ -7,7 +7,7 @@ export function CheckoutSuccessScreen({ orderId }: { orderId?: string }) {
       <section className="relative -mx-5 md:-mx-6">
         <ImageSlot
           slot="checkout-success/confetti-bg"
-          src="/images/checkout-success/confetti-bg.png"
+          src="/images/checkout-success/confetti-bg.webp"
           ratio="16/9"
           variant="interlude"
           caption="Свято успіху"

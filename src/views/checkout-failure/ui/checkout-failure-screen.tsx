@@ -8,7 +8,7 @@ export function CheckoutFailureScreen() {
       <section className="relative -mx-5 md:-mx-6">
         <ImageSlot
           slot="checkout-failure/rain-bg"
-          src="/images/checkout-failure/rain-bg.png"
+          src="/images/checkout-failure/rain-bg.webp"
           ratio="16/9"
           variant="interlude"
           caption="Дощовий фон невдачі"

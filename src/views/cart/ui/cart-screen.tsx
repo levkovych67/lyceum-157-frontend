@@ -23,7 +23,7 @@ export function CartScreen() {
           <p className="font-hand text-hand-l text-ink">Поки що тут порожньо.</p>
           <ImageSlot
             slot="cart/empty-state"
-            src="/images/cart/empty-state.png"
+            src="/images/cart/empty-state.webp"
             ratio="1/1"
             variant="plain"
             caption="Порожній кошик"
@@ -73,7 +73,7 @@ export function CartScreen() {
             />
             <EditorialLabel className="mb-6">ПІДСУМОК</EditorialLabel>
 
-            <div className="border-ink/30 mb-6 space-y-4 border-b-[1.5px] border-dashed pb-6 text-lead text-ink">
+            <div className="border-ink/30 mb-6 space-y-4 border-b-[1.5px] border-dashed text-lead text-ink">
               <div className="flex justify-between">
                 <span>Роботи ({items.reduce((acc, it) => acc + it.qty, 0)})</span>
                 <span>{total} ₴</span>

@@ -9,7 +9,7 @@ export function StudentDashboardScreen() {
       <h1 className="font-display text-h1 italic text-burgundy">Привіт! Що сьогодні створюєш?</h1>
       <ImageSlot
         slot="student/dashboard/hero"
-        src="/images/student/dashboard/hero.png"
+        src="/images/student/dashboard/hero.webp"
         ratio="16/9"
         variant="interlude"
         caption="Hero банер кабінету учня"
@@ -30,7 +30,7 @@ export function StudentDashboardScreen() {
       <div className="flex flex-col items-center gap-3 py-8">
         <ImageSlot
           slot="student/empty/no-products"
-          src="/images/student/empty/no-products.png"
+          src="/images/student/empty/no-products.webp"
           ratio="1/1"
           variant="stamp"
           caption="Поки робіт немає"

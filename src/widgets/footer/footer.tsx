@@ -42,7 +42,7 @@ export function Footer() {
           </div>
         </div>
         <EditorialDivider variant="dashed" className="my-8" />
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 text-small">
+        <div className="flex flex-wrap items-center justify-between gap-4 text-small">
           <EditorialLabel>© ЛІЦЕЙ 157 · 2026 · ОБОЛОНЬ</EditorialLabel>
           <nav className="flex gap-5 text-ink-soft">
             <Link href="/catalog">Каталог</Link>

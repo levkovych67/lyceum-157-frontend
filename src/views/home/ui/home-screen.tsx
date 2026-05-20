@@ -14,7 +14,7 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
     <EditorialPageShell>
       {/* BLOCK 1 — masthead */}
       <header className="space-y-2">
-        <EditorialLabel>ВИПУСК №47 · ТРАВЕНЬ 2026</EditorialLabel>
+        <EditorialLabel>ВИПУСК №47 · ТРАВЕНЬ 2026*</EditorialLabel>
         <h1 className="font-display text-mega italic text-burgundy">Майстерня 157</h1>
         <p className="max-w-prose text-lead text-ink-soft">
           Архів учнівських робіт Ліцею №157. Київ · Оболонь · з 1957 року.
@@ -45,7 +45,7 @@ export function HomeScreen({ initial }: { initial: Page<ProductCardDto> | null }
             blurDataURL={getBlur("/images/home/hero/poster-1.webp")}
           />
         </div>
-        <div className="z-20 flex justify-center transition-transform hover:rotate-0 hover:scale-105 md:-mt-4 md:rotate-[2deg]">
+        <div className="z-20 flex justify-center transition-transform hover:rotate-0 hover:scale-105 md:mb-11 md:rotate-[2deg]">
           <ImageSlot
             slot="home/hero/poster-2"
             src="/images/home/hero/poster-2.webp"

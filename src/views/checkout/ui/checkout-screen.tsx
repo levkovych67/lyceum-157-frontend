@@ -16,7 +16,7 @@ export function CheckoutScreen() {
       <div className="border-ink/30 mt-16 flex items-center justify-center gap-4 border-t-[1.5px] border-dashed pt-8 text-center md:justify-start md:text-left">
         <ImageSlot
           slot="checkout/trust-seal"
-          src="/images/checkout/trust-seal.png"
+          src="/images/checkout/trust-seal.webp"
           ratio="1/1"
           variant="stamp"
           caption="Безпечний платіж"

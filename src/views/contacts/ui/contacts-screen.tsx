@@ -50,7 +50,7 @@ export function ContactsScreen() {
           <div className="rotate-[2deg] transition-transform hover:rotate-0">
             <ImageSlot
               slot="contacts/map/paper"
-              src="/images/contacts/map/paper.png"
+              src="/images/contacts/map/paper.webp"
               ratio="3/2"
               variant="photo-print"
               caption="Мапа Оболоні"
@@ -60,7 +60,7 @@ export function ContactsScreen() {
           <div className="absolute -bottom-16 -left-12 z-10 hidden rotate-[-6deg] transition-transform hover:rotate-0 hover:scale-105 md:block">
             <ImageSlot
               slot="contacts/building/photo"
-              src="/images/contacts/building/photo.png"
+              src="/images/contacts/building/photo.webp"
               ratio="1/1"
               variant="polaroid"
               caption="Фасад ліцею"

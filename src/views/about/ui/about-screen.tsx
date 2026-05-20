@@ -9,7 +9,7 @@ export function AboutScreen() {
         <div className="relative aspect-[16/9] md:aspect-[21/9]">
           <ImageSlot
             slot="about/hero/portrait"
-            src="/images/about/hero/portrait.png"
+            src="/images/about/hero/portrait.webp"
             ratio="21/9"
             variant="plain"
             caption="Hero — фасад ліцею"
@@ -49,7 +49,7 @@ export function AboutScreen() {
         <div className="relative mt-8 md:mt-0">
           <ImageSlot
             slot="about/spread-1"
-            src="/images/about/spread-1.png"
+            src="/images/about/spread-1.webp"
             ratio="4/5"
             variant="photo-print"
             caption="Архівне фото — клас образотворчого"
@@ -71,7 +71,7 @@ export function AboutScreen() {
         <div className="md:col-span-5 md:col-start-1">
           <ImageSlot
             slot="about/spread-2"
-            src="/images/about/spread-2.png"
+            src="/images/about/spread-2.webp"
             ratio="4/5"
             variant="polaroid"
             caption="Майстерня кераміки"
@@ -94,7 +94,7 @@ export function AboutScreen() {
       <section className="flex flex-col items-center gap-6 py-12">
         <ImageSlot
           slot="about/sign/photo"
-          src="/images/about/sign/photo.png"
+          src="/images/about/sign/photo.webp"
           ratio="1/1"
           variant="portrait"
           caption="Підпис директорки"

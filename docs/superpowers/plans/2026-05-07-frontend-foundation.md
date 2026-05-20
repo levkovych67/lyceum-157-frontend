@@ -1705,7 +1705,7 @@ export type PolaroidProps = {
 export function Polaroid({ src, alt, caption, rotation = -3, ratio = "4/5", paperClip, hoverInteractive = true, className }: PolaroidProps) {
   return (
     <div style={{ transform: `rotate(${rotation}deg)` }} className={cn(
-      "relative inline-block bg-white p-3 pb-9 shadow-photo transition-transform duration-d3 ease-spring",
+      "relative inline-block bg-white p-3  shadow-photo transition-transform duration-d3 ease-spring",
       hoverInteractive && "hover:rotate-0 hover:scale-[1.04]",
       className,
     )}>
@@ -4269,7 +4269,7 @@ export function Footer() {
           </div>
         </div>
         <EditorialDivider variant="dashed" className="my-8" />
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 text-small">
+        <div className="flex flex-wrap items-center justify-between gap-4  text-small">
           <EditorialLabel>© ЛІЦЕЙ 157 · 2026 · ОБОЛОНЬ</EditorialLabel>
           <nav className="flex gap-5 text-ink-soft">
             <Link href="/catalog">Каталог</Link>

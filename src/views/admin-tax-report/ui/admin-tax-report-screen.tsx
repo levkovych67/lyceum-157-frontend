@@ -21,7 +21,7 @@ export function AdminTaxReportScreen() {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-[auto_1fr] md:items-center">
         <ImageSlot
           slot="admin/reports/ledger"
-          src="/images/admin/reports/ledger.png"
+          src="/images/admin/reports/ledger.webp"
           ratio="4/5"
           variant="photo-print"
           caption="Книга реєстрації"
