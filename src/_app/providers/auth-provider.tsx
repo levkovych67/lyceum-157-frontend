@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
@@ -18,9 +19,12 @@ import {
 import { logout as apiLogout } from "@/shared/api/generated/auth/auth";
 import { tryRefresh } from "@/shared/api/refresh";
 
+export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
+
 type Ctx = {
   user: TokenSnapshot | null;
   role: Role | null;
+  status: AuthStatus;
   isAuthenticated: boolean;
   logout: () => Promise<void>;
 };
@@ -29,6 +33,24 @@ const AuthCtx = createContext<Ctx | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const snap = useSyncExternalStore(subscribe, getSnapshot, () => null);
+  const [bootstrapped, setBootstrapped] = useState(false);
+
+  // One-shot session bootstrap: on first mount, restore the session from the
+  // refresh_token cookie. Until this resolves, status is "loading" so route
+  // guards wait instead of redirecting to /login.
+  useEffect(() => {
+    let cancelled = false;
+    if (getSnapshot()) {
+      setBootstrapped(true);
+      return;
+    }
+    void tryRefresh().finally(() => {
+      if (!cancelled) setBootstrapped(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const handler = () => {
@@ -53,18 +75,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snap?.expiresAt]);
 
-  const value = useMemo<Ctx>(
-    () => ({
+  const value = useMemo<Ctx>(() => {
+    const status: AuthStatus = !bootstrapped
+      ? "loading"
+      : snap
+        ? "authenticated"
+        : "unauthenticated";
+    return {
       user: snap,
       role: snap?.role ?? null,
-      isAuthenticated: !!snap,
+      status,
+      isAuthenticated: status === "authenticated",
       logout: async () => {
         await apiLogout().catch(() => {});
         setSnapshot(null);
       },
-    }),
-    [snap],
-  );
+    };
+  }, [snap, bootstrapped]);
 
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
