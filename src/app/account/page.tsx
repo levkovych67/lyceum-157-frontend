@@ -5,12 +5,16 @@ import { useAuth } from "@/_app/providers/auth-provider";
 import { AccountScreen } from "@/views/account";
 
 export default function Page() {
-  const { isAuthenticated, role } = useAuth();
+  const { status, role } = useAuth();
   const router = useRouter();
   useEffect(() => {
-    if (!isAuthenticated) router.replace("/login");
-    else if (role === "ADMIN") router.replace("/admin");
-  }, [isAuthenticated, role, router]);
-  if (!isAuthenticated || role === "ADMIN") return null;
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
+      router.replace("/login");
+      return;
+    }
+    if (role === "ADMIN") router.replace("/admin");
+  }, [status, role, router]);
+  if (status !== "authenticated" || role === "ADMIN") return null;
   return <AccountScreen />;
 }
