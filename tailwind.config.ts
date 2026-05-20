@@ -102,6 +102,8 @@ const config: Config = {
         lift: "var(--sh-lift)",
         photo: "var(--sh-photo)",
         deep: "var(--sh-deep)",
+        press: "var(--sh-press)",
+        "press-sm": "var(--sh-press-sm)",
       },
       transitionTimingFunction: {
         paper: "var(--ease-paper)",
