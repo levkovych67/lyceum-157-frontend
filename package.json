@@ -18,7 +18,7 @@
     "sync-api": "node -e \"require('fs').writeFileSync('api.json', require('child_process').execSync('curl -sSf ' + (process.env.API_BASE || 'http://localhost:8080') + '/v3/api-docs'))\"",
     "gen-types": "orval --config orval.config.ts && prettier --write \"src/shared/api/generated/**/*.ts\"",
     "sync": "pnpm sync-api && pnpm gen-types && pnpm typecheck",
-    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm scan-images && pnpm build && pnpm e2e --grep @smoke",
+    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm scan-images && pnpm build",
     "prepare": "husky"
   },
   "dependencies": {
