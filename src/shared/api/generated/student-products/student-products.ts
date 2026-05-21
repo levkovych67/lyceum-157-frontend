@@ -33,14 +33,144 @@ import type {
   CreateProductRequest,
   CreatedProductResponse,
   EditProductRequest,
+  ImageReorderRequest,
+  ListParams,
+  PageStudentProductDto,
   PresignedUploadDto,
   ProblemDetail,
+  StudentProductDetailDto,
   UploadImageRequest,
 } from "../models";
 
 import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+export const getDetailUrl = (productId: string) => {
+  return `/api/v1/student/products/${productId}`;
+};
+
+/**
+ * Returns full editable detail including the image gallery. Returns 404 if the product does not exist or is not owned by the caller (existence is not leaked).
+ * @summary Get one of my products in detail
+ */
+export const detail = async (
+  productId: string,
+  options?: RequestInit,
+): Promise<StudentProductDetailDto> => {
+  return customFetch<StudentProductDetailDto>(getDetailUrl(productId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getDetailQueryKey = (productId: string) => {
+  return [`/api/v1/student/products/${productId}`] as const;
+};
+
+export const getDetailQueryOptions = <
+  TData = Awaited<ReturnType<typeof detail>>,
+  TError = ProblemDetail | StudentProductDetailDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getDetailQueryKey(productId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof detail>>> = ({ signal }) =>
+    detail(productId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: productId !== null && productId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof detail>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type DetailQueryResult = NonNullable<Awaited<ReturnType<typeof detail>>>;
+export type DetailQueryError = ProblemDetail | StudentProductDetailDto;
+
+export function useDetail<
+  TData = Awaited<ReturnType<typeof detail>>,
+  TError = ProblemDetail | StudentProductDetailDto,
+>(
+  productId: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof detail>>,
+          TError,
+          Awaited<ReturnType<typeof detail>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useDetail<
+  TData = Awaited<ReturnType<typeof detail>>,
+  TError = ProblemDetail | StudentProductDetailDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof detail>>,
+          TError,
+          Awaited<ReturnType<typeof detail>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useDetail<
+  TData = Awaited<ReturnType<typeof detail>>,
+  TError = ProblemDetail | StudentProductDetailDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Get one of my products in detail
+ */
+
+export function useDetail<
+  TData = Awaited<ReturnType<typeof detail>>,
+  TError = ProblemDetail | StudentProductDetailDto,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getDetailQueryOptions(productId, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 export const getEditUrl = (productId: string) => {
   return `/api/v1/student/products/${productId}`;
@@ -267,6 +397,270 @@ export function useDelete<TData = Awaited<ReturnType<typeof _delete>>, TError = 
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getDeleteQueryOptions(productId, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getReorderImagesUrl = (productId: string) => {
+  return `/api/v1/student/products/${productId}/images/reorder`;
+};
+
+/**
+ * Atomically updates sort_order + is_primary across all images of a DRAFT/REJECTED product. The body must reference each existing image exactly once and mark exactly one as primary.
+ * @summary Reorder images and choose the primary
+ */
+export const reorderImages = async (
+  productId: string,
+  imageReorderRequest: ImageReorderRequest,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getReorderImagesUrl(productId), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(imageReorderRequest),
+  });
+};
+
+export const getReorderImagesQueryKey = (
+  productId: string,
+  imageReorderRequest?: ImageReorderRequest,
+) => {
+  return [
+    "PUT",
+    `/api/v1/student/products/${productId}/images/reorder`,
+    imageReorderRequest,
+  ] as const;
+};
+
+export const getReorderImagesQueryOptions = <
+  TData = Awaited<ReturnType<typeof reorderImages>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageReorderRequest: ImageReorderRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reorderImages>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getReorderImagesQueryKey(productId, imageReorderRequest);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof reorderImages>>> = ({ signal }) =>
+    reorderImages(productId, imageReorderRequest, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: productId !== null && productId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof reorderImages>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type ReorderImagesQueryResult = NonNullable<Awaited<ReturnType<typeof reorderImages>>>;
+export type ReorderImagesQueryError = ProblemDetail | void;
+
+export function useReorderImages<
+  TData = Awaited<ReturnType<typeof reorderImages>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageReorderRequest: ImageReorderRequest,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof reorderImages>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reorderImages>>,
+          TError,
+          Awaited<ReturnType<typeof reorderImages>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReorderImages<
+  TData = Awaited<ReturnType<typeof reorderImages>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageReorderRequest: ImageReorderRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reorderImages>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reorderImages>>,
+          TError,
+          Awaited<ReturnType<typeof reorderImages>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReorderImages<
+  TData = Awaited<ReturnType<typeof reorderImages>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageReorderRequest: ImageReorderRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reorderImages>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Reorder images and choose the primary
+ */
+
+export function useReorderImages<
+  TData = Awaited<ReturnType<typeof reorderImages>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageReorderRequest: ImageReorderRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reorderImages>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getReorderImagesQueryOptions(productId, imageReorderRequest, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getListUrl = (params: ListParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/student/products?${stringifiedParams}`
+    : `/api/v1/student/products`;
+};
+
+/**
+ * Returns a paginated list of the authenticated student's own products. Default page size is 20 (max 50). Sort whitelist: createdAt, updatedAt, priceUah, status. Soft-deleted products are excluded.
+ * @summary List my products
+ */
+export const list = async (
+  params: ListParams,
+  options?: RequestInit,
+): Promise<PageStudentProductDto> => {
+  return customFetch<PageStudentProductDto>(getListUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListQueryKey = (params?: ListParams) => {
+  return [`/api/v1/student/products`, ...(params ? [params] : [])] as const;
+};
+
+export const getListQueryOptions = <
+  TData = Awaited<ReturnType<typeof list>>,
+  TError = ProblemDetail,
+>(
+  params: ListParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof list>>> = ({ signal }) =>
+    list(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, staleTime: 60000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof list>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ListQueryResult = NonNullable<Awaited<ReturnType<typeof list>>>;
+export type ListQueryError = ProblemDetail;
+
+export function useList<TData = Awaited<ReturnType<typeof list>>, TError = ProblemDetail>(
+  params: ListParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof list>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof list>>,
+          TError,
+          Awaited<ReturnType<typeof list>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useList<TData = Awaited<ReturnType<typeof list>>, TError = ProblemDetail>(
+  params: ListParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof list>>,
+          TError,
+          Awaited<ReturnType<typeof list>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useList<TData = Awaited<ReturnType<typeof list>>, TError = ProblemDetail>(
+  params: ListParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary List my products
+ */
+
+export function useList<TData = Awaited<ReturnType<typeof list>>, TError = ProblemDetail>(
+  params: ListParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getListQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;
@@ -502,7 +896,7 @@ export const getSubmitUrl = (productId: string) => {
 };
 
 /**
- * Transitions DRAFT → PENDING_REVIEW. Requires the parent's KYC to be APPROVED and at least one product image confirmed.
+ * Transitions DRAFT → PENDING_REVIEW. Requires a SIGNED parental consent (LegalConsent.status == SIGNED) and at least one confirmed product image. Returns 409 with type urn:l157:product/kyc-required if the student's parental consent is missing or not yet SIGNED.
  * @summary Submit a draft for admin review
  */
 export const submit = async (productId: string, options?: RequestInit): Promise<void> => {
@@ -612,6 +1006,129 @@ export function useSubmit<
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getSubmitQueryOptions(productId, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getResubmitUrl = (productId: string) => {
+  return `/api/v1/student/products/${productId}/resubmit`;
+};
+
+/**
+ * Convenience alias of /submit specifically for REJECTED → PENDING_REVIEW. The underlying state machine accepts both DRAFT and REJECTED in a single call, so this endpoint exists primarily for UI clarity. Same preconditions as /submit including SIGNED parental consent.
+ * @summary Resubmit a REJECTED product after edits
+ */
+export const resubmit = async (productId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getResubmitUrl(productId), {
+    ...options,
+    method: "POST",
+  });
+};
+
+export const getResubmitQueryKey = (productId: string) => {
+  return ["POST", `/api/v1/student/products/${productId}/resubmit`] as const;
+};
+
+export const getResubmitQueryOptions = <
+  TData = Awaited<ReturnType<typeof resubmit>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof resubmit>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getResubmitQueryKey(productId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof resubmit>>> = ({ signal }) =>
+    resubmit(productId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: productId !== null && productId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof resubmit>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type ResubmitQueryResult = NonNullable<Awaited<ReturnType<typeof resubmit>>>;
+export type ResubmitQueryError = ProblemDetail | void;
+
+export function useResubmit<
+  TData = Awaited<ReturnType<typeof resubmit>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof resubmit>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof resubmit>>,
+          TError,
+          Awaited<ReturnType<typeof resubmit>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useResubmit<
+  TData = Awaited<ReturnType<typeof resubmit>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof resubmit>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof resubmit>>,
+          TError,
+          Awaited<ReturnType<typeof resubmit>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useResubmit<
+  TData = Awaited<ReturnType<typeof resubmit>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof resubmit>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Resubmit a REJECTED product after edits
+ */
+
+export function useResubmit<
+  TData = Awaited<ReturnType<typeof resubmit>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof resubmit>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getResubmitQueryOptions(productId, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;
@@ -1019,6 +1536,139 @@ export function useHide<TData = Awaited<ReturnType<typeof hide>>, TError = Probl
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getHideQueryOptions(productId, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getRemoveImageUrl = (productId: string, imageId: string) => {
+  return `/api/v1/student/products/${productId}/images/${imageId}`;
+};
+
+/**
+ * Deletes the row and the underlying S3 object. If the removed image was the primary, the lowest-sort surviving image is promoted to primary.
+ * @summary Remove an image from a DRAFT/REJECTED product
+ */
+export const removeImage = async (
+  productId: string,
+  imageId: string,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getRemoveImageUrl(productId, imageId), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getRemoveImageQueryKey = (productId: string, imageId: string) => {
+  return ["DELETE", `/api/v1/student/products/${productId}/images/${imageId}`] as const;
+};
+
+export const getRemoveImageQueryOptions = <
+  TData = Awaited<ReturnType<typeof removeImage>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof removeImage>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getRemoveImageQueryKey(productId, imageId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof removeImage>>> = ({ signal }) =>
+    removeImage(productId, imageId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled:
+      productId !== null && productId !== undefined && imageId !== null && imageId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof removeImage>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type RemoveImageQueryResult = NonNullable<Awaited<ReturnType<typeof removeImage>>>;
+export type RemoveImageQueryError = ProblemDetail | void;
+
+export function useRemoveImage<
+  TData = Awaited<ReturnType<typeof removeImage>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageId: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof removeImage>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof removeImage>>,
+          TError,
+          Awaited<ReturnType<typeof removeImage>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useRemoveImage<
+  TData = Awaited<ReturnType<typeof removeImage>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof removeImage>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof removeImage>>,
+          TError,
+          Awaited<ReturnType<typeof removeImage>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useRemoveImage<
+  TData = Awaited<ReturnType<typeof removeImage>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof removeImage>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Remove an image from a DRAFT/REJECTED product
+ */
+
+export function useRemoveImage<
+  TData = Awaited<ReturnType<typeof removeImage>>,
+  TError = ProblemDetail | void,
+>(
+  productId: string,
+  imageId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof removeImage>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getRemoveImageQueryOptions(productId, imageId, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;

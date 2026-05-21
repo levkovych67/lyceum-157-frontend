@@ -17,7 +17,7 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
  */
 
 export interface SortObject {
+  empty?: boolean;
   sorted?: boolean;
   unsorted?: boolean;
-  empty?: boolean;
 }

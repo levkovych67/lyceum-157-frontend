@@ -30,8 +30,7 @@ export interface ProductDetailDto {
   slug?: string;
   /** Sanitized HTML description */
   description?: string;
-  /** Price in UAH */
-  priceUah?: number;
+  priceUah?: string;
   /** PHYSICAL or DIGITAL */
   type?: ProductDetailDtoType;
   /** Stock left (PHYSICAL only) */

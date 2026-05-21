@@ -39,7 +39,7 @@ export const getCreate1Url = () => {
 };
 
 /**
- * Acquires pessimistic locks on the affected product rows in sorted-ID order to avoid deadlocks, decrements stock atomically, returns LiqPay redirect URL.
+ * Acquires pessimistic locks on the affected product rows in sorted-ID order to avoid deadlocks, decrements stock atomically, returns LiqPay redirect URL. When app.captcha.enabled=true the request body must include a valid reCAPTCHA v3 token whose score >= app.captcha.threshold.
  * @summary Create a new order and obtain a payment URL
  */
 export const create1 = async (

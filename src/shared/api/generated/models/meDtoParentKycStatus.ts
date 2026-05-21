@@ -16,9 +16,13 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
  * OpenAPI spec version: v1
  */
 
-export type ListType = (typeof ListType)[keyof typeof ListType];
+/**
+ * Parent KYC state; null for non-students
+ */
+export type MeDtoParentKycStatus = (typeof MeDtoParentKycStatus)[keyof typeof MeDtoParentKycStatus];
 
-export const ListType = {
-  PHYSICAL: "PHYSICAL",
-  DIGITAL: "DIGITAL",
+export const MeDtoParentKycStatus = {
+  AWAITING_DETAILS: "AWAITING_DETAILS",
+  PENDING_SIGNATURE: "PENDING_SIGNATURE",
+  APPROVED: "APPROVED",
 } as const;

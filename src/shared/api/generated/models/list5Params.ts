@@ -15,14 +15,13 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 
  * OpenAPI spec version: v1
  */
+import type { List5StatusItem } from "./list5StatusItem";
+import type { Pageable } from "./pageable";
 
-export type List1Status = (typeof List1Status)[keyof typeof List1Status];
-
-export const List1Status = {
-  DRAFT: "DRAFT",
-  PENDING_APPROVAL: "PENDING_APPROVAL",
-  ACTIVE: "ACTIVE",
-  HIDDEN: "HIDDEN",
-  REJECTED: "REJECTED",
-  SOLD_OUT: "SOLD_OUT",
-} as const;
+export type List5Params = {
+  status?: List5StatusItem[];
+  from?: string;
+  to?: string;
+  q?: string;
+  pageable: Pageable;
+};

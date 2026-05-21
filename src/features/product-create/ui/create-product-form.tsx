@@ -40,7 +40,7 @@ export function CreateProductForm() {
       const { productId } = await m.mutateAsync({
         title: data.title,
         description: data.description,
-        priceUah: Number(data.priceUah),
+        priceUah: data.priceUah,
         type: data.type,
         stockQty: data.stockQty,
       });

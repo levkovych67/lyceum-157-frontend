@@ -21,7 +21,10 @@ import type { ConfirmImageRequestDeclaredMimeType } from "./confirmImageRequestD
  * Confirm a successful S3 upload. Server reads first 64 bytes and verifies magic bytes match declaredMimeType.
  */
 export interface ConfirmImageRequest {
-  /** S3 object key returned by /upload-url */
+  /**
+   * S3 object key returned by /upload-url
+   * @pattern ^products/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/images/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$
+   */
   s3Key: string;
   /**
    * Declared MIME type — must match magic-byte signature

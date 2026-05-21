@@ -15,26 +15,13 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 
  * OpenAPI spec version: v1
  */
-import type { ListType } from "./listType";
+import type { ListStatusItem } from "./listStatusItem";
+import type { Pageable } from "./pageable";
 
 export type ListParams = {
   /**
-   * Zero-based page index
-   * @minimum 0
+   * Filter by one or more statuses; default = all non-deleted
    */
-  page?: number;
-  /**
-   * Page size, 1..100
-   * @minimum 1
-   * @maximum 100
-   */
-  size?: number;
-  /**
-   * Filter by product type
-   */
-  type?: ListType;
-  /**
-   * Sort order: newest | price_asc | price_desc | popular
-   */
-  sort?: string;
+  status?: ListStatusItem[];
+  pageable: Pageable;
 };

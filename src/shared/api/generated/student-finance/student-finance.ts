@@ -39,7 +39,7 @@ export const getSummaryUrl = () => {
 };
 
 /**
- * Returns total gross/taxes/net across all approved payouts plus pending hold (within 14-day chargeback window) and pending approved (waiting admin payout execution).
+ * Totals + breakdowns across all non-cancelled payouts: gross, taxes (PDFO + ВЗ), net (HOLD + APPROVED + PROCESSING + PAID_OUT), paid-out, refunded gross, tax/fee component splits, and last-6-months rollup.
  * @summary Aggregate earnings summary
  */
 export const summary = async (options?: RequestInit): Promise<FinanceSummaryDto> => {

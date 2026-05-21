@@ -28,7 +28,13 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { ProblemDetail, RefundOrderRequest } from "../models";
+import type {
+  AdminOrderDetailDto,
+  List5Params,
+  PageAdminOrderListDto,
+  ProblemDetail,
+  RefundOrderRequest,
+} from "../models";
 
 import { customFetch } from "../../orval-mutator";
 
@@ -160,6 +166,254 @@ export function useRefund<
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getRefundQueryOptions(orderId, refundOrderRequest, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getList5Url = (params: List5Params) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/admin/orders?${stringifiedParams}`
+    : `/api/v1/admin/orders`;
+};
+
+/**
+ * Filterable order list. Default status filter is PAID. Supports ISO date range on paid_at and free-text search on order_number / buyer_email / buyer_name (case-insensitive ILIKE).
+ * @summary List orders for moderation
+ */
+export const list5 = async (
+  params: List5Params,
+  options?: RequestInit,
+): Promise<PageAdminOrderListDto> => {
+  return customFetch<PageAdminOrderListDto>(getList5Url(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getList5QueryKey = (params?: List5Params) => {
+  return [`/api/v1/admin/orders`, ...(params ? [params] : [])] as const;
+};
+
+export const getList5QueryOptions = <
+  TData = Awaited<ReturnType<typeof list5>>,
+  TError = ProblemDetail,
+>(
+  params: List5Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list5>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getList5QueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof list5>>> = ({ signal }) =>
+    list5(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, staleTime: 60000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof list5>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type List5QueryResult = NonNullable<Awaited<ReturnType<typeof list5>>>;
+export type List5QueryError = ProblemDetail;
+
+export function useList5<TData = Awaited<ReturnType<typeof list5>>, TError = ProblemDetail>(
+  params: List5Params,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof list5>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof list5>>,
+          TError,
+          Awaited<ReturnType<typeof list5>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useList5<TData = Awaited<ReturnType<typeof list5>>, TError = ProblemDetail>(
+  params: List5Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list5>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof list5>>,
+          TError,
+          Awaited<ReturnType<typeof list5>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useList5<TData = Awaited<ReturnType<typeof list5>>, TError = ProblemDetail>(
+  params: List5Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list5>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary List orders for moderation
+ */
+
+export function useList5<TData = Awaited<ReturnType<typeof list5>>, TError = ProblemDetail>(
+  params: List5Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list5>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getList5QueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getDetail1Url = (orderId: string) => {
+  return `/api/v1/admin/orders/${orderId}`;
+};
+
+/**
+ * Includes line items (with payout state per line), payment, and refund info.
+ * @summary Get full order detail
+ */
+export const detail1 = async (
+  orderId: string,
+  options?: RequestInit,
+): Promise<AdminOrderDetailDto> => {
+  return customFetch<AdminOrderDetailDto>(getDetail1Url(orderId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getDetail1QueryKey = (orderId: string) => {
+  return [`/api/v1/admin/orders/${orderId}`] as const;
+};
+
+export const getDetail1QueryOptions = <
+  TData = Awaited<ReturnType<typeof detail1>>,
+  TError = ProblemDetail | AdminOrderDetailDto,
+>(
+  orderId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getDetail1QueryKey(orderId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof detail1>>> = ({ signal }) =>
+    detail1(orderId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: orderId !== null && orderId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof detail1>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type Detail1QueryResult = NonNullable<Awaited<ReturnType<typeof detail1>>>;
+export type Detail1QueryError = ProblemDetail | AdminOrderDetailDto;
+
+export function useDetail1<
+  TData = Awaited<ReturnType<typeof detail1>>,
+  TError = ProblemDetail | AdminOrderDetailDto,
+>(
+  orderId: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail1>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof detail1>>,
+          TError,
+          Awaited<ReturnType<typeof detail1>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useDetail1<
+  TData = Awaited<ReturnType<typeof detail1>>,
+  TError = ProblemDetail | AdminOrderDetailDto,
+>(
+  orderId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail1>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof detail1>>,
+          TError,
+          Awaited<ReturnType<typeof detail1>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useDetail1<
+  TData = Awaited<ReturnType<typeof detail1>>,
+  TError = ProblemDetail | AdminOrderDetailDto,
+>(
+  orderId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Get full order detail
+ */
+
+export function useDetail1<
+  TData = Awaited<ReturnType<typeof detail1>>,
+  TError = ProblemDetail | AdminOrderDetailDto,
+>(
+  orderId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof detail1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getDetail1QueryOptions(orderId, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;

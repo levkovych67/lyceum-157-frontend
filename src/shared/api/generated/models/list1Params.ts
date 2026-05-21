@@ -15,13 +15,13 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 
  * OpenAPI spec version: v1
  */
-import type { List1Status } from "./list1Status";
+import type { List1StatusItem } from "./list1StatusItem";
 import type { Pageable } from "./pageable";
 
 export type List1Params = {
   /**
-   * Filter by product status (default: PENDING_REVIEW)
+   * Filter by one or more order statuses; default = PAID|FULFILLED|DELIVERED|REFUNDED|DISPUTED
    */
-  status?: List1Status;
+  status?: List1StatusItem[];
   pageable: Pageable;
 };

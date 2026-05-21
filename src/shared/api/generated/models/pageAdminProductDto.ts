@@ -20,15 +20,15 @@ import type { PageableObject } from "./pageableObject";
 import type { SortObject } from "./sortObject";
 
 export interface PageAdminProductDto {
-  totalPages?: number;
   totalElements?: number;
-  pageable?: PageableObject;
-  first?: boolean;
-  last?: boolean;
-  numberOfElements?: number;
+  totalPages?: number;
   size?: number;
   content?: AdminProductDto[];
   number?: number;
   sort?: SortObject;
+  numberOfElements?: number;
+  pageable?: PageableObject;
+  first?: boolean;
+  last?: boolean;
   empty?: boolean;
 }

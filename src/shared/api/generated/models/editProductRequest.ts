@@ -32,10 +32,5 @@ export interface EditProductRequest {
    * @maxLength 10000
    */
   description: string;
-  /**
-   * Price in UAH (50.00–50000.00)
-   * @minimum 50
-   * @maximum 50000
-   */
-  priceUah: number;
+  priceUah: string;
 }

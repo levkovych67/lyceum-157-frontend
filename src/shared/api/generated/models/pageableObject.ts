@@ -18,10 +18,10 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 import type { SortObject } from "./sortObject";
 
 export interface PageableObject {
-  paged?: boolean;
-  pageNumber?: number;
-  pageSize?: number;
-  unpaged?: boolean;
   offset?: number;
   sort?: SortObject;
+  pageNumber?: number;
+  pageSize?: number;
+  paged?: boolean;
+  unpaged?: boolean;
 }

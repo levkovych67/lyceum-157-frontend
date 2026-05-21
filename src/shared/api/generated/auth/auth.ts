@@ -281,8 +281,8 @@ export const getLogoutUrl = () => {
 };
 
 /**
- * Idempotent — safe to call when the cookie is already gone.
- * @summary Invalidate the current refresh token
+ * Idempotent — safe to call when the cookie is already gone. The current Bearer access token (if present) is added to a Redis denylist for the remainder of its TTL so that stolen tokens cannot survive the user's logout. See P0-4.
+ * @summary Invalidate the current refresh token and denylist the access JWT
  */
 export const logout = async (options?: RequestInit): Promise<void> => {
   return customFetch<void>(getLogoutUrl(), {
@@ -357,7 +357,7 @@ export function useLogout<TData = Awaited<ReturnType<typeof logout>>, TError = P
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 /**
- * @summary Invalidate the current refresh token
+ * @summary Invalidate the current refresh token and denylist the access JWT
  */
 
 export function useLogout<TData = Awaited<ReturnType<typeof logout>>, TError = ProblemDetail>(

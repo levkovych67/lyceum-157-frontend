@@ -15,6 +15,7 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 
  * OpenAPI spec version: v1
  */
+import type { DeliveryRequest } from "./deliveryRequest";
 
 /**
  * Order created. Buyer should be redirected to `paymentUrl` to complete payment.
@@ -24,10 +25,10 @@ export interface OrderCreationResponse {
   orderId?: string;
   /** Human-readable order number */
   orderNumber?: string;
-  /** Total amount in UAH */
   totalAmount?: string;
   /** Order status */
   status?: string;
   /** LiqPay redirect URL for payment */
   paymentUrl?: string;
+  delivery?: DeliveryRequest;
 }

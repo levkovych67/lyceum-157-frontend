@@ -30,7 +30,6 @@ export interface AdminProductDto {
   slug?: string;
   /** Description with HTML stripped */
   descriptionPlain?: string;
-  /** Price in UAH */
   priceUah?: string;
   /** PHYSICAL or DIGITAL */
   type?: AdminProductDtoType;

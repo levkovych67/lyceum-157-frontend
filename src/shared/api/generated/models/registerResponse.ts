@@ -22,6 +22,8 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 export interface RegisterResponse {
   /** Newly-created user UUID */
   userId?: string;
+  /** Masked parent email for confirmation UI */
+  parentEmailMasked?: string;
   /** Human-readable confirmation in Ukrainian */
   message?: string;
 }

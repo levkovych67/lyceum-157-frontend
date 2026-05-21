@@ -28,8 +28,7 @@ export interface ProductCardDto {
   title?: string;
   /** URL-safe slug */
   slug?: string;
-  /** Price in UAH */
-  priceUah?: number;
+  priceUah?: string;
   /** PHYSICAL or DIGITAL */
   type?: ProductCardDtoType;
   author?: AuthorDto;

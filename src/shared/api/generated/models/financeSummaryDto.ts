@@ -15,19 +15,23 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 
  * OpenAPI spec version: v1
  */
+import type { FeeBreakdown } from "./feeBreakdown";
+import type { MonthBreakdown } from "./monthBreakdown";
+import type { TaxBreakdown } from "./taxBreakdown";
 
 /**
- * Student earnings dashboard — all amounts in UAH (DECIMAL(10,2))
+ * Student earnings dashboard — UAH amounts as DECIMAL(10,2)
  */
 export interface FinanceSummaryDto {
-  /** Total gross sales (full price) */
   totalGross?: string;
-  /** Total taxes withheld (PDFO 18% + ВЗ 1.5%) */
   totalTaxes?: string;
-  /** Sum of SUCCESS-status net payouts (already on parent's card) */
   totalNetEarned?: string;
-  /** HOLD-status net amount (within 14-day chargeback window) */
   pendingHold?: string;
-  /** APPROVED + PROCESSING net amount (awaiting admin payout execution) */
   pendingApproved?: string;
+  paidOut?: string;
+  refunded?: string;
+  taxBreakdown?: TaxBreakdown;
+  feeBreakdown?: FeeBreakdown;
+  /** Last 6 calendar months, oldest → newest */
+  recentMonths?: MonthBreakdown[];
 }

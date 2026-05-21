@@ -20,15 +20,15 @@ import type { ProductCardDto } from "./productCardDto";
 import type { SortObject } from "./sortObject";
 
 export interface PageProductCardDto {
-  totalPages?: number;
   totalElements?: number;
-  pageable?: PageableObject;
-  first?: boolean;
-  last?: boolean;
-  numberOfElements?: number;
+  totalPages?: number;
   size?: number;
   content?: ProductCardDto[];
   number?: number;
   sort?: SortObject;
+  numberOfElements?: number;
+  pageable?: PageableObject;
+  first?: boolean;
+  last?: boolean;
   empty?: boolean;
 }

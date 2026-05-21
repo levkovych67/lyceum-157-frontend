@@ -24,7 +24,7 @@ export type AdminProductDtoStatus =
 
 export const AdminProductDtoStatus = {
   DRAFT: "DRAFT",
-  PENDING_APPROVAL: "PENDING_APPROVAL",
+  PENDING_REVIEW: "PENDING_REVIEW",
   ACTIVE: "ACTIVE",
   HIDDEN: "HIDDEN",
   REJECTED: "REJECTED",

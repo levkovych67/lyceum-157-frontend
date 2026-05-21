@@ -28,18 +28,282 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { PayoutBatchRequest, PayoutBatchResponse, ProblemDetail } from "../models";
+import type {
+  List4Params,
+  PageAdminPayoutDto,
+  PayoutBatchRequest,
+  PayoutBatchResponse,
+  ProblemDetail,
+  RejectPayoutRequest,
+} from "../models";
 
 import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+export const getReject1Url = (payoutId: string) => {
+  return `/api/v1/admin/payouts/${payoutId}/reject`;
+};
+
+/**
+ * Transitions HOLD → CANCELLED. Reason is mandatory and audit-logged.
+ * @summary Reject a HOLD payout (2FA-gated)
+ */
+export const reject1 = async (
+  payoutId: string,
+  rejectPayoutRequest: RejectPayoutRequest,
+  options?: RequestInit,
+): Promise<void> => {
+  return customFetch<void>(getReject1Url(payoutId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(rejectPayoutRequest),
+  });
+};
+
+export const getReject1QueryKey = (payoutId: string, rejectPayoutRequest?: RejectPayoutRequest) => {
+  return ["POST", `/api/v1/admin/payouts/${payoutId}/reject`, rejectPayoutRequest] as const;
+};
+
+export const getReject1QueryOptions = <
+  TData = Awaited<ReturnType<typeof reject1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  rejectPayoutRequest: RejectPayoutRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reject1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getReject1QueryKey(payoutId, rejectPayoutRequest);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof reject1>>> = ({ signal }) =>
+    reject1(payoutId, rejectPayoutRequest, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: payoutId !== null && payoutId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof reject1>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type Reject1QueryResult = NonNullable<Awaited<ReturnType<typeof reject1>>>;
+export type Reject1QueryError = ProblemDetail | void;
+
+export function useReject1<
+  TData = Awaited<ReturnType<typeof reject1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  rejectPayoutRequest: RejectPayoutRequest,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof reject1>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reject1>>,
+          TError,
+          Awaited<ReturnType<typeof reject1>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReject1<
+  TData = Awaited<ReturnType<typeof reject1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  rejectPayoutRequest: RejectPayoutRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reject1>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof reject1>>,
+          TError,
+          Awaited<ReturnType<typeof reject1>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useReject1<
+  TData = Awaited<ReturnType<typeof reject1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  rejectPayoutRequest: RejectPayoutRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reject1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Reject a HOLD payout (2FA-gated)
+ */
+
+export function useReject1<
+  TData = Awaited<ReturnType<typeof reject1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  rejectPayoutRequest: RejectPayoutRequest,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof reject1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getReject1QueryOptions(payoutId, rejectPayoutRequest, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getApprove1Url = (payoutId: string) => {
+  return `/api/v1/admin/payouts/${payoutId}/approve`;
+};
+
+/**
+ * Transitions HOLD → APPROVED. Hold-period must already have expired.
+ * @summary Approve a HOLD payout (2FA-gated)
+ */
+export const approve1 = async (payoutId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getApprove1Url(payoutId), {
+    ...options,
+    method: "POST",
+  });
+};
+
+export const getApprove1QueryKey = (payoutId: string) => {
+  return ["POST", `/api/v1/admin/payouts/${payoutId}/approve`] as const;
+};
+
+export const getApprove1QueryOptions = <
+  TData = Awaited<ReturnType<typeof approve1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof approve1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getApprove1QueryKey(payoutId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof approve1>>> = ({ signal }) =>
+    approve1(payoutId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: payoutId !== null && payoutId !== undefined,
+    staleTime: 60000,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof approve1>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type Approve1QueryResult = NonNullable<Awaited<ReturnType<typeof approve1>>>;
+export type Approve1QueryError = ProblemDetail | void;
+
+export function useApprove1<
+  TData = Awaited<ReturnType<typeof approve1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof approve1>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof approve1>>,
+          TError,
+          Awaited<ReturnType<typeof approve1>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useApprove1<
+  TData = Awaited<ReturnType<typeof approve1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof approve1>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof approve1>>,
+          TError,
+          Awaited<ReturnType<typeof approve1>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useApprove1<
+  TData = Awaited<ReturnType<typeof approve1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof approve1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Approve a HOLD payout (2FA-gated)
+ */
+
+export function useApprove1<
+  TData = Awaited<ReturnType<typeof approve1>>,
+  TError = ProblemDetail | void,
+>(
+  payoutId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof approve1>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getApprove1QueryOptions(payoutId, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 export const getExecuteUrl = () => {
   return `/api/v1/admin/payouts/execute`;
 };
 
 /**
- * Submits LiqPay B2C payout requests. Each payout transitions APPROVED → PROCESSING. Final status (SUCCESS / FAILED) is set asynchronously by the LiqPay payout webhook.
+ * Submits LiqPay B2C payout requests. Each payout transitions APPROVED → PROCESSING. Final status (PAID_OUT / FAILED) is set asynchronously by the LiqPay payout webhook.
  * @summary Execute a batch of approved payouts (2FA-gated)
  */
 export const execute = async (
@@ -150,6 +414,128 @@ export function useExecute<
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getExecuteQueryOptions(payoutBatchRequest, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export const getList4Url = (params: List4Params) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/admin/payouts?${stringifiedParams}`
+    : `/api/v1/admin/payouts`;
+};
+
+/**
+ * Default status filter is APPROVED. Joins student profile and consent for full admin context (parent name, masked card last4).
+ * @summary List payouts
+ */
+export const list4 = async (
+  params: List4Params,
+  options?: RequestInit,
+): Promise<PageAdminPayoutDto> => {
+  return customFetch<PageAdminPayoutDto>(getList4Url(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getList4QueryKey = (params?: List4Params) => {
+  return [`/api/v1/admin/payouts`, ...(params ? [params] : [])] as const;
+};
+
+export const getList4QueryOptions = <
+  TData = Awaited<ReturnType<typeof list4>>,
+  TError = ProblemDetail,
+>(
+  params: List4Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list4>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getList4QueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof list4>>> = ({ signal }) =>
+    list4(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, staleTime: 60000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof list4>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type List4QueryResult = NonNullable<Awaited<ReturnType<typeof list4>>>;
+export type List4QueryError = ProblemDetail;
+
+export function useList4<TData = Awaited<ReturnType<typeof list4>>, TError = ProblemDetail>(
+  params: List4Params,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof list4>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof list4>>,
+          TError,
+          Awaited<ReturnType<typeof list4>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useList4<TData = Awaited<ReturnType<typeof list4>>, TError = ProblemDetail>(
+  params: List4Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list4>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof list4>>,
+          TError,
+          Awaited<ReturnType<typeof list4>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useList4<TData = Awaited<ReturnType<typeof list4>>, TError = ProblemDetail>(
+  params: List4Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list4>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary List payouts
+ */
+
+export function useList4<TData = Awaited<ReturnType<typeof list4>>, TError = ProblemDetail>(
+  params: List4Params,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof list4>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getList4QueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;

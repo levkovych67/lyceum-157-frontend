@@ -15,6 +15,7 @@ withholds PDFO 18% + ВЗ 1.5%, and pays NET to parents' cards.
 
  * OpenAPI spec version: v1
  */
+import type { DeliveryRequest } from "./deliveryRequest";
 import type { OrderItemRequest } from "./orderItemRequest";
 
 /**
@@ -40,4 +41,7 @@ export interface CreateOrderRequest {
   buyerPhone: string;
   /** Cart items (at least one) */
   items: OrderItemRequest[];
+  /** reCAPTCHA v3 token (required when app.captcha.enabled=true). The server verifies score; below threshold orders are rejected with 403. */
+  recaptchaToken?: string;
+  delivery?: DeliveryRequest;
 }

@@ -28,11 +28,111 @@ import type {
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { ProblemDetail } from "../models";
+import type { MeDto, ProblemDetail } from "../models";
 
 import { customFetch } from "../../orval-mutator";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+export const getGetMeUrl = () => {
+  return `/api/v1/users/me`;
+};
+
+/**
+ * Returns role-aware profile fields. Cache-Control: no-store — clients should rely on their own short-lived in-memory cache (e.g. TanStack Query staleTime).
+ * @summary Authenticated user profile
+ */
+export const getMe = async (options?: RequestInit): Promise<MeDto> => {
+  return customFetch<MeDto>(getGetMeUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetMeQueryKey = () => {
+  return [`/api/v1/users/me`] as const;
+};
+
+export const getGetMeQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMe>>,
+  TError = ProblemDetail,
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>>;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMeQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMe>>> = ({ signal }) =>
+    getMe({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, staleTime: 60000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMe>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMeQueryResult = NonNullable<Awaited<ReturnType<typeof getMe>>>;
+export type GetMeQueryError = ProblemDetail;
+
+export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = ProblemDetail>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMe>>,
+          TError,
+          Awaited<ReturnType<typeof getMe>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = ProblemDetail>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMe>>,
+          TError,
+          Awaited<ReturnType<typeof getMe>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = ProblemDetail>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Authenticated user profile
+ */
+
+export function useGetMe<TData = Awaited<ReturnType<typeof getMe>>, TError = ProblemDetail>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getMe>>, TError, TData>>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetMeQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 export const getDeleteMyAccountUrl = () => {
   return `/api/v1/users/me`;
