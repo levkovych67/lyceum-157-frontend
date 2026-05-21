@@ -5,10 +5,12 @@ import { cn } from "@/shared/lib";
 export type AuthLayoutProps = {
   /** Вміст колонки-форми. */
   children: ReactNode;
-  /** Slot-id фото для `ImageSlot` (placeholder-режим, без `src`). */
+  /** Slot-id фото для `ImageSlot`. */
   photoSlot: string;
   /** Підпис фото (обовʼязковий для `ImageSlot`). */
   photoCaption: string;
+  /** Реальне зображення фото-колонки; без нього `ImageSlot` показує placeholder. */
+  photoSrc?: string;
   /** З якого боку фото-колонка. Дефолт — справа. */
   photoSide?: "left" | "right";
 };
@@ -17,11 +19,19 @@ export function AuthLayout({
   children,
   photoSlot,
   photoCaption,
+  photoSrc,
   photoSide = "right",
 }: AuthLayoutProps) {
   const photo = (
     <div data-auth-col className="relative hidden md:block">
-      <ImageSlot slot={photoSlot} ratio="3/4" variant="portrait" caption={photoCaption} />
+      <ImageSlot
+        slot={photoSlot}
+        src={photoSrc}
+        ratio="3/4"
+        variant="portrait"
+        caption={photoCaption}
+        className="h-full w-full object-cover"
+      />
     </div>
   );
   const form = (

@@ -6,7 +6,12 @@ import { LoginForm } from "@/features/auth";
 
 export function LoginScreen() {
   return (
-    <AuthLayout photoSide="left" photoSlot="auth/login/cover" photoCaption="Читальна зала ліцею">
+    <AuthLayout
+      photoSide="left"
+      photoSlot="auth/login/cover"
+      photoSrc="/images/home/manifesto/bw.webp"
+      photoCaption="Читальна зала ліцею"
+    >
       <div className="w-full max-w-[460px]">
         <EditorialLabel>БІБЛІОТЕЧНА КАРТКА</EditorialLabel>
         <h1 className="mt-4 font-display text-display italic text-burgundy">Вхід</h1>

@@ -7,6 +7,7 @@ export function RegisterScreen() {
     <AuthLayout
       photoSide="right"
       photoSlot="auth/register/cover"
+      photoSrc="/images/about/spread-2.webp"
       photoCaption="Майстерня художнього класу"
     >
       <div className="w-full max-w-2xl">
