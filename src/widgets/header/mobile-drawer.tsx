@@ -1,9 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type TransitionEvent } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { ImageSlot, Stamp } from "@/shared/ui";
+import { cn } from "@/shared/lib";
+import { DrawerAccount } from "./drawer-account";
 
 /** Пункти меню — як нумерований індекс архівного випуску. */
 const navItems = [
@@ -19,8 +21,54 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
   // Портал у body — щоб меню не лишалось у stacking-контексті хедера
   // й малювалось над cookie-банером та рештою сторінки.
   const [mounted, setMounted] = useState(false);
+  // `render` тримає панель у DOM на час exit-анімації; `shown` керує
+  // open/closed-станом transition'ів. Розв'язка цих двох дає шухляді
+  // анімацію закриття — без неї панель просто зникала.
+  const [render, setRender] = useState(false);
+  const [shown, setShown] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => setMounted(true), []);
-  if (!open || !mounted) return null;
+
+  // prefers-reduced-motion → прибираємо stagger-затримки рядків
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  // Lifecycle: при open — монтуємо й через кадр вмикаємо enter-transition;
+  // при close — лишаємо в DOM і чекаємо transitionend панелі (див. нижче).
+  useEffect(() => {
+    if (open) {
+      setRender(true);
+      const raf = requestAnimationFrame(() => requestAnimationFrame(() => setShown(true)));
+      return () => cancelAnimationFrame(raf);
+    }
+    setShown(false);
+  }, [open]);
+
+  // Escape закриває — симетрично до кліку по затемненню.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!mounted || !render) return null;
+
+  // Демонтуємо лише коли панель доїхала за екран (exit завершився).
+  const handlePanelTransitionEnd = (e: TransitionEvent<HTMLDivElement>) => {
+    if (e.target === panelRef.current && e.propertyName === "transform" && !open) {
+      setRender(false);
+    }
+  };
 
   return createPortal(
     <div className="fixed inset-0 z-50 md:hidden">
@@ -28,14 +76,22 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
       <div
         aria-hidden
         onClick={onClose}
-        className="bg-bg-noir/50 absolute inset-0 backdrop-blur-sm"
-        style={{ animation: "drawer-fade var(--d-2) var(--ease-paper) both" }}
+        className={cn(
+          "absolute inset-0 bg-[#1a1612]/55 backdrop-blur-sm",
+          "transition-opacity duration-d3 ease-paper",
+          shown ? "opacity-100" : "opacity-0",
+        )}
       />
 
-      {/* Панель */}
+      {/* Панель — заїжджає d-3, виїжджає d-2 (exit швидший за enter) */}
       <div
-        className="absolute inset-y-0 left-0 flex w-[86vw] max-w-[340px] flex-col overflow-y-auto overflow-x-hidden border-r-2 border-dashed border-line-strong bg-bg-warm shadow-deep"
-        style={{ animation: "drawer-in var(--d-3) var(--ease-paper) both" }}
+        ref={panelRef}
+        onTransitionEnd={handlePanelTransitionEnd}
+        className={cn(
+          "absolute inset-y-0 left-0 flex w-[86vw] max-w-[340px] flex-col overflow-y-auto overflow-x-hidden border-r-2 border-dashed border-line-strong bg-bg-warm shadow-deep",
+          "transition-transform ease-drawer",
+          shown ? "translate-x-0 duration-d3" : "-translate-x-full duration-d2",
+        )}
       >
         {/* Шапка */}
         <div className="flex items-start justify-between border-b-2 border-dashed border-line-strong px-6 pb-5 pt-7">
@@ -49,11 +105,14 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
             type="button"
             onClick={onClose}
             aria-label="Закрити меню"
-            className="flex h-9 w-9 shrink-0 items-center justify-center border border-line-strong text-ink transition-colors hover:border-burgundy hover:text-burgundy"
+            className="flex h-9 w-9 shrink-0 items-center justify-center border border-line-strong text-ink transition-[color,border-color,transform] duration-d2 ease-paper hover:border-burgundy hover:text-burgundy active:scale-90"
           >
             <X size={18} strokeWidth={1.6} />
           </button>
         </div>
+
+        {/* Блок акаунта — над індексом розділів */}
+        <DrawerAccount onNavigate={onClose} />
 
         {/* Індекс архіву */}
         <nav className="flex-1 px-6">
@@ -61,12 +120,18 @@ export function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => 
             {navItems.map((it, i) => (
               <li
                 key={it.href}
-                className="border-line-strong/60 border-b border-dashed last:border-0"
+                style={{
+                  transitionDelay: shown && !reduceMotion ? `${i * 45}ms` : "0ms",
+                }}
+                className={cn(
+                  "border-line-strong/60 border-b border-dashed transition-[opacity,transform] duration-d3 ease-paper last:border-0",
+                  shown ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0",
+                )}
               >
                 <Link
                   href={it.href}
                   onClick={onClose}
-                  className="group flex items-center gap-4 py-5"
+                  className="group flex items-center gap-4 py-5 transition-transform duration-d1 ease-paper active:scale-[0.985]"
                 >
                   <span className="font-body text-[11px] font-bold tracking-[0.16em] text-burgundy">
                     0{i + 1}
