@@ -63,7 +63,7 @@ export function RegisterForm() {
             required
             error={form.formState.errors.firstName?.message}
           >
-            <Input variant="underline" {...form.register("firstName")} />
+            <Input variant="underline" placeholder="Олена" {...form.register("firstName")} />
           </FormField>
           <FormField
             name="lastName"
@@ -71,7 +71,7 @@ export function RegisterForm() {
             required
             error={form.formState.errors.lastName?.message}
           >
-            <Input variant="underline" {...form.register("lastName")} />
+            <Input variant="underline" placeholder="Сидоренко" {...form.register("lastName")} />
           </FormField>
         </FormRow>
         <FormRow cols={2}>
@@ -85,6 +85,7 @@ export function RegisterForm() {
               type="email"
               autoComplete="email"
               variant="underline"
+              placeholder="olena@example.com"
               {...form.register("email")}
             />
           </FormField>
@@ -92,10 +93,10 @@ export function RegisterForm() {
             name="grade"
             label="Клас"
             required
-            hint="формат 9-А або 11-B"
+            hint="напр. 11-А"
             error={form.formState.errors.grade?.message}
           >
-            <Input variant="underline" placeholder="9-А" {...form.register("grade")} />
+            <Input variant="underline" placeholder="11-А" {...form.register("grade")} />
           </FormField>
         </FormRow>
         <FormField
@@ -109,6 +110,7 @@ export function RegisterForm() {
             type="password"
             autoComplete="new-password"
             variant="underline"
+            placeholder="••••••••"
             {...form.register("password")}
           />
         </FormField>
@@ -119,7 +121,12 @@ export function RegisterForm() {
           hint="Надішлемо їм запит на згоду"
           error={form.formState.errors.parentEmail?.message}
         >
-          <Input type="email" variant="underline" {...form.register("parentEmail")} />
+          <Input
+            type="email"
+            variant="underline"
+            placeholder="email@example.com"
+            {...form.register("parentEmail")}
+          />
         </FormField>
         <FormFooter className="border-ink/30 mt-8 border-t-[1.5px] border-dashed pt-8">
           <span />

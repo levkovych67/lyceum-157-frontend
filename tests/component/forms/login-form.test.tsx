@@ -19,8 +19,8 @@ describe("LoginForm", () => {
     render(wrap(<LoginForm />));
     await userEvent.click(screen.getByRole("button", { name: /Увійти/ }));
     await waitFor(() => {
-      expect(screen.getByText(/Невірний email/)).toBeInTheDocument();
-      expect(screen.getByText(/Мінімум 8 символів/)).toBeInTheDocument();
+      expect(screen.getByText(/Вкажіть email/)).toBeInTheDocument();
+      expect(screen.getByText(/Вкажіть пароль/)).toBeInTheDocument();
     });
   });
 });

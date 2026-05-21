@@ -1,19 +1,31 @@
 import { z } from "zod";
 
 export const LoginSchema = z.object({
-  email: z.string().email("Невірний email").max(255),
-  password: z.string().min(8, "Мінімум 8 символів").max(128),
+  email: z
+    .string()
+    .min(1, "Вкажіть email")
+    .email("Перевірте email — здається, є помилка")
+    .max(255, "Email задовгий"),
+  password: z.string().min(1, "Вкажіть пароль").max(128, "Пароль задовгий"),
 });
 export type LoginInput = z.input<typeof LoginSchema>;
 
 export const RegisterSchema = z
   .object({
-    email: z.string().email().max(255),
-    password: z.string().min(8).max(128),
-    firstName: z.string().min(1, "Обовʼязкове").max(100),
-    lastName: z.string().min(1, "Обовʼязкове").max(100),
-    grade: z.string().regex(/^\d{1,2}-[А-ЯA-Z]$/, "формат 9-А або 11-B"),
-    parentEmail: z.string().email().max(255),
+    email: z
+      .string()
+      .min(1, "Вкажіть email учня")
+      .email("Перевірте email — здається, є помилка")
+      .max(255, "Email задовгий"),
+    password: z.string().min(8, "Пароль — щонайменше 8 символів").max(128, "Пароль задовгий"),
+    firstName: z.string().trim().min(1, "Вкажіть імʼя").max(100, "Імʼя задовге"),
+    lastName: z.string().trim().min(1, "Вкажіть прізвище").max(100, "Прізвище задовге"),
+    grade: z.string().trim().min(1, "Вкажіть клас").max(20, "Назва класу задовга"),
+    parentEmail: z
+      .string()
+      .min(1, "Вкажіть email батьків")
+      .email("Перевірте email батьків — здається, є помилка")
+      .max(255, "Email задовгий"),
   })
   .refine((d) => d.email !== d.parentEmail, {
     message: "Email учня й батьків мають відрізнятись",

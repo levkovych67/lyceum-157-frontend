@@ -13,7 +13,7 @@ describe("Input", () => {
   it("underline variant renders a bottom-rule field", () => {
     const { container } = render(<Input variant="underline" />);
     const cls = container.querySelector("input")!.className;
-    expect(cls).toMatch(/border-b-\[1\.5px\]/);
+    expect(cls).toMatch(/border-b-2/);
     expect(cls).toMatch(/bg-transparent/);
     expect(cls).not.toMatch(/rounded-md/);
   });

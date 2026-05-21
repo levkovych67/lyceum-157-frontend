@@ -44,7 +44,7 @@ export function LoginForm() {
             autoComplete="email"
             variant="underline"
             {...form.register("email")}
-            placeholder="your.name@example.com"
+            placeholder="email@example.com"
           />
         </FormField>
         <FormField

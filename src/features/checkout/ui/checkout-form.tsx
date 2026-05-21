@@ -70,7 +70,11 @@ export function CheckoutForm() {
             required
             error={form.formState.errors.buyerName?.message}
           >
-            <Input variant="underline" {...form.register("buyerName")} />
+            <Input
+              variant="underline"
+              placeholder="Імʼя Прізвище"
+              {...form.register("buyerName")}
+            />
           </FormField>
           <FormField
             name="buyerEmail"
@@ -78,7 +82,12 @@ export function CheckoutForm() {
             required
             error={form.formState.errors.buyerEmail?.message}
           >
-            <Input type="email" variant="underline" {...form.register("buyerEmail")} />
+            <Input
+              type="email"
+              variant="underline"
+              placeholder="email@example.com"
+              {...form.register("buyerEmail")}
+            />
           </FormField>
           <FormField
             name="buyerPhone"
@@ -87,7 +96,12 @@ export function CheckoutForm() {
             hint="+380XXXXXXXXX"
             error={form.formState.errors.buyerPhone?.message}
           >
-            <Input type="tel" variant="underline" {...form.register("buyerPhone")} />
+            <Input
+              type="tel"
+              variant="underline"
+              placeholder="+380501234567"
+              {...form.register("buyerPhone")}
+            />
           </FormField>
 
           <FormFooter className="pt-8">

@@ -11,11 +11,11 @@ const variants: Record<InputVariant, string> = {
     "h-14 rounded-md border border-line bg-bg-card px-4 " +
     "focus:border-transparent focus:ring-2 focus:ring-burgundy " +
     "aria-[invalid=true]:border-error aria-[invalid=true]:ring-error",
-  // «Бібліотечне» поле — лише нижня лінія, прозоре тло, бордовий focus.
+  // «Бібліотечне» поле — чітка нижня лінія (видно куди вводити), бордовий focus.
   underline:
-    "border-ink/30 h-12 rounded-none border-0 border-b-[1.5px] bg-transparent px-0 " +
-    "transition-colors duration-d2 focus:border-burgundy " +
-    "aria-[invalid=true]:border-error",
+    "h-12 rounded-none border-0 border-b-2 border-ink-soft bg-transparent px-0 " +
+    "transition-colors duration-d2 hover:border-ink " +
+    "focus:border-burgundy aria-[invalid=true]:border-error",
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
