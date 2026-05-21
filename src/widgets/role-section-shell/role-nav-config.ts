@@ -1,3 +1,6 @@
+/** Ролі, що мають кабінет із власним хедером. */
+export type CabinetRole = "student" | "admin";
+
 export type RoleNavItem = {
   href: string;
   label: string;
@@ -5,7 +8,7 @@ export type RoleNavItem = {
   exact?: boolean;
 };
 
-export const roleNav: Record<"student" | "admin", RoleNavItem[]> = {
+export const roleNav: Record<CabinetRole, RoleNavItem[]> = {
   student: [
     { href: "/student", label: "Панель", exact: true },
     { href: "/student/products", label: "Мої роботи" },
@@ -20,7 +23,7 @@ export const roleNav: Record<"student" | "admin", RoleNavItem[]> = {
   ],
 };
 
-export const roleTitle: Record<"student" | "admin", string> = {
+export const roleTitle: Record<CabinetRole, string> = {
   student: "Кабінет учня",
   admin: "Адміністрування",
 };

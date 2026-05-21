@@ -4,14 +4,14 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Container } from "@/shared/ui";
 import { cn } from "@/shared/lib";
-import { roleNav, roleTitle, type RoleNavItem } from "./role-nav-config";
+import { roleNav, roleTitle, type CabinetRole, type RoleNavItem } from "./role-nav-config";
 
 function isActive(pathname: string, item: RoleNavItem): boolean {
   if (item.exact) return pathname === item.href;
   return pathname === item.href || pathname.startsWith(item.href + "/");
 }
 
-export function RoleHeader({ role }: { role: "student" | "admin" }) {
+export function RoleHeader({ role }: { role: CabinetRole }) {
   const pathname = usePathname() ?? "/";
   const items = roleNav[role];
 
@@ -35,6 +35,7 @@ export function RoleHeader({ role }: { role: "student" | "admin" }) {
           </Link>
           <Link
             href="/"
+            aria-label="На сайт"
             className="text-small font-bold uppercase tracking-[0.1em] text-ink transition-colors duration-d2 ease-paper hover:text-burgundy"
           >
             ← На сайт
