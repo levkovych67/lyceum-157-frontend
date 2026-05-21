@@ -17,11 +17,12 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === segment || pathname.startsWith(segment + "/");
 }
 
-export function Nav() {
+export function Nav({ tone = "light" }: { tone?: "light" | "dark" }) {
   const pathname = usePathname() ?? "/";
   const listRef = useRef<HTMLUListElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const [box, setBox] = useState<{ left: number; width: number } | null>(null);
+  const dark = tone === "dark";
 
   const activeIndex = items.findIndex((it) => isActive(pathname, it.href));
 
@@ -57,7 +58,8 @@ export function Nav() {
           aria-hidden
           data-nav-indicator="true"
           className={cn(
-            "pointer-events-none absolute bottom-1 top-1 rounded-sm border-[1.5px] border-burgundy",
+            "pointer-events-none absolute bottom-1 top-1 rounded-sm border-[1.5px]",
+            dark ? "border-bg-warm" : "border-burgundy",
             "transition-[left,width,opacity] duration-d4 ease-paper motion-reduce:transition-none",
             box ? "opacity-100" : "opacity-0",
           )}
@@ -74,7 +76,13 @@ export function Nav() {
               className={cn(
                 "relative z-10 block px-4 py-2 text-small font-bold uppercase tracking-[0.1em]",
                 "transition-colors duration-d3 ease-paper",
-                i === activeIndex ? "text-burgundy" : "text-ink hover:text-burgundy",
+                i === activeIndex
+                  ? dark
+                    ? "text-bg-warm"
+                    : "text-burgundy"
+                  : dark
+                    ? "text-bg-warm/75 hover:text-bg-warm"
+                    : "text-ink hover:text-burgundy",
               )}
             >
               {it.label}

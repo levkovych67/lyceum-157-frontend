@@ -9,6 +9,8 @@ import { CartBadge } from "./cart-badge";
 import { useHeaderState } from "./use-header-state";
 import { Container, Stamp } from "@/shared/ui";
 import { cn } from "@/shared/lib";
+import { usePathname } from "next/navigation";
+import { toneForPath } from "./header-tone";
 
 const navItems = [
   { href: "/catalog", label: "Каталог" },
@@ -20,6 +22,9 @@ const navItems = [
 export function Header() {
   const { floating } = useHeaderState();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname() ?? "/";
+  // У rest-стані на темних маршрутах хедер «зливається» з фото-hero — кремові елементи.
+  const dark = !floating && toneForPath(pathname) === "dark";
 
   // Prevent background scroll when mobile menu is open
   useEffect(() => {
@@ -57,7 +62,10 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="-ml-2 p-2 text-ink transition-colors hover:text-burgundy md:hidden"
+            className={cn(
+              "-ml-2 p-2 transition-colors md:hidden",
+              dark ? "text-bg-warm hover:text-white" : "text-ink hover:text-burgundy",
+            )}
             aria-label="Відкрити меню"
           >
             <Menu size={24} strokeWidth={1.5} />
@@ -82,10 +90,12 @@ export function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <Nav />
+          <Nav tone={dark ? "dark" : "light"} />
 
           {/* Global Icons */}
-          <div className="flex items-center gap-4 text-ink md:gap-5">
+          <div
+            className={cn("flex items-center gap-4 md:gap-5", dark ? "text-bg-warm" : "text-ink")}
+          >
             <Search
               size={20}
               strokeWidth={1.5}
