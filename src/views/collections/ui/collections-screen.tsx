@@ -47,18 +47,15 @@ const tiles = [
 export function CollectionsScreen() {
   return (
     <EditorialPageShell>
-      {/* Hero */}
-      <section className="relative py-12">
+      {/* Заголовок-смуга */}
+      <header>
         <EditorialLabel>▌ ТЕМАТИЧНІ СПЕЦВИПУСКИ</EditorialLabel>
-        <h1 className="mt-4 font-display text-mega italic leading-none text-burgundy">Колекції</h1>
-        <div className="absolute right-[8%] top-[20%] hidden md:block">
-          <Stamp text="АРХІВ ЛІЦЕЮ 157" rotation={-8} animateOn="load" className="text-burgundy" />
-        </div>
-        <p className="mt-8 max-w-prose text-lead text-ink-soft">
+        <h1 className="mt-3 font-display text-h1 italic leading-tight text-burgundy">Колекції</h1>
+        <p className="mt-3 max-w-prose text-body text-ink-soft">
           Кураторські добірки робіт за темою, випуском чи сезоном — не просто список товарів, а
           спецвипуски архіву.
         </p>
-      </section>
+      </header>
 
       <EditorialDivider />
 

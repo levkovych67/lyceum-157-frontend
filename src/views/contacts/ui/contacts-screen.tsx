@@ -1,21 +1,16 @@
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
-import { EditorialLabel, EditorialDivider, ImageSlot, Stamp } from "@/shared/ui";
+import { EditorialLabel, EditorialDivider, ImageSlot } from "@/shared/ui";
 
 export function ContactsScreen() {
   return (
     <EditorialPageShell>
-      {/* Hero */}
-      <section className="relative py-12">
+      {/* Заголовок-смуга */}
+      <header>
         <EditorialLabel>КОЛОФОН</EditorialLabel>
-        <h1 className="mt-4 font-display text-mega italic leading-none text-burgundy">
-          Як з нами
-          <br />
-          зв&apos;язатись
+        <h1 className="mt-3 font-display text-h1 italic leading-tight text-burgundy">
+          Як з нами зв&apos;язатись
         </h1>
-        <div className="absolute right-[5%] top-[20%] hidden md:block">
-          <Stamp text="ПОШТА" rotation={12} animateOn="load" className="text-burgundy" />
-        </div>
-      </section>
+      </header>
 
       <EditorialDivider />
 
