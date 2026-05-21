@@ -2,22 +2,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Search, User, Menu, X } from "lucide-react";
+import { Search, User, Menu } from "lucide-react";
 import { TopBar } from "./top-bar";
 import { Nav } from "./nav";
 import { CartBadge } from "./cart-badge";
+import { MobileDrawer } from "./mobile-drawer";
 import { useHeaderState } from "./use-header-state";
-import { Container, Stamp } from "@/shared/ui";
+import { Container } from "@/shared/ui";
 import { cn } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { toneForPath } from "./header-tone";
-
-const navItems = [
-  { href: "/catalog", label: "Каталог" },
-  { href: "/authors/all", label: "Автори" },
-  { href: "/collections", label: "Колекції" },
-  { href: "/about", label: "Про проєкт" },
-];
 
 export function Header() {
   const { floating } = useHeaderState();
@@ -114,76 +108,8 @@ export function Header() {
         </div>
       </Container>
 
-      {/* Mobile Menu Drawer Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-d3"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-
-          {/* Drawer Panel */}
-          <div
-            className={cn(
-              "fixed inset-y-0 left-0 flex w-full max-w-[300px] flex-col justify-between border-r border-line bg-bg p-6 shadow-deep transition-transform duration-d3 ease-paper",
-              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full",
-            )}
-          >
-            <div>
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between border-b border-line pb-4">
-                <div className="flex flex-col">
-                  <span className="-rotate-2 font-hand text-hand-m text-green">зміст випуску</span>
-                  <span className="font-body text-[10px] uppercase tracking-widest text-ink-fade">
-                    Архів 157
-                  </span>
-                </div>
-                <button
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="rounded-full p-2 text-ink transition-colors hover:bg-line"
-                  aria-label="Закрити меню"
-                >
-                  <X size={20} strokeWidth={1.5} />
-                </button>
-              </div>
-
-              {/* Navigation Items */}
-              <nav className="mt-8">
-                <ul className="flex flex-col gap-6">
-                  {navItems.map((it) => (
-                    <li key={it.href}>
-                      <Link
-                        href={it.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="font-display text-h2 italic text-burgundy transition-colors hover:text-green"
-                      >
-                        {it.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-
-            {/* Drawer Footer with Stamp decoration */}
-            <div className="flex flex-col items-center gap-4 border-t border-line pt-6">
-              <Stamp
-                text="1957"
-                shape="octagon"
-                rotation={-5}
-                size={64}
-                animateOn="none"
-                smudge={true}
-                className="text-burgundy/20"
-              />
-              <p className="text-center font-body text-[10px] uppercase tracking-[0.15em] text-ink-fade">
-                ВИПУСК №47 · ТРАВЕНЬ 2026
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Mobile Menu Drawer */}
+      <MobileDrawer open={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
     </header>
   );
 }

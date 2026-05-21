@@ -22,3 +22,21 @@ body {
   background: var(--c-burgundy-soft);
   color: var(--c-burgundy-deep);
 }
+
+/* Mobile drawer — slide-in panel + backdrop fade */
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes drawer-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
