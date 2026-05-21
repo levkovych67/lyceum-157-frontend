@@ -1,5 +1,5 @@
 "use client";
-import { useRef, type CSSProperties, type MouseEventHandler } from "react";
+import { useId, useRef, type CSSProperties, type MouseEventHandler } from "react";
 import { cn } from "@/shared/lib";
 import { useIntersection } from "@/shared/hooks/use-intersection";
 import type { StampText, StampShape, StampRotation, StampColor, StampAnimateOn } from "./types";
@@ -71,7 +71,9 @@ export function Stamp({
 }
 
 function StampShapeSvg({ shape }: { shape: StampShape }) {
-  const fid = `stamp-displace-${Math.random().toString(36).slice(2, 8)}`;
+  // Стабільний id (узгоджений між SSR і клієнтом) — без `Math.random`,
+  // що спричиняв hydration-mismatch. Колони з useId прибираємо для CSS url().
+  const fid = `stamp-displace-${useId().replace(/:/g, "")}`;
   return (
     <svg viewBox="0 0 110 110" className="absolute inset-0 h-full w-full" aria-hidden>
       <defs>
