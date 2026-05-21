@@ -2,12 +2,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Search, User, Menu } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { TopBar } from "./top-bar";
 import { Nav } from "./nav";
 import { CartBadge } from "./cart-badge";
 import { MobileDrawer } from "./mobile-drawer";
 import { useHeaderState } from "./use-header-state";
+import { AccountControl } from "./account-control";
 import { Container } from "@/shared/ui";
 import { cn } from "@/shared/lib";
 import { usePathname } from "next/navigation";
@@ -57,7 +58,7 @@ export function Header() {
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className={cn(
-              "-ml-2 p-2 transition-colors md:hidden",
+              "-ml-2 p-2 transition-[color,transform] duration-d1 ease-paper active:scale-90 md:hidden",
               dark ? "text-bg-warm hover:text-white" : "text-ink hover:text-burgundy",
             )}
             aria-label="Відкрити меню"
@@ -96,13 +97,7 @@ export function Header() {
               className="hidden cursor-pointer transition-colors hover:text-burgundy sm:block"
               aria-label="Пошук"
             />
-            <Link
-              href="/account"
-              className="hidden transition-colors hover:text-burgundy sm:block"
-              aria-label="Кабінет"
-            >
-              <User size={20} strokeWidth={1.5} />
-            </Link>
+            <AccountControl dark={dark} />
             <CartBadge />
           </div>
         </div>
