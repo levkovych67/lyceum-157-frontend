@@ -1,43 +1,10 @@
-import { Container, EditorialLabel, EditorialDivider, ImageSlot, Stamp } from "@/shared/ui";
+import { Container, EditorialDivider, ImageSlot, Stamp } from "@/shared/ui";
+import { AboutHero } from "./about-hero";
 
 export function AboutScreen() {
   return (
     <section className="relative overflow-x-hidden bg-bg">
-      {/* Full bleed hero section */}
-      <section className="relative w-full overflow-hidden border-b border-line-strong bg-burgundy">
-        <div className="relative aspect-[16/9] max-h-[500px] w-full md:aspect-[21/9]">
-          <ImageSlot
-            slot="about/hero/portrait"
-            src="/images/about/hero/portrait.webp"
-            ratio="21/9"
-            variant="plain"
-            caption="Hero — фасад ліцею"
-            className="h-full w-full scale-105 object-cover opacity-55 mix-blend-multiply contrast-125 grayscale"
-          />
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center">
-            <EditorialLabel className="border-bg-warm/30 text-bg-warm/80 mb-6 tracking-[0.2em]">
-              РЕДАКТОРСЬКА КОЛОНКА
-            </EditorialLabel>
-            <h1 className="font-display text-mega italic leading-[1.1] text-bg-warm drop-shadow-md">
-              Це не магазин.
-              <br />
-              Це архів.
-            </h1>
-          </div>
-          {/* Stamped Seal "ІСТОРІЯ" or "EST. 1957" in the top-right corner */}
-          <div className="absolute right-6 top-6 z-20 md:right-12 md:top-12">
-            <Stamp
-              text="ІСТОРІЯ"
-              shape="octagon"
-              rotation={12}
-              size={120}
-              color="burgundy"
-              animateOn="load"
-              className="border-bg-warm/30 text-bg-warm opacity-90"
-            />
-          </div>
-        </div>
-      </section>
+      <AboutHero />
 
       {/* Main page content wrapped in FSD containers for proper desktop margins */}
       <Container className="py-16 md:py-24">
