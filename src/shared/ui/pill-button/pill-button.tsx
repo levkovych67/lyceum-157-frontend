@@ -25,9 +25,10 @@ const button = cva(
           "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
         // Контур для темного тла — кремовий, без зміщеної тіні.
         "outline-l":
-          "border-2 border-white bg-transparent text-white " + "hover:bg-white hover:text-burgundy",
+          "border-2 border-white bg-transparent text-white " +
+          "hover:bg-white hover:text-burgundy active:scale-[0.97]",
         // Текстова — без рамки й тіні.
-        ghost: "bg-transparent text-burgundy hover:text-green",
+        ghost: "bg-transparent text-burgundy hover:text-green active:scale-[0.97]",
       },
       size: {
         s: "h-9 px-5 text-small",

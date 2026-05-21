@@ -1,5 +1,5 @@
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
-import { EditorialLabel, EditorialDivider, ImageSlot, Stamp } from "@/shared/ui";
+import { EditorialLabel, EditorialDivider, ImageSlot, Reveal, Stamp } from "@/shared/ui";
 
 const tiles = [
   {
@@ -60,29 +60,31 @@ export function CollectionsScreen() {
       <EditorialDivider />
 
       {/* Featured / hero collection — full bleed */}
-      <section aria-label="Колекція місяця" className="-mx-6 my-8 md:-mx-12 lg:-mx-24">
-        <div className="relative">
-          <ImageSlot
-            slot="collections/hero"
-            src="/images/collections/hero.webp"
-            ratio="21/9"
-            variant="plain"
-            caption="Колекція місяця"
-            className="h-full w-full object-cover"
-          />
-          <div className="from-ink/70 via-ink/20 absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t to-transparent p-8 md:p-16">
-            <EditorialLabel className="border-bg-warm/30 text-bg-warm/80">
-              КОЛЕКЦІЯ МІСЯЦЯ
-            </EditorialLabel>
-            <p className="mt-2 font-display text-h1 italic text-bg-warm drop-shadow-md">
-              Шевченківські дні
-            </p>
-            <p className="text-bg-warm/90 mt-2 max-w-prose font-hand text-hand-m">
-              ← обери на колажі нижче
-            </p>
+      <Reveal>
+        <section aria-label="Колекція місяця" className="-mx-6 my-8 md:-mx-12 lg:-mx-24">
+          <div className="relative">
+            <ImageSlot
+              slot="collections/hero"
+              src="/images/collections/hero.webp"
+              ratio="21/9"
+              variant="plain"
+              caption="Колекція місяця"
+              className="h-full w-full object-cover"
+            />
+            <div className="from-ink/70 via-ink/20 absolute inset-0 flex flex-col items-start justify-end bg-gradient-to-t to-transparent p-8 md:p-16">
+              <EditorialLabel className="border-bg-warm/30 text-bg-warm/80">
+                КОЛЕКЦІЯ МІСЯЦЯ
+              </EditorialLabel>
+              <p className="mt-2 font-display text-h1 italic text-bg-warm drop-shadow-md">
+                Шевченківські дні
+              </p>
+              <p className="text-bg-warm/90 mt-2 max-w-prose font-hand text-hand-m">
+                ← обери на колажі нижче
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
       <EditorialDivider />
 
@@ -91,50 +93,54 @@ export function CollectionsScreen() {
         aria-label="Усі колекції"
         className="grid grid-cols-1 gap-12 py-8 md:grid-cols-12 md:gap-6"
       >
-        {tiles.map((t) => (
-          <article key={t.slot} className={`flex flex-col gap-4 ${t.col}`}>
-            <div
-              className={`flex justify-center ${t.rotate} transition-transform hover:rotate-0 hover:scale-[1.02]`}
-            >
-              <ImageSlot
-                slot={t.slot}
-                src={t.src}
-                ratio="4/5"
-                variant="photo-print"
-                caption={t.title}
-                className={`${t.width} shadow-[0_12px_24px_rgba(0,0,0,0.18)]`}
-              />
-            </div>
-            <div className="px-2">
-              <p className="font-mono text-small uppercase tracking-wider text-ink-soft">
-                {t.edition}
-              </p>
-              <h2 className="mt-1 font-display text-h2 italic text-burgundy">{t.title}</h2>
-              <p className="mt-2 max-w-prose text-body text-ink-soft">{t.blurb}</p>
-            </div>
-          </article>
+        {tiles.map((t, i) => (
+          <Reveal key={t.slot} delayMs={i * 60} className={t.col}>
+            <article className="flex flex-col gap-4">
+              <div
+                className={`flex justify-center ${t.rotate} transition-transform duration-d3 ease-spring hover:rotate-0 hover:scale-[1.02]`}
+              >
+                <ImageSlot
+                  slot={t.slot}
+                  src={t.src}
+                  ratio="4/5"
+                  variant="photo-print"
+                  caption={t.title}
+                  className={`${t.width} shadow-[0_12px_24px_rgba(0,0,0,0.18)]`}
+                />
+              </div>
+              <div className="px-2">
+                <p className="font-mono text-small uppercase tracking-wider text-ink-soft">
+                  {t.edition}
+                </p>
+                <h2 className="mt-1 font-display text-h2 italic text-burgundy">{t.title}</h2>
+                <p className="mt-2 max-w-prose text-body text-ink-soft">{t.blurb}</p>
+              </div>
+            </article>
+          </Reveal>
         ))}
       </section>
 
       <EditorialDivider />
 
       {/* Decorative footer */}
-      <section className="flex flex-col items-center gap-6 py-16">
-        <div className="rotate-[-4deg] transition-transform hover:rotate-0">
-          <ImageSlot
-            slot="collections/decorative/stamp"
-            src="/images/collections/decorative/stamp.webp"
-            ratio="1/1"
-            variant="stamp"
-            caption="Архівна печатка"
-            className="w-32 grayscale"
-          />
-        </div>
-        <Stamp text="АРХІВ ЛІЦЕЮ 157" rotation={-5} animateOn="load" />
-        <p className="max-w-prose text-center font-hand text-hand-m text-ink-soft">
-          Нові спецвипуски виходять кожного місяця — слідкуйте за випусками.
-        </p>
-      </section>
+      <Reveal>
+        <section className="flex flex-col items-center gap-6 py-16">
+          <div className="rotate-[-4deg] transition-transform duration-d3 ease-spring hover:rotate-0">
+            <ImageSlot
+              slot="collections/decorative/stamp"
+              src="/images/collections/decorative/stamp.webp"
+              ratio="1/1"
+              variant="stamp"
+              caption="Архівна печатка"
+              className="w-32 grayscale"
+            />
+          </div>
+          <Stamp text="АРХІВ ЛІЦЕЮ 157" rotation={-5} animateOn="scroll" />
+          <p className="max-w-prose text-center font-hand text-hand-m text-ink-soft">
+            Нові спецвипуски виходять кожного місяця — слідкуйте за випусками.
+          </p>
+        </section>
+      </Reveal>
     </EditorialPageShell>
   );
 }

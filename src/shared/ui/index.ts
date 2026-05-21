@@ -8,6 +8,8 @@ export * from "./photo-print";
 export * from "./paper-clip";
 export * from "./sticker";
 export * from "./postage-stamp";
+export * from "./reveal";
+export * from "./route-transition";
 export * from "./hand-arrow";
 export * from "./museum-label";
 export * from "./confetti";

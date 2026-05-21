@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
-import { EditorialLabel, ImageSlot } from "@/shared/ui";
+import { EditorialLabel, ImageSlot, Reveal } from "@/shared/ui";
 import { MOCK_PRODUCTS_CARDS } from "@/shared/api/mock-products";
 
 type Author = { studentId: string; firstName: string; grade: string; thumb: string };
@@ -83,23 +83,28 @@ export function AuthorsListScreen() {
         </header>
 
         <ul className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          {authors.map((a) => (
+          {authors.map((a, i) => (
             <li key={a.studentId}>
-              <Link href={`/authors/${a.studentId}`} className="group block">
-                <ImageSlot
-                  slot={`authors/${a.studentId}/card`}
-                  src={a.thumb}
-                  ratio="1/1"
-                  variant="photo-print"
-                  caption={`Робота автора — ${a.firstName}`}
-                  sizes="(min-width: 768px) 22vw, 45vw"
-                  className="grayscale transition-all duration-d3 ease-paper group-hover:grayscale-0"
-                />
-                <p className="mt-3 font-display text-h3 italic text-ink">{a.firstName}</p>
-                <p className="font-body text-small uppercase tracking-wider text-ink-soft">
-                  {a.grade}
-                </p>
-              </Link>
+              <Reveal delayMs={(i % 4) * 55}>
+                <Link
+                  href={`/authors/${a.studentId}`}
+                  className="group block transition-transform duration-d2 ease-paper active:scale-[0.98]"
+                >
+                  <ImageSlot
+                    slot={`authors/${a.studentId}/card`}
+                    src={a.thumb}
+                    ratio="1/1"
+                    variant="photo-print"
+                    caption={`Робота автора — ${a.firstName}`}
+                    sizes="(min-width: 768px) 22vw, 45vw"
+                    className="grayscale transition-[filter] duration-d3 ease-paper group-hover:grayscale-0"
+                  />
+                  <p className="mt-3 font-display text-h3 italic text-ink">{a.firstName}</p>
+                  <p className="font-body text-small uppercase tracking-wider text-ink-soft">
+                    {a.grade}
+                  </p>
+                </Link>
+              </Reveal>
             </li>
           ))}
         </ul>

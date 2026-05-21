@@ -142,6 +142,7 @@ const config: Config = {
         spring: "var(--ease-spring)",
         quart: "var(--ease-quart)",
         stamp: "var(--ease-stamp)",
+        drawer: "var(--ease-drawer)",
       },
       transitionDuration: {
         d1: "var(--d-1)",
@@ -173,11 +174,26 @@ const config: Config = {
           "0%": { transform: "rotate(calc(var(--final-rotation, 0deg) + 20deg))", opacity: "0" },
           "100%": { transform: "rotate(var(--final-rotation, 0deg))", opacity: "1" },
         },
+        // Лічильник кошика: впечатується з лагідним overshoot — ніколи з scale(0).
+        "badge-pop": {
+          "0%": { transform: "scale(0.5)", opacity: "0" },
+          "60%": { transform: "scale(1.15)", opacity: "1" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        // Route-transition: контент сторінки проявляється на кожній навігації.
+        "route-in": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "stamp-drop": "stamp-drop var(--d-3) var(--ease-stamp) both",
         "page-turn": "page-turn var(--d-3) var(--ease-paper) both",
         "tilt-into-place": "tilt-into-place var(--d-4) var(--ease-spring) both",
+        "badge-pop": "badge-pop var(--d-2) var(--ease-quart) both",
+        // `backwards` (не `both`) — після завершення transform зникає,
+        // щоб обгортка не лишалась containing-block для fixed-елементів.
+        "route-in": "route-in var(--d-3) var(--ease-paper) backwards",
       },
       backgroundImage: {
         "paper-noise": "url('/textures/paper-noise.svg')",

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MOCK_PRODUCTS_CARDS } from "@/shared/api/mock-products";
 import { EditorialPageShell } from "@/widgets/editorial-page-shell";
-import { EditorialDivider, ImageSlot } from "@/shared/ui";
+import { EditorialDivider, ImageSlot, Reveal } from "@/shared/ui";
 import { CatalogHero } from "./catalog-hero";
 import type { Page, ProductCardDto } from "@/shared/api";
 
@@ -15,41 +15,43 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
       <CatalogHero />
       <EditorialPageShell>
         {/* Categories strip */}
-        <section
-          aria-label="Категорії"
-          className="grid grid-cols-1 gap-8 py-8 md:grid-cols-12 md:gap-4 lg:gap-8"
-        >
-          <div className="flex rotate-[-2deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:col-span-4 md:col-start-1 md:mt-8 md:justify-end">
-            <ImageSlot
-              slot="catalog/category/tile-1"
-              src="/images/catalog/category/tile-1.webp"
-              ratio="4/5"
-              variant="photo-print"
-              caption="Кераміка"
-              className="w-56 shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
-            />
-          </div>
-          <div className="z-10 flex rotate-[3deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:col-span-5 md:col-start-4 md:-mt-4">
-            <ImageSlot
-              slot="catalog/category/tile-2"
-              src="/images/catalog/category/tile-2.webp"
-              ratio="4/5"
-              variant="photo-print"
-              caption="Графіка"
-              className="w-64 shadow-[0_12px_24px_rgba(0,0,0,0.18)] lg:w-80"
-            />
-          </div>
-          <div className="flex rotate-[-4deg] justify-center transition-transform hover:rotate-0 hover:scale-105 md:col-span-4 md:col-start-9 md:mt-12 md:justify-start">
-            <ImageSlot
-              slot="catalog/category/tile-3"
-              src="/images/catalog/category/tile-3.webp"
-              ratio="4/5"
-              variant="photo-print"
-              caption="Текстиль"
-              className="w-48 shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
-            />
-          </div>
-        </section>
+        <Reveal>
+          <section
+            aria-label="Категорії"
+            className="grid grid-cols-1 gap-8 py-8 md:grid-cols-12 md:gap-4 lg:gap-8"
+          >
+            <div className="flex rotate-[-2deg] justify-center transition-transform duration-d3 ease-spring hover:rotate-0 hover:scale-105 md:col-span-4 md:col-start-1 md:mt-8 md:justify-end">
+              <ImageSlot
+                slot="catalog/category/tile-1"
+                src="/images/catalog/category/tile-1.webp"
+                ratio="4/5"
+                variant="photo-print"
+                caption="Кераміка"
+                className="w-56 shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
+              />
+            </div>
+            <div className="z-10 flex rotate-[3deg] justify-center transition-transform duration-d3 ease-spring hover:rotate-0 hover:scale-105 md:col-span-5 md:col-start-4 md:-mt-4">
+              <ImageSlot
+                slot="catalog/category/tile-2"
+                src="/images/catalog/category/tile-2.webp"
+                ratio="4/5"
+                variant="photo-print"
+                caption="Графіка"
+                className="w-64 shadow-[0_12px_24px_rgba(0,0,0,0.18)] lg:w-80"
+              />
+            </div>
+            <div className="flex rotate-[-4deg] justify-center transition-transform duration-d3 ease-spring hover:rotate-0 hover:scale-105 md:col-span-4 md:col-start-9 md:mt-12 md:justify-start">
+              <ImageSlot
+                slot="catalog/category/tile-3"
+                src="/images/catalog/category/tile-3.webp"
+                ratio="4/5"
+                variant="photo-print"
+                caption="Текстиль"
+                className="w-48 shadow-[0_12px_24px_rgba(0,0,0,0.18)]"
+              />
+            </div>
+          </section>
+        </Reveal>
 
         <EditorialDivider />
 
@@ -60,11 +62,12 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
               const rotations = [-3, 2, -4, 3, -2, 4];
               const rotation = rotations[idx % rotations.length];
               return (
-                <div key={product.id} className="flex justify-center">
+                // Каскад по колонках — кожен ряд «друкується» зліва направо.
+                <Reveal key={product.id} delayMs={(idx % 3) * 60} className="flex justify-center">
                   <Link
                     href={`/p/${product.slug}`}
                     style={{ transform: `rotate(${rotation}deg)` }}
-                    className="group relative flex w-full max-w-[280px] flex-col items-center rounded-[2px] bg-white p-4 shadow-photo transition-all duration-d3 ease-spring hover:rotate-0 hover:scale-[1.04]"
+                    className="group relative flex w-full max-w-[280px] flex-col items-center rounded-[2px] bg-white p-4 shadow-photo transition-transform duration-d3 ease-spring hover:rotate-0 hover:scale-[1.04]"
                   >
                     {/* Polaroid photo display */}
                     <div className="relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-[1px] bg-bg-warm">
@@ -92,22 +95,24 @@ export function CatalogScreen({ data }: { data: Page<ProductCardDto> | null }) {
                       </div>
                     </div>
                   </Link>
-                </div>
+                </Reveal>
               );
             })}
           </div>
         </section>
 
         {/* Mid-page intermission */}
-        <section aria-label="Цитата-інтермісія" className="-mx-5 my-12 md:-mx-6">
-          <ImageSlot
-            slot="catalog/intermission/quote"
-            src="/images/catalog/intermission/quote.webp"
-            ratio="21/9"
-            variant="interlude"
-            caption="Інтермісія — full-bleed цитата"
-          />
-        </section>
+        <Reveal>
+          <section aria-label="Цитата-інтермісія" className="-mx-5 my-12 md:-mx-6">
+            <ImageSlot
+              slot="catalog/intermission/quote"
+              src="/images/catalog/intermission/quote.webp"
+              ratio="21/9"
+              variant="interlude"
+              caption="Інтермісія — full-bleed цитата"
+            />
+          </section>
+        </Reveal>
 
         {/* Empty state */}
         {isEmpty && (

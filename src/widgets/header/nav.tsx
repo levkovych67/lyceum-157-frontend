@@ -60,7 +60,7 @@ export function Nav({ tone = "light" }: { tone?: "light" | "dark" }) {
           className={cn(
             "pointer-events-none absolute bottom-1 top-1 rounded-sm border-[1.5px]",
             dark ? "border-bg-warm" : "border-burgundy",
-            "transition-[left,width,opacity] duration-d4 ease-paper motion-reduce:transition-none",
+            "transition-[left,width,opacity] duration-d3 ease-paper motion-reduce:transition-none",
             box ? "opacity-100" : "opacity-0",
           )}
           style={box ? { left: box.left, width: box.width } : undefined}
