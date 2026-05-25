@@ -28,7 +28,7 @@ export default async function Page({
   params.set("size", "20");
   if (searchParams.sort) params.set("sort", searchParams.sort);
   if (searchParams.type) params.set("type", searchParams.type);
-  const data = await serverApi<P<ProductCardDto>>(`/products?${params}`, {
+  const data = await serverApi<P<ProductCardDto>>(`/api/v1/products?${params}`, {
     revalidate: 300,
     tags: ["catalog"],
   }).catch(() => null);

@@ -5,9 +5,12 @@ import type { Page as P, ProductCardDto } from "@/shared/api";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const now = new Date();
-  const products = await serverApi<P<ProductCardDto>>("/products?page=0&size=1000&sort=newest", {
-    revalidate: 3600,
-  }).catch(() => null);
+  const products = await serverApi<P<ProductCardDto>>(
+    "/api/v1/products?page=0&size=1000&sort=newest",
+    {
+      revalidate: 3600,
+    },
+  ).catch(() => null);
   const productEntries: MetadataRoute.Sitemap = (products?.content ?? []).map((p) => ({
     url: `${base}/p/${p.slug}`,
     lastModified: now,

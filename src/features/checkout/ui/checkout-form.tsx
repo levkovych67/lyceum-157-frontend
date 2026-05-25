@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Controller } from "react-hook-form";
 import { useAppForm } from "@/shared/lib/forms/use-app-form";
 import { Form, FormField, Input, PillButton, FormFooter, FormError } from "@/shared/ui";
 import { useCartStore } from "@/entities/cart";
@@ -10,6 +11,7 @@ import {
   revalidateCart,
   type CartRevalidationIssue,
 } from "@/features/checkout/model/cart-revalidator";
+import { NovaPoshtaPicker } from "./nova-poshta-picker";
 
 export function CheckoutForm() {
   const items = useCartStore((s) => s.items);
@@ -20,7 +22,22 @@ export function CheckoutForm() {
 
   const form = useAppForm({
     schema: CheckoutSchema,
-    defaultValues: { buyerEmail: "", buyerName: "", buyerPhone: "+380" } as CheckoutInput,
+    defaultValues: {
+      buyerEmail: "",
+      buyerName: "",
+      buyerPhone: "+380",
+      delivery: {
+        method: "NOVA_POSHTA",
+        details: {
+          cityRef: "",
+          cityName: "",
+          branchRef: "",
+          branchNumber: "",
+          branchType: "BRANCH",
+          branchAddress: "",
+        },
+      },
+    } as CheckoutInput,
     onSubmit: async (data) => {
       const newIssues = await revalidateCart(items);
       if (newIssues.length) {
@@ -103,6 +120,21 @@ export function CheckoutForm() {
               {...form.register("buyerPhone")}
             />
           </FormField>
+
+          <Controller
+            control={form.control}
+            name="delivery.details"
+            render={({ field }) => (
+              <NovaPoshtaPicker
+                value={field.value}
+                onChange={(patch) => field.onChange({ ...field.value, ...patch })}
+                errors={{
+                  city: form.formState.errors.delivery?.details?.cityRef?.message,
+                  branch: form.formState.errors.delivery?.details?.branchRef?.message,
+                }}
+              />
+            )}
+          />
 
           <FormFooter className="pt-8">
             <span />

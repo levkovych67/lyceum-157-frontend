@@ -34,6 +34,22 @@ export const uk = {
     toLogin: "Увійти",
     legalStubStamp: "ДОКУМЕНТ ГОТУЄТЬСЯ",
   },
+  delivery: {
+    cityLabel: "Місто",
+    cityPlaceholder: "Почніть вводити назву",
+    cityRequired: "Оберіть місто",
+    cityNotFound: "Місто не знайдено",
+    cityPopularHeader: "Популярні міста",
+    branchLabel: "Відділення або поштомат",
+    branchPlaceholder: "Номер або адреса",
+    branchRequired: "Оберіть відділення або поштомат",
+    branchEmpty: "Немає відділень у цьому місті",
+    branchLoading: "завантаження точок…",
+    branchTagBranch: "Відділення",
+    branchTagPostbox: "Поштомат",
+    unavailable: "Сервіс Нової Пошти тимчасово недоступний",
+    refStale: "Оберіть місто/відділення зі списку ще раз",
+  },
 } as const;
 
 export type UkStrings = typeof uk;

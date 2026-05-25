@@ -10,7 +10,7 @@ export const revalidate = 600;
 export const dynamicParams = true;
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
-  const top = await serverApi<P<ProductCardDto>>("/products?page=0&size=100&sort=popular", {
+  const top = await serverApi<P<ProductCardDto>>("/api/v1/products?page=0&size=100&sort=popular", {
     revalidate: 3600,
   }).catch(() => null);
   const slugs = top?.content.flatMap(({ slug }) => (slug ? [{ slug }] : [])) ?? [];
@@ -31,7 +31,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  let p = await serverApi<ProductDetailDto>(`/products/${params.slug}`, {
+  let p = await serverApi<ProductDetailDto>(`/api/v1/products/${params.slug}`, {
     revalidate: 600,
     tags: [`product:${params.slug}`],
   }).catch(() => null);
@@ -66,7 +66,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  let p = await serverApi<ProductDetailDto>(`/products/${params.slug}`, {
+  let p = await serverApi<ProductDetailDto>(`/api/v1/products/${params.slug}`, {
     revalidate: 600,
     tags: [`product:${params.slug}`],
   }).catch(() => null);

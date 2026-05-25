@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function Page() {
-  const initial = await serverApi<P<ProductCardDto>>("/products?page=0&size=8&sort=newest", {
+  const initial = await serverApi<P<ProductCardDto>>("/api/v1/products?page=0&size=8&sort=newest", {
     revalidate: 300,
     tags: ["catalog"],
   }).catch(() => null);

@@ -10,6 +10,7 @@ import {
 } from "@/features/product-image-upload/model/use-image-mutations";
 
 const ACCEPT = "image/jpeg,image/png,image/webp";
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 export function ImageManager({
   productId,
@@ -38,6 +39,10 @@ export function ImageManager({
   }
 
   async function onPick(file: File) {
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error("Файл завеликий: максимум 5 МБ");
+      return;
+    }
     setBusy(true);
     try {
       await upload.mutateAsync({ productId, file, primary: images.length === 0 });

@@ -2,6 +2,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { approve } from "@/shared/api/generated/admin-products/admin-products";
 import { adminKeys } from "@/shared/api/admin-keys";
+import { revalidateOnClient } from "@/shared/api";
 
 /** Approves a PENDING_REVIEW product → ACTIVE. */
 export function useApproveProduct() {
@@ -9,6 +10,9 @@ export function useApproveProduct() {
   return useMutation({
     mutationFn: (id: string) =>
       approve(id, { headers: { "Idempotency-Key": crypto.randomUUID() } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminKeys.products() }),
+    onSuccess: async (_d, id) => {
+      await revalidateOnClient(["catalog", `product:${id}`]);
+      qc.invalidateQueries({ queryKey: adminKeys.products() });
+    },
   });
 }
